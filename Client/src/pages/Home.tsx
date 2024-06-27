@@ -1,6 +1,10 @@
+import HomeLayout from "../layouts/HomeLayout"
+
 const Home = () => {
   return (
-    <div>Home</div>
+   <HomeLayout>
+    
+   </HomeLayout>
   )
 }
 
