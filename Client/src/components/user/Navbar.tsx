@@ -5,26 +5,18 @@ import LoginModal from '../common/LoginModal';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const openLoginModal = () => {
-    setIsLoginModalOpen(true);
-  };
-
-  const closeLoginModal = () => {
-    setIsLoginModalOpen(false);
-  };
-
-
-
   return (
     <nav className="bg-customRed text-white px-4 py-2 flex justify-between items-center">
       <div className="text-lg font-semibold">
         <Link to="/">Brand</Link>
+      </div>
+      <div className="text-lg font-semibold">
+        <Link to="/owner-login">Sell</Link>
       </div>
       <div className="md:hidden">
         <button onClick={toggleMenu} className="focus:outline-none">
@@ -32,11 +24,11 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <div className={`md:flex md:items-center ${isOpen ? 'block' : 'hidden'}`}>
-        <Link to="#" onClick={openLoginModal} className="block mt-4 md:inline-block md:mt-0 md:ml-4">
+        <button onClick={toggleMenu} className="block mt-4 md:inline-block md:mt-0 md:ml-4 focus:outline-none">
           Login
-        </Link>
+        </button>
       </div>
-      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+      {isOpen && <LoginModal isOpen={isOpen} onClose={toggleMenu} />}
     </nav>
   );
 };
