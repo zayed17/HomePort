@@ -32,7 +32,7 @@ const LoginForm: React.FC = () => {
             <button
               type="submit"
               className="w-full py-2 px-4   shadow-sm text-sm font-medium rounded-full text-white bg-customRed ">
-              Sign In
+              Login
             </button>
           </form>
           <h5 className='text-right font-light text-sm text-gray-700 mt-2'>Don't have an account?<Link to='/owner-signup' className='text-customRed'>SignUp</Link></h5>
