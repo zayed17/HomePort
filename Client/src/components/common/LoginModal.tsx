@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLoginInMutation ,useSignUpMutation} from '../../store/user/userApi';
 
 interface ModalProps {
     isOpen: boolean;
@@ -7,9 +8,36 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     const [isLogin, setIsLogin] = useState(true); 
+    const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '' });
+
+    const [login] = useLoginInMutation();
+    const [signUp] = useSignUpMutation()
 
     const toggleForm = () => {
         setIsLogin(prevState => !prevState); 
+    };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        console.log(formData)
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log("submited")
+        if (isLogin) {
+            const res = await login({ email: formData.email, password: formData.password }).unwrap()
+            console.log(res,"of login")
+        } else {
+            await signUp({
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+                password: formData.password,
+            }).unwrap()
+        }
+        onClose();
     };
 
     if (!isOpen) return null;
@@ -21,23 +49,29 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                     &times;
                 </button>
                 <h2 className="text-black text-center py-3 text-2xl font-bold">{isLogin ? 'Login' : 'Sign Up'}</h2>
-                <form className='px-5'>
+                <form className='px-5' onSubmit={handleSubmit}>
                     {!isLogin && (
                         <div className="mb-4 flex">
                             <div className="w-1/2 mr-2">
                                 <input
                                     className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="firstName"
+                                    name='firstName'
                                     type="text"
                                     placeholder="First Name"
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div className="w-1/2 ml-2">
                                 <input
                                     className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="lastName"
+                                    name='lastName'
                                     type="text"
+                                    value={formData.lastName}
                                     placeholder="Last Name"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                         </div>
@@ -48,7 +82,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                             className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="email"
                             type="email"
+                            name='email'
+                            value={formData.email}
                             placeholder="Email"
+                            onChange={handleInputChange}
                         />
                     </div>
                     )}
@@ -59,7 +96,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                                     className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="email"
                                     type="text"
+                                    name='email'
+                                    value={formData.email}
                                     placeholder="email"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div className="w-1/2 ml-2">
@@ -67,7 +107,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                                     className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="phone"
                                     type="tel"
+                                    name='phone'
+                                    value={formData.phone}
                                     placeholder="Phone"
+                                    onChange={handleInputChange}
                                 />  
                             </div>
                         </div>
@@ -77,8 +120,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                         <input
                             className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="password"
+                            name='password'
                             type="password"
+                            value={formData.password}
                             placeholder="Password"
+                            onChange={handleInputChange}
                         />
                     </div>
                     )}    
@@ -88,22 +134,28 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                                 <input
                                     className="shadow  appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="password"
+                                    name='password'
                                     type="password"
+                                    value={formData.password}
                                     placeholder="password"
+                                    onChange={handleInputChange}
                                 />
                             </div>
                             <div className="w-1/2 ml-2">
                                 <input
                                     className="shadow appearance-none border border-black rounded-full px-3 py-2 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="password"
+                                    name='confirmPassword'
                                     type="password"
+                                    value={formData.confirmPassword}
                                     placeholder="confirm password"
+                                    onChange={handleInputChange}
                                 />  
                             </div>
                         </div>
                     )}
                     <div className="mb-4">
-                        <button className="bg-customRed text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline" type="button">
+                        <button className="bg-customRed text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline" type="submit">
                             {isLogin ? 'Login' : 'Sign Up'}
                         </button>
                     </div>
@@ -124,7 +176,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                 <h4 className="text-gray-600 font-thin text-sm text-right">
                     {isLogin ? "Don't have an account?" : "Already have an account?"}
                     <span className="text-customRed">
-                        <button className="text-customRed underline focus:outline-none" onClick={toggleForm}>
+                        <button className="text-customRed underline focus:outline-none" type='button' onClick={toggleForm}>
                             {isLogin ? 'Sign Up' : 'Login'}
                         </button>
                     </span>
