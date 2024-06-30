@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { signUpUser,loginUser, verifyOTP } from '../../../adapters/frameworks/express/controllers/UserController';
+import { signUpUser,loginUser, verifyOTP } from '../express/controllers/UserController';
 
 const router = Router();
 

@@ -1,5 +1,5 @@
 # Use the Nginx stable Alpine image as the base
-FROM nginx:stable-alpine
+FROM nginx:latest
 
 # Copy the custom Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf

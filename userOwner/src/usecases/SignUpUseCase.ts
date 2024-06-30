@@ -42,7 +42,7 @@ export class SignUpUseCase {
             active:false
         });
 
-        // await this.userRepository.save(newUser);
+        await this.userRepository.save(newUser);
         await this.emailServic.sendEmail(params.email!,"OTP Verification",`Your OTP is ${otp}`)
 
         return newUser;

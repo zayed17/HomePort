@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import app from './app';
+import app from './src/app';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 5001;
-const MONGO_URL = "mongodb+srv://mzayed9745:mohammadzayed9745@projectcluster.dozic4b.mongodb.net/?retryWrites=true&w=majority&appName=ProjectCluster"
+const MONGO_URL = process.env.MONGO_URL || ""
 
 mongoose.connect(MONGO_URL).then(() => {
     console.log('Connected to MongoDB');
