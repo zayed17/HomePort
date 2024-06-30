@@ -1,6 +1,6 @@
 const Navbar: React.FC = () => {
   return (
-    <nav className="bg-customRed p-4">
+    <nav className="bg-darkBlue p-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-center">
           <div>

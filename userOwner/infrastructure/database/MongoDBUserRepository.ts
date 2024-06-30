@@ -1,5 +1,5 @@
-import { User } from '../../entities/userEntity';
-import { UserRepository } from '../../repositories/UserRepository';
+import { User } from '../../entities';
+import { UserRepository } from '../../repositories';
 import UserModel from './models/UserModel';
 
 export class MongooseUserRepository implements UserRepository {
@@ -14,6 +14,10 @@ export class MongooseUserRepository implements UserRepository {
     async save(user: User): Promise<void> {
         const newUser = new UserModel(user);
         await newUser.save();
+    }
+
+    async update(email: string, updateData: Partial<User>): Promise<void> {
+        await UserModel.updateOne({ email }, { $set: updateData }).exec(); 
     }
 
 }

@@ -72,7 +72,7 @@ const SignupForm: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-2 px-4 shadow-sm text-sm font-medium rounded-full text-white bg-customRed"
+              className="w-full py-2 px-4 shadow-sm text-sm font-medium rounded-full text-white bg-darkBlue"
             >
               Sign Up
             </button>
@@ -80,7 +80,7 @@ const SignupForm: React.FC = () => {
           <div className="text-center mt-4">
             <span className="text-sm text-gray-700">
               Already have an account?{' '}
-              <Link to='/owner-login' className='text-customRed'>Login In</Link>
+              <Link to='/owner-login' className='text-darkBlue'>Login In</Link>
             </span>
           </div>
         </div>

@@ -31,11 +31,11 @@ const LoginForm: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-2 px-4   shadow-sm text-sm font-medium rounded-full text-white bg-customRed ">
+              className="w-full py-2 px-4   shadow-sm text-sm font-medium rounded-full text-white bg-darkBlue ">
               Login
             </button>
           </form>
-          <h5 className='text-right font-light text-sm text-gray-700 mt-2'>Don't have an account?<Link to='/owner-signup' className='text-customRed'>SignUp</Link></h5>
+          <h5 className='text-right font-light text-sm text-gray-700 mt-2'>Don't have an account?<Link to='/owner-signup' className='text-darkBlue'>SignUp</Link></h5>
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-customRed text-white px-4 py-2 flex justify-between items-center">
+    <nav className="bg-darkBlue text-white px-4 py-4 flex justify-between items-center">
       <div className="text-lg font-semibold">
         <Link to="/">Brand</Link>
       </div>

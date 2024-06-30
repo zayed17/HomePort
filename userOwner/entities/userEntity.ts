@@ -1,23 +1,26 @@
-export interface userData{
-    firstName:string,
-    lastName:string,
-    email:string,
-    phone:number,
-    password:string
+export interface UserData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: number;
+    password: string;
+    active: boolean; 
 }
 
-export class User{
-    firstName:string;
-    lastName:string;
-    email:string;
-    phone:number;
-    password:string
+export class User {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: number;
+    password: string;
+    active: boolean; 
 
-    constructor({firstName,lastName,email,phone,password}:userData){
-        this.firstName = firstName
-        this.lastName = lastName
-        this.email = email
-        this.phone = phone
-        this.password = password
+    constructor({ firstName, lastName, email, phone, password, active }: UserData) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.active = active; 
     }
 }
