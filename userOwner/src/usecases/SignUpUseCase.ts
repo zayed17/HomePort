@@ -1,8 +1,5 @@
 import { User } from '../entities';
-import { EmailService } from '../infrastructure/email/emailService';
-import { RedisOTPService } from '../infrastructure/redis/redisClient';
-import { UserRepository } from '../repositories';
-import { generateOTP } from '../utils/otpGenerator';
+import { UserInterface, RedisOtpInterface,EmailInterface } from '../repositories/interface';
 
 interface SignUpParams {
     firstName: string;
@@ -10,40 +7,45 @@ interface SignUpParams {
     email: string;
     phone: number;
     password: string;
+    role: string;
 }
 
 export class SignUpUseCase {
-    constructor(private userRepository: UserRepository,
-                private otpService: RedisOTPService,
-                private emailServic:EmailService
+    constructor(
+        private userRepository: UserInterface,
+        private otpService: RedisOtpInterface,
+        private emailService: EmailInterface
     ) {}
 
-    async execute(params: SignUpParams): Promise<User> {
-        if (!params.firstName || !params.lastName || !params.email || !params.phone || !params.password) {
-            throw new Error('Missing required fields');
-        }
-
-        const existingUser = await this.userRepository.findByEmail(params.email);
+    async execute({ firstName, lastName, email, phone, password, role }: SignUpParams): Promise<User> {
+        const existingUser = await this.userRepository.findByEmail(email);
         if (existingUser) {
-            throw new Error('User with this email already exists');
+            if (existingUser.roles.includes(role)) {
+                throw new Error('Email already exists with this role');
+            } else {
+                existingUser.roles.push(role);
+                await this.userRepository.update(existingUser.email, { roles: existingUser.roles });
+                return existingUser;
+            }
         }
 
-        const otp = generateOTP();
-        console.log(otp,"From signuse")
-        await this.otpService.storeOTP(params.email!,otp)
-
+        const otp = this.emailService.generateOTP()
+        console.log(otp, "Generated OTP");
+        await this.otpService.storeOTP(email, otp);
+        console.log("OTP stored in Redis");
 
         const newUser = new User({
-            firstName: params.firstName,
-            lastName: params.lastName,
-            email: params.email,
-            phone: params.phone,
-            password: params.password,
-            active:false
+            firstName,
+            lastName,
+            email,
+            phone,
+            password,
+            active: false,
+            roles: [role] 
         });
 
         await this.userRepository.save(newUser);
-        await this.emailServic.sendEmail(params.email!,"OTP Verification",`Your OTP is ${otp}`)
+        await this.emailService.sendEmail(email, "OTP Verification", `Your OTP is ${otp}`);
 
         return newUser;
     }

@@ -1,86 +1,93 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SubmitHandler } from 'react-hook-form';
+import { useSignUpMutation } from '../../store/user/userApi';
+import Input from '../common/Input';
+import Button from '../common/Button';
+import { useFormValidation } from '../../hooks/useFormValidation';
+import { SignUpFormInputs, signUpSchema } from '../../validation/validationSchema';
+import useErrorHandling from '../../hooks/useErrorHandling';
 
 const SignupForm: React.FC = () => {
+  const [signUp] = useSignUpMutation();
+  const form = useFormValidation<SignUpFormInputs>(signUpSchema);
+  const {ErrorMessage,clearError,handleError} = useErrorHandling()
+
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
+      try {
+          await signUp({
+              firstName: data.firstName,
+              lastName: data.lastName,
+              email: data.email,
+              phone: data.phone,
+              password: data.password,
+              role:'owner',
+          }).unwrap();
+          clearError()
+      } catch (error: any) {
+          handleError(error.data.message ||'Something Happend')
+          console.error('Error signing up:', error);
+      }
+  };
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="max-w-md min-w-96 md:max-w-xl">
         <div className="p-4 md:p-6">
           <h2 className="text-2xl font-bold mb-1 text-center">Sign Up</h2>
-          <form className='mt-2'>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form className='mt-4' onSubmit={form.handleSubmit(onSubmit)}>
+            <ErrorMessage />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div >
-                <input
-                  type="text"
-                  id="firstname"
-                  name="firstname"
-                  className="w-full px-3 py-2 border border-black rounded-full"
+                <Input
+                  register={form.register('firstName')}
                   placeholder="First Name"
-                  required
+                  error={form.formState.errors.firstName}
                 />
               </div>
               <div >
-                <input
-                  type="text"
-                  id="lastname"
-                  name="lastname"
-                  className="w-full px-3 py-2 border border-black rounded-full"
+                <Input
+                  register={form.register('lastName')}
                   placeholder="Last Name"
-                  required
+                  error={form.formState.errors.lastName}
                 />
               </div>
               <div >
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="w-full px-3 py-2 border border-black rounded-full"
-                  placeholder="Phone"
-                  required
-                />
-              </div>
-              <div >
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full px-3 py-2 border border-black rounded-full"
+                <Input
+                  register={form.register('email')}
                   placeholder="Email"
-                  required
+                  error={form.formState.errors.email}
                 />
               </div>
-              <div className="mb-4">
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  className="w-full px-3 py-2 border rounded-full border-black"
+              <div >
+                <Input
+                  register={form.register('phone')}
+                  placeholder="Phone"
+                  error={form.formState.errors.phone}
+                />
+              </div>
+              <div className="mb-3">
+                <Input
+                  register={form.register('password')}
                   placeholder="Password"
-                  required
+                  type="password"
+                  error={form.formState.errors.password}
                 />
               </div>
-              <div className="mb-4">
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  className="w-full px-3 py-2 border rounded-full border-black"
+              <div className="mb-3">
+                <Input
+                  register={form.register('confirmPassword')}
                   placeholder="Confirm Password"
-                  required
+                  type="password"
+                  error={form.formState.errors.confirmPassword}
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4 shadow-sm text-sm font-medium rounded-full text-white bg-darkBlue"
-            >
-              Sign Up
-            </button>
+            <Button type="submit">Sign Up</Button>
           </form>
           <div className="text-center mt-4">
             <span className="text-sm text-gray-700">
               Already have an account?{' '}
-              <Link to='/owner-login' className='text-darkBlue'>Login In</Link>
+              <Link to='/owner-login' className='text-LightdarkBlue'>Login In</Link>
             </span>
           </div>
         </div>

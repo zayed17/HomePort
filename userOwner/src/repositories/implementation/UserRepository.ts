@@ -1,8 +1,8 @@
 import { User } from '../../entities';
-import { UserRepository } from '../../repositories';
-import UserModel from './models/UserModel';
+import { UserInterface } from '../interface';
+import UserModel from '../../infrastructure/database/models/UserModel';
 
-export class MongooseUserRepository implements UserRepository {
+export class UserRepository implements UserInterface {
     async findByEmail(email: string): Promise<User | null> {
         const user = await UserModel.findOne({ email }).exec();
         if (!user) {
