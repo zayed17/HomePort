@@ -10,8 +10,9 @@ export default {
         'sans': ['Open Sans', 'ui-sans-serif', 'system-ui'],
       },
       colors: {
-        darkBlue: '#474973',
-        lightViolet: '#a69cac'
+        LightdarkBlue: '#474973',
+        lightViolet: '#a69cac',
+        DarkBlue:'#0d0c1d'
       },
     },
   },

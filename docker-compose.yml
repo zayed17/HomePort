@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  userowner:
+    build:
+      context: ./userowner
+    ports:
+      - "5001:5001"
+    networks:
+      - app-network
+
+  nginx:
+    build: ./nginx   
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - userowner
+    networks:
+      - app-network
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

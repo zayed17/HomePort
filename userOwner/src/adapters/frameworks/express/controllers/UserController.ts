@@ -3,6 +3,9 @@ import { MongooseUserRepository } from '../../../../infrastructure/database/Mong
 import { SignUpUseCase,LoginUseCase,OTPVerificationUseCase } from '../../../../usecases';
 import { RedisOTPService } from '../../../../infrastructure/redis/redisClient';
 import { EmailService } from '../../../../infrastructure/email/emailService';
+import { generateAuthToken,setAuthTokenCookie } from '../../../../services';
+import dontenv from 'dotenv'
+dontenv.config()
 
 const userRepository = new MongooseUserRepository();
 const otpService = new RedisOTPService()
@@ -18,6 +21,8 @@ export const signUpUser = async (req: Request, res: Response): Promise<void> => 
 
     try {
         const newUser = await signUpUseCase.execute({ firstName, lastName, email, phone, password });
+        const token = generateAuthToken({ email: newUser.email }); 
+        setAuthTokenCookie(res, token);
         res.status(201).json(newUser);
     } catch (error) {
         res.status(400).json({ message: "Unexpected Happened" });
@@ -39,6 +44,8 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
     console.log(req.body,"from verifyOtp ")
     try {
         await otpVerificationUseCase.VerifyOtp(email, otp);
+        const token = generateAuthToken({ email }); 
+        setAuthTokenCookie(res, token); 
         res.status(200).json({
             message: 'OTP verified successfully',
         });

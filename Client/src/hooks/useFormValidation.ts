@@ -1,36 +1,38 @@
-import { useFormik } from 'formik';
-import { loginSchema, signUpSchema } from '../validation/validationSchema';
+// import { useForm, UseFormReturn } from 'react-hook-form';
+// import * as Yup from 'yup';
+// import { yupResolver } from '@hookform/resolvers/yup';
 
-interface FormData {
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  phone?: string;
-  password: string;
-  confirmPassword?: string;
-}
+// interface FormValues {
+//   firstName: string;
+//   lastName: string;
+//   phone: number;
+//   email: string;
+//   password: string;
+//   confirmPassword?: string; 
+// }
 
-interface UseFormValidationProps {
-  isLogin: boolean;
-  handleSubmit: (values: FormData) => void;
-}
+// const validationSchema = Yup.object().shape({
+//   firstName: Yup.string().required('First name is required'),
+//   lastName: Yup.string().required('Last name is required'),
+//   phone: Yup.number().required('Phone number is required'),
+//   email: Yup.string().email('Invalid email address').required('Email is required'),
+//   password: Yup.string()
+//    .min(6, 'Password must be at least 6 characters')
+//    .required('Password is required'),
+//   confirmPassword: Yup.string()
+//    .oneOf([Yup.ref('password')], 'Passwords must match')
+//    .when('password', (password, schema) => {
+//       return password && password.length > 0? Yup.string().required('Please confirm your password') : schema;
+//     }),
+// });
 
-export const useFormValidation = ({ isLogin, handleSubmit }: UseFormValidationProps) => {
-  console.log(isLogin,handleSubmit,"getting or not")
-  const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
-    },
-    validationSchema: isLogin ? loginSchema : signUpSchema,
-    onSubmit: (values: FormData) => {
-      handleSubmit(values);
-    },
-  });
+// const useValidationForm = (): UseFormReturn<FormValues> => {
+//   return useForm<FormValues>({
+//     resolver: yupResolver(validationSchema),
+//   });
+// };
 
-  return formik;
-};
+// export default useValidationForm;
+
+
+
