@@ -5,6 +5,8 @@ import errorHandler from './infrastructure/middleware/ErrorMiddleware';
 const app = express();
 const corsOptions = {
   origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'OPTIONS'], 
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 app.use(cors(corsOptions));

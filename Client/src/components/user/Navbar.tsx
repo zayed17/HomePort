@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import LoginModal from '../common/LoginModal';
+import { useDispatch, useSelector } from 'react-redux';
+import {RootState} from '../../store/store'
+import { useGetUserMutation } from '../../store/user/userApi';
+import { setUser } from '../../store/user/authSlice';
+
+
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const token = useSelector((state:RootState)=>state.auth.token)
+  const dispatch = useDispatch()
+  const [GetUser] = useGetUserMutation()
+
+  const navigate = useNavigate()
+
+  
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    if(token){
+      navigate('/profile/details')
+    }else{
+      setIsOpen(!isOpen);
+    }
   };
 
   return (
@@ -24,8 +41,8 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <div className={`md:flex md:items-center ${isOpen ? 'block' : 'hidden'}`}>
-        <button onClick={toggleMenu} className="block mt-4 md:inline-block md:mt-0 md:ml-4 focus:outline-none">
-          Login
+        <button  onClick={toggleMenu} className="block mt-4 md:inline-block md:mt-0 md:ml-4 focus:outline-none">
+          {token?"profile":"login"}
         </button>
       </div>
       {isOpen && <LoginModal isOpen={isOpen} onClose={toggleMenu} />}

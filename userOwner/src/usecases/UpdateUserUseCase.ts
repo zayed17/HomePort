@@ -1,4 +1,3 @@
-import { generateToken } from '../../../HomePackage/src';
 import { User } from '../entities';
 import {UserInterface} from '../repositories/interface'
 
@@ -18,7 +17,6 @@ export class LoginUseCase{
         if (user.password !== password) {
             throw new Error('Incorrect password');      
         }
-        const token = generateToken({email:user.email})
 
         return {user,token}
     }

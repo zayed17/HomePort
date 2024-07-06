@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
+import { FaEdit } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import {RootState} from '../../../../store/store'
+import EditUserModal from '../../EditModal';
 
 const UserDetails: React.FC = () => {
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
-  const [phone, setPhone] = useState('+1234567890');
+  const user = useSelector((state:RootState)=>state.auth.user)
   const [photo, setPhoto] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEditClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <div className="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="max-w-lg mx-auto bg-white shadow-md rounded my-10 px-8 pt-6 pb-8 mb-4 relative">
+      <div className="absolute top-0 right-0 mt-2 mr-2">
+        <FaEdit className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={handleEditClick}/>
+      </div>
       <div className="mb-4 text-center">
         <label className="block text-DarkBlue text-sm font-bold mb-2" htmlFor="photo">
           Photo
         </label>
-        <div className="relative w-24 h-24 mx-auto mb-2">
+        <div className="relative w-32 h-32 mx-auto mb-2">
           <div className="w-full h-full bg-gray-200 rounded-full overflow-hidden">
             {photo ? (
               <img
@@ -45,22 +58,21 @@ const UserDetails: React.FC = () => {
           />
         </div>
       </div>
-      <div className="mb-4 flex">
-        <div className="w-1/2 mr-2">
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
           <label className="block text-DarkBlue text-sm font-bold mb-2" htmlFor="firstName">
-            First Name
+            First Name  
           </label>
           <input
             type="text"
             id="firstName"
             disabled
             className="shadow appearance-none border rounded-full w-full py-2 px-3 text-DarkBlue leading-tight focus:outline-none focus:shadow-outline"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={user?.userDetails?.firstName}
             required
           />
         </div>
-        <div className="w-1/2 ml-2">
+        <div>
           <label className="block text-DarkBlue text-sm font-bold mb-2" htmlFor="lastName">
             Last Name
           </label>
@@ -69,8 +81,7 @@ const UserDetails: React.FC = () => {
             id="lastName"
             disabled
             className="shadow appearance-none border rounded-full w-full py-2 px-3 text-DarkBlue leading-tight focus:outline-none focus:shadow-outline"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={user?.userDetails?.lastName}
             required
           />
         </div>
@@ -84,8 +95,7 @@ const UserDetails: React.FC = () => {
           id="email"
           disabled
           className="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={user?.userDetails?.email}
           required
         />
       </div>
@@ -98,11 +108,20 @@ const UserDetails: React.FC = () => {
           id="phone"
           disabled
           className="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          value={user?.userDetails?.phone}
           required
         />
       </div>
+      <EditUserModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        user={{
+          firstName: user?.userDetails?.firstName || '',
+          lastName: user?.userDetails?.lastName || '',
+          email: user?.userDetails?.email || '',
+          phone: user?.userDetails?.phone || ''
+        }}
+      />
     </div>
   );
 };

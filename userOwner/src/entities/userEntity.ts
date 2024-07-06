@@ -2,7 +2,7 @@ export interface UserData {
     firstName: string;
     lastName: string;
     email: string;
-    phone: number;
+    phone: string;
     password: string;
     active: boolean; 
     roles:string[]
@@ -12,7 +12,7 @@ export class User {
     firstName: string;
     lastName: string;
     email: string;
-    phone: number;
+    phone: string;
     password: string;
     active: boolean;
     roles:string[];

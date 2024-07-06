@@ -1,52 +1,50 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { FaUser, FaHeart, FaCreditCard, FaComments } from 'react-icons/fa';
 
-
-
 const ProfileSidebar: React.FC = () => {
- 
+  const location = useLocation();
 
   return (
     <div className="h-screen bg-[#161b33] text-white flex flex-col justify-between p-4 fixed md:w-64 w-20 transition-all duration-300">
       <div>
-        <div className="text-2xl font-bold mb-4 hidden md:block">Profile</div>
+        <div className="text-2xl font-bold mb-5 hidden md:block">Profile</div>
         <ul>
-          <li className="mb-2">
-            <Link 
-              to="/profile/details"
-              className="w-full flex items-center py-2 my-4 px-4 rounded-full bg-[#a69cac] hover:bg-[#928aa7] transition-all duration-300"
+          <li className="my-6">
+            <NavLink 
+              to="/profile/details" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-full ${location.pathname === '/profile/details' ? 'bg-LightdarkBlue text-white' : 'bg-white text-black'}`}
             >
               <FaUser className="md:mr-2" />
               <span className="hidden md:block">User Details</span>
-            </Link>
+            </NavLink>
           </li>
-          <li className="mb-2">
-            <Link 
-              to="/profile/favorite"
-              className="w-full flex items-center py-2 my-4 px-4 rounded-full bg-[#a69cac] hover:bg-[#928aa7] transition-all duration-300"
+          <li className="my-6">
+            <NavLink 
+              to="/profile/favorite" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-full text-black ${location.pathname === '/profile/favorite' ? 'bg-LightdarkBlue text-white' : 'text-black bg-white'}`}
             >
               <FaHeart className="md:mr-2" />
               <span className="hidden md:block">Favorite</span>
-            </Link>
+            </NavLink>
           </li>
-          <li className="mb-2">
-            <Link 
-              to="/profile/payment"
-              className="w-full flex items-center py-2 my-4 px-4 rounded-full bg-[#a69cac] hover:bg-[#928aa7] transition-all duration-300"
+          <li className="my-6">
+            <NavLink 
+              to="/profile/payment" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-full text-black ${location.pathname === '/profile/payment' ? 'bg-LightdarkBlue text-white' : 'text-black bg-white'}`}
             >
               <FaCreditCard className="md:mr-2" />
               <span className="hidden md:block">Payment</span>
-            </Link>
+            </NavLink>
           </li>
-          <li className="mb-2">
-            <Link 
-              to="/profile/chat"
-              className="w-full flex items-center py-2 my-4 px-4 rounded-full bg-[#a69cac] hover:bg-[#928aa7] transition-all duration-300"
+          <li className="my-6">
+            <NavLink 
+              to="/profile/chat" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-full text-black ${location.pathname === '/profile/chat' ? 'bg-LightdarkBlue text-white' : 'text-black bg-white'}`}
             >
               <FaComments className="md:mr-2" />
               <span className="hidden md:block">Chat</span>
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>
@@ -55,5 +53,3 @@ const ProfileSidebar: React.FC = () => {
 };
 
 export default ProfileSidebar;
-
-

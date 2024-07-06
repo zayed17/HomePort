@@ -3,10 +3,9 @@ import Home from '../pages/user/Home';
 import OwnerLogin from '../pages/owner/Login';
 import OwnerSignup from '../pages/owner/SignUp';
 import Profile from '../pages/user/Profile';
-import UserDetails from '../components/user/sections/profile/UserDetails';
-import Favorite from '../components/user/sections/profile/Favorite';
-import Payment from '../components/user/sections/profile/Payment';
-import Chat from '../components/user/sections/profile/Chat';
+import ChatPage from '../components/user/ChatPage';
+import FavoritePage from '../components/user/FavoritePage';
+import PaymentPage from '../components/user/PaymentPage';
 
 const AppRoutes = () => {
   return (
@@ -15,12 +14,10 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/owner-login" element={<OwnerLogin />} />
         <Route path="/owner-signup" element={<OwnerSignup />} />
-        <Route path="/profile/details" element={<Profile />}>
-          <Route path="details" element={<UserDetails />} />
-          <Route path="favorite" element={<Favorite />} />
-          <Route path="payment" element={<Payment />} />
-          <Route path="chat" element={<Chat />} />
-        </Route>
+        <Route path="/profile/details" element={<Profile />} />
+        <Route path="/profile/favorite" element={<FavoritePage />} />
+        <Route path="/profile/payment" element={<PaymentPage />} />
+        <Route path="/profile/chat" element={<ChatPage />} />
       </Routes>
     </Router>
   );

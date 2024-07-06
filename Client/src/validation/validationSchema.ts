@@ -28,8 +28,8 @@ export interface SignUpFormInputs {
   lastName: string;
   email: string;
   phone: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
 }
 
 export const signUpSchema = Yup.object().shape({

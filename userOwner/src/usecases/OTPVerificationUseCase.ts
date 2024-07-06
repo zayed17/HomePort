@@ -1,11 +1,12 @@
 import { UserInterface ,RedisOtpInterface } from '../repositories/interface'
+import {generateToken} from '../../../HomePackage/src'
 
 export class OTPVerificationUseCase{
     constructor(
         private otpService:RedisOtpInterface,
         private userRepository:UserInterface
     ){}
-    async VerifyOtp(email:string,otp:string,):Promise<void>{
+    async VerifyOtp(email:string,otp:string,):Promise<{token:string,user:any}>{
         const storeOtp = await this.otpService.retrieveOTP(email);
 
         if(!storeOtp || storeOtp != otp){
@@ -18,5 +19,7 @@ export class OTPVerificationUseCase{
         user.active = true;
         await this.userRepository.update(email, { active: true }); 
         await this.otpService.deleteOTP(email);
+        const token = generateToken({email:user.email})
+        return {token,user}
     }
 }

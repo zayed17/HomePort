@@ -1,8 +1,7 @@
-// Profile.tsx
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
 import ProfileSidebar from '../../components/user/ProfileSidebar';
 import ProfileNav from '../../components/user/ProfileNav';
+import UserDetails from '../../components/user/sections/profile/UserDetails';
 
 const Profile: React.FC = () => {
   return (
@@ -11,7 +10,7 @@ const Profile: React.FC = () => {
       <div className="flex-1 md:ml-64 ml-20 transition-all duration-300">
         <ProfileNav />
         <div className="p-4">
-          <Outlet />
+          <UserDetails />
         </div>
       </div>
     </div>

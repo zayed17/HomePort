@@ -1,52 +1,48 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
-// import useValidationForm from '../../hooks/useFormValidation';
+import { Link } from 'react-router-dom';
+import { SubmitHandler } from 'react-hook-form';
+import Input from '../common/Input';
+import Button from '../common/Button';
+import { useFormValidation } from '../../hooks/useFormValidation';
+import { LoginFormInputs, loginSchema } from '../../validation/validationSchema';
+import useErrorHandling from '../../hooks/useErrorHandling';
+import { useLoginInMutation } from '../../store/user/userApi';
 
 
-// interface FormValues {
-//   email: string;
-//   password: string;
-// }
 const LoginForm: React.FC = () => {
 
-  // const { register, handleSubmit, formState: { errors } } = useValidationForm();
-  // const onSubmit = (data: FormValues) => {
-  //   console.log(data);
-  // };
+  const [login] = useLoginInMutation();
+  const form = useFormValidation<LoginFormInputs>(loginSchema);
+  const { handleError, clearError, ErrorMessage } = useErrorHandling();
+
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+      try {
+          const res = await login({ email: data.email, password: data.password }).unwrap();
+          console.log(res);
+          clearError()
+      } catch (error: any) {
+          handleError(error.data.message || 'Error logging in');
+      }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      {/* <div className="max-w-md min-w-96  md:max-w-xl">
+      <div className="max-w-md min-w-96  md:max-w-xl">
         <div className="p-4 md:p-6">
           <h2 className="text-2xl font-bold mb-1 text-center">Login</h2>
-          <form onSubmit={handleSubmit(onSubmit)} >
+          <form onSubmit={form.handleSubmit(onSubmit)} >
+            <ErrorMessage />
             <div className="mb-4">
-              <input
-                type="email"
-                id="email"
-                className={`w-full px-3 py-2 border rounded-full ${errors.email ? 'border-red-500' : 'border-black'}`}
-                {...register('email')}
-              />
-            {errors.email && <p className="text-red-500 text-xs italic">{errors.email.message}</p>}
+              <Input register={form.register('email')} placeholder="Email" error={form.formState.errors.email} />
             </div>
             <div className="mb-4">
-              <input
-                type="password"
-                id="password"
-                className={`w-full px-3 py-2 border rounded-full ${errors.password ? 'border-red-500' : 'border-black'}`}
-                {...register('password')}
-              />
-            {errors.password && <p className="text-red-500 text-xs italic">{errors.password.message}</p>}
+              <Input register={form.register('password')} placeholder="Password" type="password" error={form.formState.errors.password} />
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 px-4   shadow-sm text-sm font-medium rounded-full text-white bg-darkBlue ">
-              Login
-            </button>
+            <Button>Login</Button>
           </form>
           <h5 className='text-right font-light text-sm text-gray-700 mt-2'>Don't have an account?<Link to='/owner-signup' className='text-darkBlue'>SignUp</Link></h5>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

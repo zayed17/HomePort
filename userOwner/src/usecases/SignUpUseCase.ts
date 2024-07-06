@@ -5,7 +5,7 @@ interface SignUpParams {
     firstName: string;
     lastName: string;
     email: string;
-    phone: number;
+    phone: string;
     password: string;
     role: string;
 }
@@ -34,6 +34,7 @@ export class SignUpUseCase {
         await this.otpService.storeOTP(email, otp);
         console.log("OTP stored in Redis");
 
+        console.log(1)
         const newUser = new User({
             firstName,
             lastName,
@@ -43,10 +44,11 @@ export class SignUpUseCase {
             active: false,
             roles: [role] 
         });
-
+console.log(2)
         await this.userRepository.save(newUser);
+        console.log(3)
         await this.emailService.sendEmail(email, "OTP Verification", `Your OTP is ${otp}`);
-
+console.log(3)
         return newUser;
     }
 }
