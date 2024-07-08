@@ -7,6 +7,7 @@ import Button from '../common/Button';
 import { LoginFormInputs, loginSchema } from '../../validation/validationSchema';
 import useErrorHandling from '../../hooks/useErrorHandling';
 import { setUser,setToken } from '../../store/user/authSlice';
+import toast from 'react-hot-toast';
 
 interface LoginFormProps {
     onClose: () => void; 
@@ -19,11 +20,14 @@ const LoginForm: React.FC<LoginFormProps> = ({onClose}) => {
 
     const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
         try {
-            const res = await login({ email: data.email, password: data.password }).unwrap();
+            const res = await login({ email: data.email, password: data.password,role:'user' }).unwrap();
+            console.log(res,"login res")
             clearError()
-            dispatch(setUser(res.user)); 
-            dispatch(setToken(res.token)); 
+            const {user,role,token} = res
+            dispatch(setUser({user,role})); 
+            dispatch(setToken(token)); 
             onClose()
+            toast.success('Login successfully'); 
         } catch (error: any) {
             handleError(error.data.message || 'Error logging in');
         }

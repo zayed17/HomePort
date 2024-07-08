@@ -44,15 +44,33 @@ const userApi = createApi({
           method: 'GET',
         }),
       }), 
-      updataUser: builder.mutation({
-        query: () => ({
+      updateUser: builder.mutation({
+        query: (credentials) => ({
           url: `${USER_URL}/updateUser`,
-          method: 'PUT',
+          method: 'POST',
+          body: credentials,
+        }),
+      }), 
+      resendOTP: builder.mutation({
+        query: (credentials) => ({
+          url: `${USER_URL}/resendOTP`,
+          method: 'POST',
+          body: credentials,
+        }),
+      }), 
+      uploadPic: builder.mutation({
+        query: (credentials) => ({
+          url: `${USER_URL}/uploadImage`,
+          method: 'POST',
+          body: credentials,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         }),
       }), 
   }),
 });
 
-export const { useLoginInMutation, useSignUpMutation, useOtpVerifyMutation,useGetUserMutation , useUpdataUserMutation} = userApi;
+export const { useLoginInMutation, useSignUpMutation, useOtpVerifyMutation,useGetUserMutation , useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation} = userApi;
 
 export default userApi;

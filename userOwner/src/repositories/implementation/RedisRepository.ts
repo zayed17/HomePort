@@ -34,4 +34,8 @@ export class RedisOTPRepository implements RedisOtpInterface {
     async deleteOTP(email: string): Promise<void> {
         await this.client.del(email);
     }
+    
+    async resendOTP(email:string,otp:string):Promise<void>{
+        await this.storeOTP(email,otp)
+    }
 }

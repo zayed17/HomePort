@@ -5,11 +5,10 @@ interface getDetailParams{
     email:string;
 }
 
-export class GetUserDetail{
+export class GetUserDetailUsecase{
     constructor(private userRepository : UserInterface){}
     async getDetail(params:getDetailParams): Promise<User> {
         const {email} = params;
-        console.log(1,2,email)
         const user = await this.userRepository.findByEmail(email)
         if(!user){
             throw new Error("user not found")

@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-import {RootState} from '../../../../store/store'
+import { RootState } from '../../../../store/store';
 import EditUserModal from '../../EditModal';
+import axios from 'axios';
+import '../../../../style/loader.css';
 
 const UserDetails: React.FC = () => {
-  const user = useSelector((state:RootState)=>state.auth.user)
-  const [photo, setPhoto] = useState('');
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const [photo, setPhoto] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -17,24 +22,72 @@ const UserDetails: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setPhoto(file);
+    setIsPreview(true);
+  };
+
+  const handleCancel = () => {
+    setPhoto(null);
+    setIsPreview(false);
+  };
+
+  const handleUpload = async () => {
+    if (!photo) {
+      console.error('No file selected.');
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('photo', photo);
+
+      const response = await axios.post('http://localhost:5001/user/uploadImage', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Image uploaded:', response);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto bg-white shadow-md rounded my-10 px-8 pt-6 pb-8 mb-4 relative">
       <div className="absolute top-0 right-0 mt-2 mr-2">
-        <FaEdit className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={handleEditClick}/>
+        <FaEdit className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={handleEditClick} />
       </div>
       <div className="mb-4 text-center">
         <label className="block text-DarkBlue text-sm font-bold mb-2" htmlFor="photo">
           Photo
         </label>
         <div className="relative w-32 h-32 mx-auto mb-2">
-          <div className="w-full h-full bg-gray-200 rounded-full overflow-hidden">
-            {photo ? (
+          <div className="w-full h-full bg-gray-200 rounded-full overflow-hidden relative">
+            {isLoading && (
+              <div className="absolute inset-0 w-full h-full rounded-full flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+                <div className="loader"></div>
+              </div>
+            )}
+            {isPreview && photo && (
               <img
-                src={photo}
+                src={URL.createObjectURL(photo)}
                 alt="User Photo"
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full rounded-full"
               />
-            ) : (
+            )}
+            {user?.userDetails?.image && !isPreview && (
+              <img
+                src={user?.userDetails?.image}
+                alt="User Photo"
+                className="object-cover w-full h-full rounded-full"
+              />
+            )}
+            {!user?.userDetails?.image && !isPreview && (
               <span className="text-gray-500 flex items-center justify-center h-full">
                 No photo uploaded
               </span>
@@ -44,24 +97,30 @@ const UserDetails: React.FC = () => {
             type="file"
             id="photo"
             className="absolute inset-0 opacity-0 cursor-pointer"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  const photoUrl = reader.result?.toString();
-                  setPhoto(photoUrl || '');
-                };
-                reader.readAsDataURL(file);
-              }
-            }}
+            onChange={handleFileChange}
           />
         </div>
+        {isPreview && (
+          <div className="mt-2 flex justify-center space-x-2">
+            <button
+              className="bg-red-500 text-white py-1 px-3 rounded-full text-sm"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="bg-green-500 text-white py-1 px-3 rounded-full text-sm"
+              onClick={handleUpload}
+            >
+              Save
+            </button>
+          </div>
+        )}
       </div>
       <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-DarkBlue text-sm font-bold mb-2" htmlFor="firstName">
-            First Name  
+            First Name
           </label>
           <input
             type="text"
@@ -119,7 +178,7 @@ const UserDetails: React.FC = () => {
           firstName: user?.userDetails?.firstName || '',
           lastName: user?.userDetails?.lastName || '',
           email: user?.userDetails?.email || '',
-          phone: user?.userDetails?.phone || ''
+          phone: user?.userDetails?.phone || '',
         }}
       />
     </div>

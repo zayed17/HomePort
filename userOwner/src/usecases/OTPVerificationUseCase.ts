@@ -19,7 +19,7 @@ export class OTPVerificationUseCase{
         user.active = true;
         await this.userRepository.update(email, { active: true }); 
         await this.otpService.deleteOTP(email);
-        const token = generateToken({email:user.email})
+        const token = generateToken({email:user.email,role:user.roles})
         return {token,user}
     }
-}
+}   

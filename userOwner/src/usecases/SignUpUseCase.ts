@@ -28,27 +28,20 @@ export class SignUpUseCase {
                 return existingUser;
             }
         }
-
         const otp = this.emailService.generateOTP()
-        console.log(otp, "Generated OTP");
         await this.otpService.storeOTP(email, otp);
-        console.log("OTP stored in Redis");
-
-        console.log(1)
         const newUser = new User({
             firstName,
             lastName,
             email,
             phone,
             password,
+            image:null,
             active: false,
             roles: [role] 
         });
-console.log(2)
         await this.userRepository.save(newUser);
-        console.log(3)
         await this.emailService.sendEmail(email, "OTP Verification", `Your OTP is ${otp}`);
-console.log(3)
         return newUser;
     }
 }

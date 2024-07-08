@@ -1,23 +1,22 @@
 import { User } from '../entities';
 import {UserInterface} from '../repositories/interface'
 
-interface LoginParams{
+interface EditParams{
+    firstName:string;
+    lastName:string;
+    phone:string;
     email:string;
-    password:string;
 }
 
-export class LoginUseCase{
+export class UpdateUsecase{
     constructor(private userRepository : UserInterface){}
-    async execute(params:LoginParams): Promise<{user:User,token:string}> {
-        const {email,password} = params;
+    async update(params:EditParams): Promise<User> {
+        const {lastName,firstName,phone,email} = params;
         const user = await this.userRepository.findByEmail(email)
         if(!user){
             throw new Error("user not found")
         }
-        if (user.password !== password) {
-            throw new Error('Incorrect password');      
-        }
-
-        return {user,token}
+        await this.userRepository.update(email, {lastName,firstName,phone}); 
+        return user
     }
 }

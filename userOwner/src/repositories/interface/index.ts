@@ -1,3 +1,5 @@
 export * from './RedisInterface'
 export * from './UserInterface'
 export * from './EmailInterface'
+export * from './S3Interface'
+export * from './GoogleAuthInterface'

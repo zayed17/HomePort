@@ -9,12 +9,10 @@ import store from './store/store'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-        <GoogleOAuthProvider clientId='550849310987-7ldblcs20utp0hrsqk819p4tqp590ram.apps.googleusercontent.com'>
-
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <GoogleOAuthProvider clientId='550849310987-7ldblcs20utp0hrsqk819p4tqp590ram.apps.googleusercontent.com'>
+      <Provider store={store}>
+        <App />
+      </Provider>
     </GoogleOAuthProvider>
-
   </React.StrictMode>
 )
