@@ -4,9 +4,11 @@ import { FiAlertCircle } from 'react-icons/fi';
 const useErrorHandling = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleError = (error: any) => {
-    if (error) {
+  const handleError = (error: unknown) => {
+    if (typeof error === 'string') {
       setErrorMessage(error);
+    } else if (error instanceof Error) {
+      setErrorMessage(error.message);
     } else {
       setErrorMessage('An unexpected error occurred');
     }

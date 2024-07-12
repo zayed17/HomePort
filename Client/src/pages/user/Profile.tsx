@@ -4,6 +4,7 @@ import ProfileNav from '../../components/user/ProfileNav';
 import UserDetails from '../../components/user/sections/profile/UserDetails';
 
 const Profile: React.FC = () => {
+
   return (
     <div className="flex h-screen">
       <ProfileSidebar />

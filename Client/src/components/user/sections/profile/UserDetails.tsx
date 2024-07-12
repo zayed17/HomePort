@@ -1,25 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../store/store';
 import EditUserModal from '../../EditModal';
 import axios from 'axios';
-import '../../../../style/loader.css';
+import ChangePasswordModal from '../../ChangePasswordModal';
+import { setUser } from '../../../../store/user/userSlice';
+import { useGetUserMutation } from '../../../../store/user/userApi';
+import { getCookie } from '../../../../helpers/getCookie';
 
 const UserDetails: React.FC = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const token = useSelector((state: RootState) => state.auth.token);
+  const user = useSelector((state: RootState) => state.user.user);
+  const token = getCookie('token');
   const [photo, setPhoto] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [GetUser] = useGetUserMutation();
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+
+  const fetchUser = async () => {
+    try {
+      if (token) {
+        const fetchedUser = await GetUser(token).unwrap();
+        dispatch(setUser(fetchedUser.userDetails));
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [token, dispatch, GetUser]);
 
   const handleEditClick = () => {
     setIsModalOpen(true);
   };
 
-  const handleModalClose = () => {
+  const handleCloseModal = () => {
     setIsModalOpen(false);
+    fetchUser(); 
+  };
+
+  const handleChangePassModal = () => {
+    setIsChangePasswordModalOpen(prev => !prev);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +76,7 @@ const UserDetails: React.FC = () => {
         },
       });
       console.log('Image uploaded:', response);
+      fetchUser(); 
     } catch (error) {
       console.error('Error uploading image:', error);
     } finally {
@@ -57,8 +84,12 @@ const UserDetails: React.FC = () => {
     }
   };
 
+  if (!user) {
+    return <div>Loading user details...</div>;
+  }
+
   return (
-    <div className="max-w-lg mx-auto bg-white shadow-md rounded my-10 px-8 pt-6 pb-8 mb-4 relative">
+    <div className="max-w-lg mx-auto bg-white shadow-md rounded my-10 px-8 pt-6 pb-4 mb-4 relative">
       <div className="absolute top-0 right-0 mt-2 mr-2">
         <FaEdit className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={handleEditClick} />
       </div>
@@ -73,21 +104,13 @@ const UserDetails: React.FC = () => {
                 <div className="loader"></div>
               </div>
             )}
-            {isPreview && photo && (
+            {(isPreview && photo) || user.image ? (
               <img
-                src={URL.createObjectURL(photo)}
+                src={isPreview && photo ? URL.createObjectURL(photo) : user.image}
                 alt="User Photo"
                 className="object-cover w-full h-full rounded-full"
               />
-            )}
-            {user?.userDetails?.image && !isPreview && (
-              <img
-                src={user?.userDetails?.image}
-                alt="User Photo"
-                className="object-cover w-full h-full rounded-full"
-              />
-            )}
-            {!user?.userDetails?.image && !isPreview && (
+            ) : (
               <span className="text-gray-500 flex items-center justify-center h-full">
                 No photo uploaded
               </span>
@@ -127,7 +150,7 @@ const UserDetails: React.FC = () => {
             id="firstName"
             disabled
             className="shadow appearance-none border rounded-full w-full py-2 px-3 text-DarkBlue leading-tight focus:outline-none focus:shadow-outline"
-            value={user?.userDetails?.firstName}
+            value={user.firstName}
             required
           />
         </div>
@@ -140,7 +163,7 @@ const UserDetails: React.FC = () => {
             id="lastName"
             disabled
             className="shadow appearance-none border rounded-full w-full py-2 px-3 text-DarkBlue leading-tight focus:outline-none focus:shadow-outline"
-            value={user?.userDetails?.lastName}
+            value={user.lastName}
             required
           />
         </div>
@@ -154,7 +177,7 @@ const UserDetails: React.FC = () => {
           id="email"
           disabled
           className="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          value={user?.userDetails?.email}
+          value={user.email}
           required
         />
       </div>
@@ -167,20 +190,15 @@ const UserDetails: React.FC = () => {
           id="phone"
           disabled
           className="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          value={user?.userDetails?.phone}
+          value={user.phone}
           required
         />
       </div>
-      <EditUserModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        user={{
-          firstName: user?.userDetails?.firstName || '',
-          lastName: user?.userDetails?.lastName || '',
-          email: user?.userDetails?.email || '',
-          phone: user?.userDetails?.phone || '',
-        }}
-      />
+      <h4 className="cursor-pointer text-sm text-right" onClick={handleChangePassModal}>
+        Change Password
+      </h4>
+      <ChangePasswordModal isOpen={isChangePasswordModalOpen} onClose={handleChangePassModal} email={user.email} />
+      <EditUserModal isOpen={isModalOpen} onClose={handleCloseModal} user={user} />
     </div>
   );
 };

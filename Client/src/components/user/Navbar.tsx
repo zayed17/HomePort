@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import LoginModal from '../common/LoginModal';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import '../../style/loader.css';
+import { getCookie } from '../../helpers/getCookie';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = getCookie('token')
+  console.log(token)
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -41,26 +41,19 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav
-      className={`bg-LightdarkBlue text-white px-4 py-1 flex justify-between items-center transition-all duration-300 ${
-        isFixed ? 'fixed top-0 w-full z-50 shadow-lg' : 'relative'
-      }`}
-    >
-      {/* Logo or Brand */}
+    <nav className={`bg-LightdarkBlue text-white px-4 py-1 flex justify-between items-center transition-all duration-300 ${isFixed ? 'fixed top-0 w-full z-50 shadow-lg' : 'relative'}`}>
       <div className="text-lg font-semibold">
         <Link to="/" className="hover:text-gray-300">
           Brand
         </Link>
       </div>
 
-      {/* Mobile Menu Button */}
       <div className="md:hidden">
         <button onClick={toggleMenu} className="focus:outline-none">
           {isOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
         </button>
       </div>
 
-      {/* Dropdown Menu */}
       <div className={`md:flex md:items-center md:space-x-4 ${isOpen ? 'block' : 'hidden'} absolute top-16 left-0 right-0 bg-LightdarkBlue md:bg-transparent md:static`}>
         <button onClick={handleProfileOrLoginClick} className="bg-white text-LightdarkBlue rounded-full px-5 py-2 font-semibold focus:outline-none m-2">
           {token ? 'Profile' : 'Register'}
@@ -70,7 +63,6 @@ const Navbar: React.FC = () => {
         </Link>
       </div>
 
-      {/* Login Modal */}
       {isOpen && !token && <LoginModal isOpen={isOpen} onClose={toggleMenu} />}
     </nav>
   );

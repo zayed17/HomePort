@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import { setUser } from '../../store/user/authSlice';
-import { useGetUserMutation } from '../../store/user/userApi';
-import { RootState } from '../../store/store';
 import { useUpdateUserMutation } from '../../store/user/userApi';
 import useErrorHandling from '../../hooks/useErrorHandling';
 
@@ -20,17 +16,14 @@ interface EditUserModalProps {
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) => {
-  const [updateUser] = useUpdateUserMutation();
-  const { handleError, clearError, ErrorMessage } = useErrorHandling();
-  const dispatch = useDispatch();
-  const [GetUser] = useGetUserMutation();
-  const token = useSelector((state: RootState) => state.auth.token);
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phone: '',
   });
+
+  const { handleError, clearError, ErrorMessage } = useErrorHandling();
+  const [updateUser] = useUpdateUserMutation();
 
   useEffect(() => {
     if (isOpen) {
@@ -41,20 +34,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) 
       });
     }
   }, [isOpen, user]);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (token) {
-          const fetchedUser = await GetUser(token).unwrap();
-          dispatch(setUser(fetchedUser));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUser();
-  }, [dispatch, token, GetUser,isOpen]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,8 +46,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) 
     []
   );
 
-  const handleSubmit = async (e:any) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       await updateUser({
         firstName: formData.firstName,
@@ -78,13 +57,11 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) 
       }).unwrap();
       clearError();
       onClose();
-      toast.success('User details updated successfully'); 
+      toast.success('User details updated successfully');
     } catch (error: any) {
-      handleError(error.data.message || 'Error updating user');
+      handleError(error.data?.message || 'Error updating user');
     }
   };
-
-
 
   if (!isOpen) return null;
 

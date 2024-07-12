@@ -1,9 +1,16 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import {useDispatch} from 'react-redux'
-import { setUser,setToken } from '../../store/user/authSlice';
+import { setUser,setToken } from '../../store/user/userSlice';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const SignInWithGoogle = ({isLogin,onClose}) => {
+interface signinwithgoogle {
+  isLogin:Boolean,
+  onClose: () => void; 
+
+}
+
+const SignInWithGoogle: React.FC<signinwithgoogle> = ({isLogin,onClose}) => {
     const dispatch = useDispatch()
 
   const googleLogin = useGoogleLogin({
@@ -18,6 +25,7 @@ const SignInWithGoogle = ({isLogin,onClose}) => {
         dispatch(setUser({userDetails,role})); 
         dispatch(setToken(token)); 
         onClose()      
+        toast.success('Login successfully'); 
         } catch (error) {
         console.error('Error fetching tokens:', error);
       }

@@ -1,78 +1,27 @@
-// import React from 'react';
-// import {useDispatch} from 'react-redux'
-// import Input from '../common/Input';
-// import Button from '../common/Button';
-// import { useOtpVerifyMutation } from '../../store/user/userApi';
-// import { useFormValidation } from '../../hooks/useFormValidation';
-// import { otpSchema, OtpFormInputs } from '../../validation/validationSchema';
-// import useErrorHandling from '../../hooks/useErrorHandling';
-// import { setToken,setUser } from '../../store/user/authSlice';
-// import { useNavigate } from 'react-router-dom';
-interface OTPFormProps {
-  email: string;
-  setIsLogin: (value: boolean) => void;
-  // setIsSubmitting: (value: boolean) => void; 
-  onClose : ()=> void;
-}
-
-// const OTPform: React.FC<OTPFormProps> = ({   setIsLogin, setIsSubmitting,email,onClose,isSubmitting }) => {
-//   const [otpVerify] = useOtpVerifyMutation();
-//   const form = useFormValidation<OtpFormInputs>(otpSchema);
-//   const {ErrorMessage,clearError,handleError} = useErrorHandling()
-//   const dispatch = useDispatch()
-//   const navigate = useNavigate()
-//   const handleOTPSubmit = async (data:any) => {
-//     try {
-//       setIsSubmitting(true);
-//      const res = await otpVerify({ otp:data.otp ,email}).unwrap();
-//      console.log(res,"inclint")
-//      clearError()
-//       setIsLogin(true);
-//       dispatch(setUser(res.user)); 
-//       dispatch(setToken(res.token)); 
-//       onClose()
-//       navigate('/')
-//     } catch (error:any) {
-//       handleError(error.data.message)
-//       console.error('Error verifying OTP:', error);
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   return (
-//     <form className="px-5" onSubmit={form.handleSubmit(handleOTPSubmit)}>
-//       <ErrorMessage />
-//       <div className="mb-4">
-//         <Input register={form.register('otp')} placeholder="Enter Otp" error={form.formState.errors.otp} />
-//       </div>
-//       <div className="mb-4">
-//         <Button type="submit">
-//         {isSubmitting ? 'Verifying...' : 'Verify OTP'}
-//         </Button>
-//       </div>
-//     </form>
-//   );
-// };
-
-// export default OTPform;
-
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Input from '../common/Input';
 import Button from '../common/Button';
-import { useOtpVerifyMutation,useResendOTPMutation } from '../../store/user/userApi';
+import { useOtpVerifyMutation, useResendOTPMutation } from '../../store/user/userApi';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import { otpSchema, OtpFormInputs } from '../../validation/validationSchema';
 import useErrorHandling from '../../hooks/useErrorHandling';
-import { setToken, setUser } from '../../store/user/authSlice';
+import { setToken, setUser } from '../../store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-const OTPform: React.FC<OTPFormProps> = ({   setIsLogin,email,onClose }) => {
+interface OTPformProps {
+  setIsLogin: (isLogin: boolean) => void;
+  onClose: () => void;
+  email: string;
+  onOtpVerified: () => void;
+  isSignupOtp?: boolean;
+}
+
+
+const OTPform: React.FC<OTPformProps> = ({ setIsLogin, onClose, email, onOtpVerified, isSignupOtp }) => {
 
 
   const [timer, setTimer] = useState(60);
@@ -80,7 +29,7 @@ const OTPform: React.FC<OTPFormProps> = ({   setIsLogin,email,onClose }) => {
   const [canResend, setCanResend] = useState(false);
 
   const [otpVerify] = useOtpVerifyMutation();
-  const[resendOTP] = useResendOTPMutation()
+  const [resendOTP] = useResendOTPMutation()
   const form = useFormValidation<OtpFormInputs>(otpSchema);
   const { ErrorMessage, clearError, handleError } = useErrorHandling();
   const dispatch = useDispatch();
@@ -103,19 +52,25 @@ const OTPform: React.FC<OTPFormProps> = ({   setIsLogin,email,onClose }) => {
 
   const handleOTPSubmit = async (data: any) => {
     try {
-      const res = await otpVerify({ otp: data.otp, email }).unwrap();
-      console.log(res, 'inclint');
-      clearError();
-      setIsLogin(true);
-      dispatch(setUser(res.user));
-      dispatch(setToken(res.token));
-      onClose();
-      navigate('/');
-      toast.success('SignUp successfully'); 
+      if (isSignupOtp) {
+        const res = await otpVerify({ otp: data.otp, email }).unwrap();
+        console.log("first")
+        clearError();
+        setIsLogin(true);
+        dispatch(setUser(res.user));
+        dispatch(setToken(res.token));
+        onClose();
+        navigate('/');
+        toast.success('SignUp successfully');
+      } else {
+        console.log('second')
+        const res = await otpVerify({ otp: data.otp, email }).unwrap();
+        onOtpVerified();
+      }
     } catch (error: any) {
       handleError(error.data.message);
       console.error('Error verifying OTP:', error);
-    } 
+    }
   };
 
   const handleResendOtp = async () => {
@@ -128,7 +83,7 @@ const OTPform: React.FC<OTPFormProps> = ({   setIsLogin,email,onClose }) => {
     } catch (error: any) {
       handleError(error.data.message);
       console.error('Error resending OTP:', error);
-    } 
+    }
   };
 
   return (
@@ -168,3 +123,4 @@ const OTPform: React.FC<OTPFormProps> = ({   setIsLogin,email,onClose }) => {
 };
 
 export default OTPform;
+
