@@ -16,7 +16,17 @@ export class UserRepository implements UserInterface {
         await newUser.save();
     }
 
-    async update(email: string, updateData: Partial<User>): Promise<void> {
-        await UserModel.updateOne({ email }, { $set: updateData }).exec(); 
+    async update(identifier: { email?: string; _id?: string }, updateData: Partial<User>): Promise<void> {
+        if (identifier.email) {
+            await UserModel.updateOne({ email: identifier.email }, { $set: updateData }).exec();
+        } else if (identifier._id) {
+            await UserModel.updateOne({ _id: identifier._id }, { $set: updateData }).exec();
+        } else {
+            throw new Error("Invalid identifier for updating user");
+        }
+    }
+    
+    async findAll(): Promise<User[]> {
+        return await UserModel.find()
     }
 }

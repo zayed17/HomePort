@@ -4,8 +4,8 @@ dontenv.config()
 import { GoogleAuthInterface } from '../interface';
 
 export class GoogleAuthRepository implements GoogleAuthInterface {
-  private clientId: string = process.env.CLIENT_ID!;
-  private clientSecret: string = process.env.CLIENT_SECRET!;
+  private clientId: string = process.env.GOOGLE_CLIENT_ID!;
+  private clientSecret: string = process.env.GOOGLE_CLIENT_SECRET!;
   private redirectUri: string = 'http://localhost:5173'; 
 
   public async exchangeCodeForTokens(code: string): Promise<any> {

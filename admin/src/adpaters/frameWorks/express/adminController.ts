@@ -1,16 +1,20 @@
 import { Request, Response } from 'express';
-import { AdminUseCase } from '../../useCase/AdminUseCase';
+import { AdminUseCase } from '../../../useCase/AdminUseCase';
 
 export class AdminController {
-  constructor(private adminUseCase: AdminUseCase) {}
+  constructor(private adminUseCase: AdminUseCase) { }
 
   async login(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
-      const {admin,token} = await this.adminUseCase.authenticate(email, password);
+      const { admin, token } = await this.adminUseCase.authenticate(email, password);
 
       if (admin) {
-        res.status(200).json({ message: 'Login successful', admin,token });
+        const ress = res.cookie('Admintoken', token, {
+          maxAge: 3600000,
+        });
+        console.log(ress, "checking")
+        res.status(200).json({ message: 'Login successful' });
       } else {
         res.status(401).json({ message: 'Invalid credentials' });
       }

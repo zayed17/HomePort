@@ -1,4 +1,4 @@
-import AdminNavbar from '../../components/admin/AdminNavbar'
+import AdminNavbar from '../../components/admin/LoginNavbar'
 import AdminLoginForm from '../../components/admin/AdminLoginForm'
 
 const AdminLogin = () => {

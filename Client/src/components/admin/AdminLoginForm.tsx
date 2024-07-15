@@ -4,24 +4,22 @@ import {  useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import Input from '../common/Input';
 import Button from '../common/Button';
+import {useLoginInMutation} from '../../store/admin/adminApi'
 import { useFormValidation } from '../../hooks/useFormValidation';
 import { LoginFormInputs, loginSchema } from '../../validation/validationSchema';
 import useErrorHandling from '../../hooks/useErrorHandling';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate()
+  const [login] = useLoginInMutation()
   const form = useFormValidation<LoginFormInputs>(loginSchema);
   const { handleError, clearError, ErrorMessage } = useErrorHandling();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
-      const response = await axios.post('http://localhost:5002/admin/login', {
-        email: data.email,
-        password: data.password,
-      });
-      
+      const response = await login({email:data.email,password:data.password})
+      console.log(response,"this is ")      
       navigate('/admin/dashboard')      
-      console.log('Login successful:', response.data);
       clearError();
     } catch (error: any) {
       handleError(error.response?.data?.message || 'Error logging in');

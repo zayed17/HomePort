@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import adminRoutes from './adpaters/frameWorks/routes/route';
 
 const app = express();
@@ -13,12 +14,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/admin', adminRoutes); 
-
 
 const PORT = 5002; 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-

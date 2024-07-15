@@ -1,5 +1,5 @@
 import { Router} from 'express';
-import { AdminController } from '../adminController';
+import { AdminController } from '../express/adminController';
 import {AdminUseCase} from '../../../useCase/AdminUseCase'
 import {AdminRepository} from '../../../repositories/implementation/adminRepository'
 

@@ -24,7 +24,7 @@ export class SignUpUseCase {
                 throw new Error('Email already exists with this role');
             } else {
                 existingUser.roles.push(role);
-                await this.userRepository.update(existingUser.email, { roles: existingUser.roles });
+                await this.userRepository.update({email:existingUser.email}, { roles: existingUser.roles });
                 return existingUser;
             }
         }

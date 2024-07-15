@@ -9,7 +9,7 @@ export class ForgotPasswordUseCase {
         if(!user){
             throw new Error("User not found")
         }
-        await this.userRepository.update(email, {password}); 
+        await this.userRepository.update({email}, {password}); 
        } catch (error:any) {
         throw new Error(error.message)
        }

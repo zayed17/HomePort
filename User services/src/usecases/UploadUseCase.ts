@@ -9,7 +9,7 @@ export  class UploadImageUseCase {
     try {
       const imageUrl = await this.s3Repository.uploadImage(file);
       console.log(imageUrl,"imaeg")
-      const user = await this.userRepository.update(email,{image:imageUrl})
+      const user = await this.userRepository.update({email},{image:imageUrl})
     } catch (error:any) {
       throw new Error(error.message)
     }

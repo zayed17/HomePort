@@ -16,7 +16,7 @@ export class UpdateUsecase{
         if(!user){
             throw new Error("user not found")
         }
-        await this.userRepository.update(email, {lastName,firstName,phone}); 
+        await this.userRepository.update({email}, {lastName,firstName,phone}); 
         return user
     }
 }

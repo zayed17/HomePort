@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../helpers/getCookie";
 
-interface ProtectedRouteProps {
+interface VerifyRouteProps {
   element: React.ComponentType;
   cookieName: string;
   redirectTo: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+const VerifyRoute: React.FC<VerifyRouteProps> = ({
   element: Component,
   cookieName,
   redirectTo,
@@ -17,16 +17,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const token = getCookie(cookieName);
 
   useEffect(() => {
-    if (!token) {
+    if (token) {
       navigate(redirectTo);
     }
   }, [token, navigate, redirectTo]);
 
-  if (!token) {
+  if (token) {
     return null;
   }
 
   return <Component />;
 };
 
-export default ProtectedRoute;
+export default VerifyRoute;

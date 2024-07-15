@@ -11,7 +11,7 @@ export class ChangePasswordUseCase {
             if (user.password != password) {
                 throw new Error("Password not match")
             }
-            await this.userRepository.update(email, { password: newPassword });
+            await this.userRepository.update({email}, { password: newPassword });
         } catch (error: any) {
             throw new Error(error.message)
         }
