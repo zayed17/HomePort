@@ -7,14 +7,14 @@ const userApi = createApi({
   baseQuery: fetchBaseQuery({ 
     baseUrl: 'http://localhost:5001',
     credentials:'include',
-    prepareHeaders:(headers,{getState})=>{
-      const token = (getState() as RootState).user.userToken;
-      if(token){
-        headers.set('Authorization',`Bearer ${token}`)
-      }
-      headers.set('Content-Type','application/json')
-      return headers
-    }
+    // prepareHeaders:(headers,{getState})=>{
+    //   const token = (getState() as RootState).user.userToken;
+    //   if(token){
+    //     headers.set('Authorization',`Bearer ${token}`)
+    //   }
+    //   headers.set('Content-Type','application/json')
+    //   return headers
+    // }
     }), 
   endpoints: (builder) => ({  
     loginIn: builder.mutation({
@@ -47,7 +47,7 @@ const userApi = createApi({
       updateUser: builder.mutation({
         query: (credentials) => ({
           url: `${URL}/updateProfile`,
-          method: 'POST',
+          method: 'PUT',
           body: credentials,
         }),
       }), 
@@ -78,7 +78,7 @@ const userApi = createApi({
       forgotPassword: builder.mutation({
         query: (credentials) => ({
           url: `${URL}/forgetPassword`,
-          method: 'POST',
+          method: 'PUT',
           body: credentials,
         }),
       }), 

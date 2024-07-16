@@ -117,6 +117,10 @@ export class UserController {
         console.log(code, "code get in con")
         try {
             const { token, userDetails } = await this.googleAuthUseCase.GoogleAuth(code)
+            const ress = res.cookie('token', token, {
+                maxAge: 3600000,
+            });
+
             res.json({ token, userDetails, role: 'user' })
         } catch (error) {
             next(error)

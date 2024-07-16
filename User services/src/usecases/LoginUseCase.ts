@@ -8,6 +8,7 @@ interface LoginParams{
     role:string
 }
 
+
 export class LoginUseCase{
     constructor(private userRepository : UserInterface){}
     async execute(params:LoginParams): Promise<{user:User,token:string}> {
@@ -18,6 +19,9 @@ export class LoginUseCase{
         }
         if(!user.roles.includes(role)){
             throw new Error('Access denied for the specified role');
+        }
+        if(!user.active){
+            throw new Error('Your Account is Blocked');
         }
         if (user.password !== password) {
             throw new Error('Incorrect password');      

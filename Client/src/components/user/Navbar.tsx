@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
         <button onClick={handleProfileOrLoginClick} className="bg-white text-LightdarkBlue rounded-full px-5 py-2 font-semibold focus:outline-none m-2">
           {token ? 'Profile' : 'Register'}
         </button>
-        <Link to="/owner-login" className="border text-white rounded-full px-5 py-2 font-semibold focus:outline-none m-2">
+        <Link to="/addproperty/details" className="border text-white rounded-full px-5 py-2 font-semibold focus:outline-none m-2">
           Sell/Rent Property
         </Link>
       </div>

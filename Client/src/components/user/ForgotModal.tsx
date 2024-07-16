@@ -12,7 +12,7 @@ interface ForgotPasswordFormProps {
   setEmail: (email: string) => void; 
 }
 
-const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onClose, setOtpSent, setEmail }) => {
+const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({  setOtpSent, setEmail }) => {
   const { handleError, clearError, ErrorMessage } = useErrorHandling();
   const form = useFormValidation<ForgotPasswordFormInputs>(forgotPasswordSchema);
   const [verifyEmail] = useVerifyEmailMutation();

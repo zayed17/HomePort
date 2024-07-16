@@ -14,10 +14,10 @@ export  class GoogleAuthUseCase {
       console.log(userDetails,"user details is getted")
       const userExist = await this.userRepository.findByEmail(userDetails.email)
       if(userExist){
-        const token = generateToken({email:userDetails.email,role:'user'})
+        const token = generateToken({email:userDetails.email,role:['user']})
         return {token,userDetails:userExist}
       }
-      const Jwttoken = generateToken({email:userDetails.email,role:'user'})
+      const Jwttoken = generateToken({email:userDetails.email,role:['user']})
       const newUser = new User({
         firstName: userDetails.given_name,
         lastName: userDetails.name,

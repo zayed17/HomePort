@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UserController } from '../express/controllers/UserController';
 import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase ,BlockUnblockUseCase} from '../../../usecases';
 import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository } from '../../../repositories';
-import { authenticateToken } from '../../../../../HomePackage/src/index'
+import { authenticateToken } from 'homepackage'
 import upload from '../express/middleware/uploadMiddleware'
 
 
@@ -40,11 +40,11 @@ router.post('/verifyOtp', (req, res, next) => userController.verifyOTP(req, res,
 router.post('/resendOTP', (req, res, next) => userController.resendOTP(req, res, next));
 router.post('/google', (req, res, next) => userController.googleAuth(req, res, next));
 router.post('/verifyEmail', (req, res, next) => userController.verifyEmail(req, res, next));
-router.post('/forgetPassword', (req, res, next) => userController.forgotPassword(req, res, next));
-router.put('/changePassword', (req, res, next) => userController.changePassword(req, res, next));
-router.get('/getUser', authenticateToken(['user', 'owner']), (req, res, next) => userController.getUser(req, res, next));
-router.post('/updateProfile', authenticateToken(['user', 'owner']), (req, res, next) => userController.updateUser(req, res, next));
-router.post('/uploadImage', authenticateToken(['user', 'owner']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));
+router.put('/forgetPassword',(req, res, next) => userController.forgotPassword(req, res, next));
+router.put('/changePassword', authenticateToken(['user']), (req, res, next) => userController.changePassword(req, res, next));
+router.get('/getUser', authenticateToken(['user']), (req, res, next) => userController.getUser(req, res, next));
+router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
+router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));
 router.get('/findAll', (req, res, next) => userController.findAllUsers(req, res, next));
 router.patch('/block-unblock', (req, res, next) => userController.blockUblock(req, res, next));
 

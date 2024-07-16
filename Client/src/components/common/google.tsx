@@ -20,7 +20,7 @@ const SignInWithGoogle: React.FC<signinwithgoogle> = ({isLogin,onClose}) => {
       try {
         const response = await axios.post('http://localhost:5001/user/google', {
           code: codeResponse.code,
-        });
+        },{withCredentials:true});
         const {userDetails,token,role} = response.data
         dispatch(setUser({userDetails,role})); 
         dispatch(setToken(token)); 
