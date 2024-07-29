@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import {RootState} from '../store'
 const URL = '/user'
 
 const userApi = createApi({
@@ -7,14 +6,6 @@ const userApi = createApi({
   baseQuery: fetchBaseQuery({ 
     baseUrl: 'http://localhost:5001',
     credentials:'include',
-    // prepareHeaders:(headers,{getState})=>{
-    //   const token = (getState() as RootState).user.userToken;
-    //   if(token){
-    //     headers.set('Authorization',`Bearer ${token}`)
-    //   }
-    //   headers.set('Content-Type','application/json')
-    //   return headers
-    // }
     }), 
   endpoints: (builder) => ({  
     loginIn: builder.mutation({
