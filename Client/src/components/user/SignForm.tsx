@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler } from '../../../node_modules/react-hook-form/dist';
 import { useSignUpMutation } from '../../store/user/userApi';
 import Input from '../common/Input';
 import Button from '../common/Button';

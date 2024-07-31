@@ -1,6 +1,6 @@
 // components/Input.tsx
 import React from 'react';
-import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
+import { FieldError, UseFormRegisterReturn } from '../../../node_modules/react-hook-form/dist';
 
 interface InputProps {
     register: UseFormRegisterReturn;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler } from '../../../node_modules/react-hook-form/dist';
 import {  useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import Input from '../common/Input';

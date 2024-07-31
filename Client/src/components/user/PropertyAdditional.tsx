@@ -1,6 +1,6 @@
 import React from 'react';
 import { MdMeetingRoom, MdNature, MdThumbUp, MdDirectionsCar, MdDirections } from 'react-icons/md';
-import { MultipleSelectWithCustomOption, otherRoomsOptions, propertyAdvantages, propertyFeatures,TextInput } from '../../components/admin/ReuseableForm';
+import { MultipleSelectWithCustomOption, otherRoomsOptions, propertyAdvantages, propertyFeatures,TextInput } from '../admin/ReuseableForm';
 
 interface FormData {
   otherRooms: string[];

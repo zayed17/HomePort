@@ -1,6 +1,6 @@
 import Input from '../common/Input';
 import Button from '../common/Button';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler } from '../../../node_modules/react-hook-form/dist';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import { ChangePasswordFormInput, ChangePasswordSchema } from '../../validation/validationSchema';
 import useErrorHandling from '../../hooks/useErrorHandling';

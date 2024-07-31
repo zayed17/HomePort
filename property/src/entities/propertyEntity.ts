@@ -1,4 +1,6 @@
 export interface PropertyData {
+    status:string;
+    reason?:string;
     propertyType: string;
     address: string;
     city: string;
@@ -31,6 +33,8 @@ export interface PropertyData {
   }
   
   export class Property  {
+    status:string;
+    reason?:string;
     propertyType: string;
     address: string;
     city: string;
@@ -62,6 +66,8 @@ export interface PropertyData {
     directionTips: string;
   
     constructor({
+      status,
+      reason,
       propertyType,
       address,
       city,
@@ -92,6 +98,8 @@ export interface PropertyData {
       noOfBikes,
       directionTips,
     }: PropertyData) {
+      this.status = status;
+      this.reason = reason;
       this.propertyType = propertyType;
       this.address = address;
       this.city = city;

@@ -1,7 +1,14 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+enum PropertyStatus {
+  PENDING = 'pending',
+  APPROVED = 'verified',
+  REJECTED = 'rejected'
+}
+
 interface PropertyDocument extends Document {
   propertyType: string;
+  reason: string;
   address: string;
   city: string;
   mediaFiles: string[];
@@ -30,6 +37,7 @@ interface PropertyDocument extends Document {
   noOfScooters: number;
   noOfBikes: number;
   directionTips: string;
+  status: PropertyStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -64,6 +72,8 @@ const PropertySchema: Schema = new Schema({
   noOfScooters: { type: Number, required: true },
   noOfBikes: { type: Number, required: true },
   directionTips: { type: String, required: true },
+  status: { type: String, enum: PropertyStatus, default: PropertyStatus.PENDING, required: true },
+  reason:{type:String,required:false}
 }, {
   timestamps: true
 });

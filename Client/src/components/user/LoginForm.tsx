@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler } from '../../../node_modules/react-hook-form/dist';
 import { useLoginInMutation } from '../../store/user/userApi';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import Input from '../common/Input';

@@ -13,7 +13,7 @@ import AdminUser from '../pages/admin/User';
 import ProtectedRoute from './Protected'
 import VerifyRoute from './Verify'
 import PropertyDetailsForm from '../pages/user/PropertyAdd';
-
+import PropertyListing from '../pages/user/PropertyList';
 const AppRoutes = () => {
   return (
     <Router>
@@ -21,8 +21,9 @@ const AppRoutes = () => {
         <Toaster position="top-right" reverseOrder={true} />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/properties" element={< PropertyListing/>} />
 
-          <Route path="/addproperty/details" element={<PropertyDetailsForm />} />
+          <Route path="/addproperty" element={<PropertyDetailsForm />} />
 
 
           <Route path="/profile/details" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
