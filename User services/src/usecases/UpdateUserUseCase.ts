@@ -12,7 +12,7 @@ export class UpdateUsecase{
     constructor(private userRepository : UserInterface){}
     async update(params:EditParams): Promise<User> {
         const {lastName,firstName,phone,email} = params;
-        const user = await this.userRepository.findByEmail(email)
+        const user = await this.userRepository.findOne({email})
         if(!user){
             throw new Error("user not found")
         }

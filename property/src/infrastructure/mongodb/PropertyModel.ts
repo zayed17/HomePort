@@ -8,11 +8,11 @@ enum PropertyStatus {
 
 interface PropertyDocument extends Document {
   propertyType: string;
-  reason: string;
+  reason?: string;
   address: string;
   city: string;
   mediaFiles: string[];
-  depositAmount: number;
+  depositAmount?: number;
   facing: string;
   propertyAge: string;
   totalFloors: number;
@@ -22,12 +22,12 @@ interface PropertyDocument extends Document {
   bathrooms: number;
   balconies: number;
   totalArea: number;
-  hasWell: boolean;
+  hasWell: string;
   furnisherType: string;
-  electronics: Record<string, boolean>;
-  rentAmount: number;
-  isRentNegotiable: string;
-  areBillsIncluded: string;
+  electronics?: Record<string, boolean>;
+  rentAmount?: number;
+  isNegotiable: string;
+  areBillsIncluded?: string;
   eligibility: string;
   availableFrom: string;
   otherRooms: string[];
@@ -37,7 +37,10 @@ interface PropertyDocument extends Document {
   noOfScooters: number;
   noOfBikes: number;
   directionTips: string;
+  sellPrice?: number;
+  propertyCondition?: string;
   status: PropertyStatus;
+  lookingFor:string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -47,7 +50,7 @@ const PropertySchema: Schema = new Schema({
   address: { type: String, required: true },
   city: { type: String, required: true },
   mediaFiles: { type: [String], required: true },
-  depositAmount: { type: Number, required: true },
+  depositAmount: { type: Number, required: false },
   facing: { type: String, required: true },
   propertyAge: { type: String, required: true },
   totalFloors: { type: Number, required: true },
@@ -60,9 +63,9 @@ const PropertySchema: Schema = new Schema({
   hasWell: { type: String, required: true },
   furnisherType: { type: String, required: true },
   electronics: { type: Map, of: Boolean, required: false },
-  rentAmount: { type: Number, required: true },
-  isRentNegotiable: { type: String, required: true },
-  areBillsIncluded: { type: String, required: true },
+  rentAmount: { type: Number, required: false },
+  isNegotiable: { type: String, required: true },
+  areBillsIncluded: { type: String, required: false },
   eligibility: { type: String, required: true },
   availableFrom: { type: String, required: true },
   otherRooms: { type: [String], required: true },
@@ -72,8 +75,14 @@ const PropertySchema: Schema = new Schema({
   noOfScooters: { type: Number, required: true },
   noOfBikes: { type: Number, required: true },
   directionTips: { type: String, required: true },
+  sellPrice: { type: Number, required: false },
+  propertyCondition: { type: String, required: false },
+  lookingFor: { type: String, required: false },
   status: { type: String, enum: PropertyStatus, default: PropertyStatus.PENDING, required: true },
-  reason:{type:String,required:false}
+  reason: { type: String, required: false },
+  createdBy: { type: String, required: true },
+  isBlock: { type: Boolean, required: true, default:false },
+
 }, {
   timestamps: true
 });

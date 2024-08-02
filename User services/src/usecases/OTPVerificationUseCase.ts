@@ -12,14 +12,14 @@ export class OTPVerificationUseCase{
         if(!storeOtp || storeOtp != otp){
             throw new Error("Invalid email or otp")
         }
-        const user = await this.userRepository.findByEmail(email);
+        const user = await this.userRepository.findOne({email});
         if (!user) {
             throw new Error('User not found');
         }
         user.active = true;
         await this.userRepository.update({email}, { active: true }); 
         await this.otpService.deleteOTP(email);
-        const token = generateToken({email:user.email,role:user.roles})
+        const token = generateToken({_id:user._id,role:user.roles})
         return {token,user}
     }
 }   

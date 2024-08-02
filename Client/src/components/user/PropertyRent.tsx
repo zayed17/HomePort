@@ -29,7 +29,7 @@ const PropertyRent: React.FC = ({ formData, setFormData }) => {
   const handleNegotiableChange = (value: string) => {
     setFormData({
       ...formData,
-      isRentNegotiable: value,
+      isNegotiable: value,
     });
   };
 
@@ -78,7 +78,7 @@ const PropertyRent: React.FC = ({ formData, setFormData }) => {
           </h3>
           <SelectButton
             options={['Yes', 'No']}
-            selectedValue={formData.isRentNegotiable}
+            selectedValue={formData.isNegotiable}
             onChange={handleNegotiableChange}
           />
         </div>

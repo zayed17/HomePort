@@ -6,7 +6,7 @@ export class VerifyPropertyUseCase {
 
   async verifyProperty(id: string): Promise<void> {
     console.log(id, "id checking")
-    const property = await this.propertyRepository.findById(id);
+    const property = await this.propertyRepository.findOne({ _id: id });
     console.log(property, "checking")
     if (!property) {
       throw new Error('Property not found');

@@ -16,11 +16,11 @@ const propertyApi = createApi({
         body: credentials,
       }),
     }),
-    getProperties: builder.query<any, void>({
+    getProperties: builder.query({
       query: () => `${URL}/list-properties`,  
       keepUnusedDataFor: 60, 
     }),
-    getPendingProperties: builder.query<any, void>({
+    getPendingProperties: builder.query({
       query: () => `${URL}/properties/pending`,
       keepUnusedDataFor: 60, 
     }),
@@ -37,9 +37,28 @@ const propertyApi = createApi({
         body:{reason},
       }),
     }),
+    getProperty: builder.query({
+      query: (id) => `${URL}/property/${id}`,  
+      keepUnusedDataFor: 60, 
+    }),
+    getAllProperties: builder.query({
+      query: () => `${URL}/properties`,  
+      keepUnusedDataFor: 60, 
+    }),
+    getAdminProperties: builder.query({
+      query: () => `${URL}/adminProperties`,  
+      keepUnusedDataFor: 60, 
+    }),
+    blockAndUnblock: builder.mutation({
+      query: (credentials) => ({
+        url: `${URL}/block-unblock`,
+        method: 'PATCH',
+        body: credentials,
+      }),
+    }), 
   }),
 });
 
-export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation} = propertyApi;
+export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation} = propertyApi;
 
 export default propertyApi;

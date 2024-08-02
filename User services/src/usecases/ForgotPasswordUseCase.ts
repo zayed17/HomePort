@@ -5,7 +5,7 @@ export class ForgotPasswordUseCase {
     async ForgotPassword(email: string,password:string): Promise<void> {
         console.log(password,"checking")
        try {
-        const user = await this.userRepository.findByEmail(email)
+        const user = await this.userRepository.findOne({email})
         if(!user){
             throw new Error("User not found")
         }

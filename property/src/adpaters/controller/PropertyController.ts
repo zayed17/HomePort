@@ -1,21 +1,27 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase } from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase , FindPropertyUseCase, FindAllPropertiesUseCase,FindAdminPropertiesUseCase, BlockUnblockUseCase} from '../../usecase';
 
 export class PropertyController {
   constructor(
     private addPropertyUseCase: AddPropertyUseCase,
     private findPendingPropertyUseCase: FindPendingPropertyUseCase,
     private verifyPropertyUseCase: VerifyPropertyUseCase,
-    private rejectPropertyUseCase: RejectPropertyUseCase
-  ) { }
+    private rejectPropertyUseCase: RejectPropertyUseCase,
+    private findPropertyUseCase: FindPropertyUseCase,
+    private findAllPropertiesUseCase: FindAllPropertiesUseCase,
+    private findAdminPropertiesUseCase: FindAdminPropertiesUseCase,
+    private blockUnblockUseCase: BlockUnblockUseCase,
+  ) {}
 
-  async addProperty(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async addProperty(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log(req.user,"user checking please resopon")
       const files = req.files as Express.Multer.File[];
+      const id = req.user._id
       console.log(files, "from controller ");
 
       const formData = req.body;
-      const result = await this.addPropertyUseCase.addProperty(files, formData);
+      const result = await this.addPropertyUseCase.addProperty(files, formData,id);
       res.status(201).json({ message: 'Property added successfully', result });
     } catch (error) {
       next(error);
@@ -51,4 +57,43 @@ export class PropertyController {
       next(error);
     }
   }
+
+  async getProperty(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const {id} = req.params
+      const result = await this.findPropertyUseCase.findProperty(id);
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findAllProperties(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const id = req.user._id
+      const result = await this.findAllPropertiesUseCase.FindAllProperties(id);
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async findAdminProperties(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await this.findAdminPropertiesUseCase.FindAdminProperties();
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async blockUblock(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log(req.body,"from the current body")
+    const {_id,newStatus} = req.body
+    try {
+        await this.blockUnblockUseCase.BlockUnblock(_id,newStatus)
+        res.status(200).json({ success: true });
+    } catch (error) {
+        next(error)
+    }
+}
 }

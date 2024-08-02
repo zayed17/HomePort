@@ -1,4 +1,4 @@
-import { generateToken } from '../../../HomePackage/src';
+import { generateToken } from 'homepackage';
 import { User } from '../entities';
 import {UserInterface} from '../repositories/interface'
 
@@ -13,7 +13,7 @@ export class LoginUseCase{
     constructor(private userRepository : UserInterface){}
     async execute(params:LoginParams): Promise<{user:User,token:string}> {
         const {email,password,role} = params;
-        const user = await this.userRepository.findByEmail(email)
+        const user = await this.userRepository.findOne({email})
         if(!user){
             throw new Error("user not found")
         }
@@ -26,7 +26,7 @@ export class LoginUseCase{
         if (user.password !== password) {
             throw new Error('Incorrect password');      
         }
-        const token = generateToken({email:user.email,role:user.roles})
+        const token = generateToken({_id:user._id,role:user.roles})
 
         return {user,token}
     }

@@ -9,7 +9,8 @@ const UserSchema = new mongoose.Schema<User>({
     password: { type: String, default:"null"},
     active:{type:Boolean,default:false},
     image:{type:String,default:null},
-    roles:{type:[String],default:[]}
+    roles:{type:[String],default:[]},
+    favourite:{type:[String],default:[]}
 });
 
 const UserModel = mongoose.model<User>('User', UserSchema);

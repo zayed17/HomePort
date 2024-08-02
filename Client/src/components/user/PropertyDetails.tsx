@@ -1,6 +1,6 @@
-import { MdHome, MdDirections, MdUpdate, MdHotel, MdCropSquare,MdDescription } from 'react-icons/md';
-import { GiWell,GiSofa } from 'react-icons/gi';
-import { FaBuilding ,FaDoorOpen} from 'react-icons/fa';
+import { MdHome, MdDirections, MdUpdate, MdHotel, MdCropSquare, MdDescription } from 'react-icons/md';
+import { GiWell, GiSofa } from 'react-icons/gi';
+import { FaBuilding, FaDoorOpen } from 'react-icons/fa';
 
 import '../../style/property.css';
 import { SelectButton, TextInput, propertyTypes, propertyFacings, propertyAges, furnisherTypes, electronicsList, hasWell } from '../admin/ReuseableForm';
@@ -8,85 +8,87 @@ import { ChangeEvent } from 'react';
 
 const PropertyDetailsForm = ({ formData, setFormData }) => {
 
- 
-const handlePropertyTypeChange = (propertyType: string) => {
-  setFormData({
-    ...formData,
-    propertyType,
-  });
-};
 
-const handleFacingChange = (facing: string) => {
-  setFormData({
-    ...formData,
-    facing,
-  });
-};
+  const handlePropertyTypeChange = (propertyType: string) => {
+    setFormData({
+      ...formData,
+      propertyType,
+    });
+  };
 
-const handlePropertyAgeChange = (propertyAge: string) => {
-  setFormData({
-    ...formData,
-    propertyAge,
-  });
-};
+  const handleFacingChange = (facing: string) => {
+    setFormData({
+      ...formData,
+      facing,
+    });
+  };
 
-const handleTotalFloorsChange = (e: ChangeEvent<HTMLInputElement>) => {
-  const totalFloors = parseInt(e.target.value, 10);
-  setFormData({
-    ...formData,
-    totalFloors: totalFloors >= 0 ? totalFloors : 0,
-  });
-};
+  const handlePropertyAgeChange = (propertyAge: string) => {
+    setFormData({
+      ...formData,
+      propertyAge,
+    });
+  };
 
-const handleOpeningsChange = (e: ChangeEvent<HTMLInputElement>) => {
-  const openings = parseInt(e.target.value, 10);
-  setFormData({
-    ...formData,
-    openings: openings >= 0 ? openings : 0,
-  });
-};
+  const handleTotalFloorsChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const totalFloors = parseInt(e.target.value, 10);
+    setFormData({
+      ...formData,
+      totalFloors: totalFloors >= 0 ? totalFloors : 0,
+    });
+  };
 
-const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
-  setFormData({
-    ...formData,
-    description: e.target.value,
-  });
-};
+  const handleOpeningsChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const openings = parseInt(e.target.value, 10);
+    setFormData({
+      ...formData,
+      openings: openings >= 0 ? openings : 0,
+    });
+  };
 
-const handleInputChange = (e: ChangeEvent<HTMLInputElement>, fieldName: string) => {
-  const value = parseInt(e.target.value, 10);
-  setFormData({ ...formData, [fieldName]: value >= 0 ? value : 0 });
-};
+  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      description: e.target.value,
+    });
+  };
 
-const handleAreaChange = (e: ChangeEvent<HTMLInputElement>) => {
-  const totalArea = parseInt(e.target.value, 10);
-  setFormData({
-    ...formData,
-    totalArea: totalArea >= 0 ? totalArea : 0,
-  });
-};
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    const value = parseInt(e.target.value, 10);
+    setFormData({ ...formData, [fieldName]: value >= 0 ? value : 0 });
+  };
 
-const handleWellChange = (hasWell: string) => {
-  setFormData({
-    ...formData,
-    hasWell,
-  });
-};
+  const handleAreaChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const totalArea = parseInt(e.target.value, 10);
+    setFormData({
+      ...formData,
+      totalArea: totalArea >= 0 ? totalArea : 0,
+    });
+  };
 
-const handleFurnisherTypeChange = (furnisherType: string) => {
-  setFormData({
-    ...formData,
-    furnisherType,
-  });
-};
+  const handleWellChange = (hasWell: string) => {
+    setFormData({
+      ...formData,
+      hasWell,
+    });
+  };
 
-const handleElectronicsChange = (electronic: string, count: number) => {
-  const updatedElectronics = { ...formData.electronics, [electronic]: count >= 0 ? count : 0 };
-  setFormData({
-    ...formData,
-    electronics: updatedElectronics,
-  });
-};
+  const handleFurnisherTypeChange = (furnisherType: string) => {
+    setFormData({
+      ...formData,
+      furnisherType,
+    });
+  };
+
+
+
+  const handleElectronicsChange = (electronic: string, count: number) => {
+    const updatedElectronics = { ...formData.electronics, [electronic]: count >= 0 ? count : 0 };
+    setFormData({
+      ...formData,
+      electronics: updatedElectronics,
+    });
+  };
   return (
     <div className="bg-white shadow-lg rounded-lg max-w-4xl mx-auto p-8">
       <h2 className="text-3xl font-bold text-center mb-8">Property Details</h2>
@@ -149,7 +151,7 @@ const handleElectronicsChange = (electronic: string, count: number) => {
           </div>
         </div>
         <div className="mb-8">
-        <h3 className="font-semibold text-lg mb-2 flex items-center">
+          <h3 className="font-semibold text-lg mb-2 flex items-center">
             <GiSofa className="mr-1 text-gray-600" />Furnisher Type
           </h3>
           <div className="flex flex-wrap gap-4">
@@ -189,20 +191,20 @@ const handleElectronicsChange = (electronic: string, count: number) => {
         )}
         <div className="grid grid-cols-2 gap-4">
           <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-2 flex items-center">
-            <FaBuilding className="mr-1 text-gray-600" />Total Floors
-          </h3>
-            <TextInput type='number'  name="totalFloors" value={formData.totalFloors} onChange={handleTotalFloorsChange} placeholder="Enter total number of floors" />
+            <h3 className="font-semibold text-lg mb-2 flex items-center">
+              <FaBuilding className="mr-1 text-gray-600" />Total Floors
+            </h3>
+            <TextInput type='number' name="totalFloors" value={formData.totalFloors} onChange={handleTotalFloorsChange} placeholder="Enter total number of floors" />
           </div>
           <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-2 flex items-center">
-            <FaDoorOpen className="mr-1 text-gray-600" />Number of Openings
-          </h3>
+            <h3 className="font-semibold text-lg mb-2 flex items-center">
+              <FaDoorOpen className="mr-1 text-gray-600" />Number of Openings
+            </h3>
             <TextInput type='number' name="openings" value={formData.openings} onChange={handleOpeningsChange} placeholder="Enter number of openings" />
           </div>
         </div>
         <div className="mb-8">
-        <h3 className="font-semibold text-lg mb-2 flex items-center">
+          <h3 className="font-semibold text-lg mb-2 flex items-center">
             <MdDescription className="mr-1 text-gray-600" />Description
           </h3>
           <TextInput type='text' name="description" value={formData.description} onChange={handleDescriptionChange} placeholder="Enter property description" />

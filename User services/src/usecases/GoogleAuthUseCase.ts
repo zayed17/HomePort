@@ -12,7 +12,7 @@ export  class GoogleAuthUseCase {
       const token = await this.googleAuthRepository.exchangeCodeForTokens(code)
       const userDetails = await this.googleAuthRepository.fetchUserProfile(token.access_token)
       console.log(userDetails,"user details is getted")
-      const userExist = await this.userRepository.findByEmail(userDetails.email)
+      const userExist = await this.userRepository.findOne({email:userDetails.email})
       if(userExist){
         const token = generateToken({email:userDetails.email,role:['user']})
         return {token,userDetails:userExist}
@@ -26,7 +26,8 @@ export  class GoogleAuthUseCase {
         email: userDetails.email,
         password:userDetails.sub,
         active:true,
-        roles:['user']
+        roles:['user'],
+        favourite:[]
       });
       await this.userRepository.save(newUser);
       return {token:Jwttoken,userDetails:newUser}

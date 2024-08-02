@@ -18,7 +18,7 @@ export class SignUpUseCase {
     ) { }
 
     async execute({ firstName, lastName, email, phone, password, role }: SignUpParams): Promise<User> {
-        const existingUser = await this.userRepository.findByEmail(email);
+        const existingUser = await this.userRepository.findOne({email});
 
         if (existingUser) {
             if (existingUser.active) {
@@ -41,7 +41,8 @@ export class SignUpUseCase {
             password,
             image: null,
             active: false,
-            roles: [role]
+            roles: [role],
+            favourite:[]
         });
 
         await this.userRepository.save(newUser);

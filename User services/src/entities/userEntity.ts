@@ -1,4 +1,5 @@
 export interface UserData {
+    _id?:string;
     firstName: string;
     lastName: string;
     email: string;
@@ -6,10 +7,12 @@ export interface UserData {
     password: string;
     active: boolean; 
     image:string | null;
-    roles:string[]
+    roles:string[];
+    favourite:string[];
 }
 
 export class User {
+    _id?:string;
     firstName: string;
     lastName: string;
     email: string;
@@ -18,8 +21,11 @@ export class User {
     active: boolean;
     image:string | null;
     roles:string[];
+    favourite:string[];
 
-    constructor({ firstName, lastName, email, phone, password, active, image ,roles }: UserData) {
+
+    constructor({ firstName, lastName, email, phone, password, active, image ,roles,_id,favourite}: UserData) {
+        this._id = _id
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -28,5 +34,6 @@ export class User {
         this.active = active; 
         this.image = image
         this.roles = roles
+        this.favourite = favourite
     }
 }

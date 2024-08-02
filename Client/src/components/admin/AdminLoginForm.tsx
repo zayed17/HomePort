@@ -1,7 +1,6 @@
 import React from 'react';
 import { SubmitHandler } from '../../../node_modules/react-hook-form/dist';
 import {  useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
 import Input from '../common/Input';
 import Button from '../common/Button';
 import {useLoginInMutation} from '../../store/admin/adminApi'
@@ -17,12 +16,13 @@ const LoginForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
-      const response = await login({email:data.email,password:data.password})
+      const response = await login({email:data.email,password:data.password}).unwrap()
       console.log(response,"this is ")      
       navigate('/admin/dashboard')      
       clearError();
     } catch (error: any) {
-      handleError(error.response?.data?.message || 'Error logging in');
+      console.log(error,"error is consoleing")
+      handleError(error.data.message || 'Invalid email or password');
     }
   };
 

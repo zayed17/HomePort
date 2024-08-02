@@ -4,7 +4,7 @@ export class ChangePasswordUseCase {
     constructor(private userRepository: UserInterface) { }
     async ChangePassword(email: string, password: string, newPassword: string): Promise<void> {
         try {
-            const user = await this.userRepository.findByEmail(email)
+            const user = await this.userRepository.findOne({email})
             if (!user) {
                 throw new Error("User not found")
             }

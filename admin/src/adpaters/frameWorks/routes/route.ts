@@ -11,5 +11,5 @@ const adminController = new AdminController(adminUseCase)
 
 const router = Router()
 
-router.post('/login' ,(req, res, next) => adminController.login(req, res));
+router.post('/login' ,(req, res, next) => adminController.login(req, res,next));
 export default router;

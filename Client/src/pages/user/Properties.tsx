@@ -2,7 +2,7 @@ import ProfileNav from '../../components/user/ProfileNav'
 import ProfileSidebar from '../../components/user/ProfileSidebar'
 import Favorite from '../../components/user/sections/profile/Favorite'
 
-const FavoritePage = () => {
+const PropertiesPage = () => {
   return (
     <div className="flex h-screen">
       <ProfileSidebar />
@@ -16,4 +16,4 @@ const FavoritePage = () => {
     )
 }
 
-export default FavoritePage
+export default PropertiesPage

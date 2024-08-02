@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropertyCard from '../../components/user/PropertyCard';
 import Nav from '../../components/user/Nav';
 import Filters from '../../components/user/Filter';
 import { useGetPropertiesQuery } from '../../store/propertyApi';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 interface Property {
   _id: string;
@@ -16,13 +17,22 @@ interface Property {
   pricePerSqft: string;
   bedrooms: number;
   bathrooms: number;
-  furnished: string;
+  balconies: string;
   description: string;
   lastUpdated: string;
 }
 
 const PropertyListing: React.FC = () => {
   const { data: properties = [], isLoading, isError } = useGetPropertiesQuery();
+  const [favoriteProperties, setFavoriteProperties] = useState<string[]>([]);
+
+  const handleFavoriteClick = (propertyId: string) => {
+    setFavoriteProperties((prevFavorites) =>
+      prevFavorites.includes(propertyId)
+        ? prevFavorites.filter((id) => id !== propertyId)
+        : [...prevFavorites, propertyId]
+    );
+  };
 
   return (
     <div>
@@ -51,19 +61,38 @@ const PropertyListing: React.FC = () => {
             {!isLoading && !isError && properties.length > 0 ? (
               <div className="space-y-4">
                 {properties.map((property: Property) => (
-                  <PropertyCard
-                    key={property._id}
+                  <div key={property._id} className="relative">
+                    <PropertyCard
+                    _id={property._id}
                     image={property.mediaFiles[0] || '/default-image.jpg'}
                     location={`${property.city}, ${property.address}`}
                     rentAmount={property.rentAmount}
-                    size={property.size}
-                    pricePerSqft={property.pricePerSqft}
+                    totalArea={property.totalArea}
                     bedrooms={property.bedrooms}
                     bathrooms={property.bathrooms}
-                    furnished={property.furnished}
+                    balconies={property.balconies}
                     description={property.description}
                     lastUpdated={property.lastUpdated}
-                  />
+                    sellPrice={property.sellPrice}
+                    depositAmount={property.depositAmount}
+                    lookingFor={property.lookingFor}
+                    />
+                    <button
+                      onClick={() => handleFavoriteClick(property._id)}
+                      className="absolute top-2 right-2 p-2 rounded-full bg-white shadow-md"
+                      aria-label={
+                        favoriteProperties.includes(property._id)
+                          ? 'Remove from favorites'
+                          : 'Add to favorites'
+                      }
+                    >
+                      {favoriteProperties.includes(property._id) ? (
+                        <FaHeart className="text-red-600" />
+                      ) : (
+                        <FaRegHeart className="text-gray-600" />
+                      )}
+                    </button>
+                  </div>
                 ))}
               </div>
             ) : (

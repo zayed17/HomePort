@@ -3,12 +3,8 @@ import { UserInterface } from '../interface';
 import UserModel from '../../infrastructure/database/models/UserModel';
 
 export class UserRepository implements UserInterface {
-    async findByEmail(email: string): Promise<User | null> {
-        const user = await UserModel.findOne({ email }).exec();
-        if (!user) {
-            return null;
-        }
-        return new User(user);
+    async findOne(filter: any): Promise<User | null> {
+        return UserModel.findOne(filter).lean();
     }
 
     async save(user: User): Promise<void> {

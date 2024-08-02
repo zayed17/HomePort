@@ -1,7 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaUser, FaHeart, FaCreditCard, FaComments, FaSignOutAlt } from 'react-icons/fa'; // Import necessary icons
+import { FaUser, FaHome, FaCreditCard, FaComments, FaSignOutAlt } from 'react-icons/fa'; // Import necessary icons
 import { removeCookie } from '../../helpers/removeCookie';
 
 const ProfileSidebar: React.FC = () => {
@@ -30,11 +30,11 @@ const ProfileSidebar: React.FC = () => {
           </li>
           <li className="my-6">
             <NavLink 
-              to="/profile/favorite" 
-              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/favorite' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
+              to="/profile/properties" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/properties' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
             >
-              <FaHeart className="md:mr-2" />
-              <span className="hidden md:block">Favorite</span>
+              <FaHome className="md:mr-2" />
+              <span className="hidden md:block">Properties</span>
             </NavLink>
           </li>
           <li className="my-6">

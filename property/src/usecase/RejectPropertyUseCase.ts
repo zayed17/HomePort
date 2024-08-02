@@ -5,7 +5,7 @@ export class RejectPropertyUseCase {
   constructor(private propertyRepository: PropertyInterface) { }
 
   async rejectProperty(id: string, reason: string): Promise<void> {
-    const property = await this.propertyRepository.findById(id);
+    const property = await this.propertyRepository.findOne({ _id: id });
     if (!property) {
       throw new Error('Property not found');
     }

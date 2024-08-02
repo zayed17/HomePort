@@ -5,7 +5,7 @@ export interface PropertyData {
     address: string;
     city: string;
     mediaFiles: string[];
-    depositAmount: number;
+    depositAmount?: number;
     facing: string;
     propertyAge: string;
     totalFloors: number;
@@ -18,9 +18,9 @@ export interface PropertyData {
     hasWell: string;
     furnisherType: string;
     electronics?: Record<string, boolean>; 
-    rentAmount: number;
-    isRentNegotiable: string;
-    areBillsIncluded: string;
+    rentAmount?: number;
+    isNegotiable: string;
+    areBillsIncluded?: string;
     eligibility: string;
     availableFrom: string;
     otherRooms: string[]; 
@@ -30,6 +30,11 @@ export interface PropertyData {
     noOfScooters: number;
     noOfBikes: number;
     directionTips: string;
+    sellPrice?: number;
+    propertyCondition?: string;
+    lookingFor:string,
+    createdBy:string,
+    isBlock:boolean,
   }
   
   export class Property  {
@@ -39,7 +44,7 @@ export interface PropertyData {
     address: string;
     city: string;
     mediaFiles: string[];
-    depositAmount: number;
+    depositAmount?: number;
     facing: string;
     propertyAge: string;
     totalFloors: number;
@@ -51,20 +56,24 @@ export interface PropertyData {
     totalArea: number;
     hasWell: string;
     furnisherType: string;
-    electronics?: Record<string, boolean>;
-    rentAmount: number;
-    isRentNegotiable: string;
-    areBillsIncluded: string;
+    electronics?: Record<string, boolean>; 
+    rentAmount?: number;
+    isNegotiable: string;
+    areBillsIncluded?: string;
     eligibility: string;
     availableFrom: string;
-    otherRooms: string[];
-    propertyFeatures: string[];
-    propertyAdvantages: string[];
+    otherRooms: string[]; 
+    propertyFeatures: string[]; 
+    propertyAdvantages: string[]; 
     noOfCars: number;
     noOfScooters: number;
     noOfBikes: number;
     directionTips: string;
-  
+    sellPrice?: number;
+    propertyCondition?: string;
+    lookingFor:string;
+    createdBy:string
+    isBlock:boolean;
     constructor({
       status,
       reason,
@@ -86,7 +95,7 @@ export interface PropertyData {
       furnisherType,
       electronics,
       rentAmount,
-      isRentNegotiable,
+      isNegotiable,
       areBillsIncluded,
       eligibility,
       availableFrom,
@@ -97,6 +106,12 @@ export interface PropertyData {
       noOfScooters,
       noOfBikes,
       directionTips,
+      sellPrice,
+      propertyCondition,
+      lookingFor,
+      createdBy,
+      isBlock,
+
     }: PropertyData) {
       this.status = status;
       this.reason = reason;
@@ -118,7 +133,7 @@ export interface PropertyData {
       this.furnisherType = furnisherType;
       this.electronics = electronics;
       this.rentAmount = rentAmount;
-      this.isRentNegotiable = isRentNegotiable;
+      this.isNegotiable = isNegotiable;
       this.areBillsIncluded = areBillsIncluded;
       this.eligibility = eligibility;
       this.availableFrom = availableFrom;
@@ -129,5 +144,10 @@ export interface PropertyData {
       this.noOfScooters = noOfScooters;
       this.noOfBikes = noOfBikes;
       this.directionTips = directionTips;
+      this.sellPrice = sellPrice;
+      this.propertyCondition = propertyCondition
+      this.lookingFor = lookingFor
+      this.createdBy = createdBy
+      this.isBlock = isBlock
     }
 }

@@ -5,11 +5,11 @@ export  class UploadImageUseCase {
               private userRepository: UserInterface,
             ) {}
 
-  async uploadImage(file: Express.Multer.File,email:string): Promise<void> {
+  async uploadImage(file: Express.Multer.File,_id:string): Promise<void> {
     try {
       const imageUrl = await this.s3Repository.uploadImage(file);
       console.log(imageUrl,"imaeg")
-      const user = await this.userRepository.update({email},{image:imageUrl})
+      const user = await this.userRepository.update({_id},{image:imageUrl})
     } catch (error:any) {
       throw new Error(error.message)
     }

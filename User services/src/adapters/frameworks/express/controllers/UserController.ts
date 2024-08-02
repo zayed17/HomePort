@@ -89,12 +89,12 @@ export class UserController {
             if (!file) {
                 throw new Error("File is not found")
             }
-            const email = req.user.email
-            console.log(email, "checking email")
-            if (!email) {
+            const id = req.user._id
+            console.log(id, "checking email")
+            if (!id) {
                 throw new Error("User not found")
             }
-            const imageUrl = await this.uploadUseCase.uploadImage(file, email)
+            const imageUrl = await this.uploadUseCase.uploadImage(file, id)
             res.status(200).json({ message: 'Image uploaded successfully', imageUrl });
         } catch (error) {
             next(error)
@@ -170,7 +170,6 @@ export class UserController {
 
     async blockUblock(req: Request, res: Response, next: NextFunction): Promise<void> {
         const {userId,newStatus} = req.body
-        console.log(userId,newStatus)
         try {
             await this.blockUnblockUseCase.BlockUnblock(userId,newStatus)
             res.status(200).json({ success: true });

@@ -6,13 +6,13 @@ export class AddPropertyUseCase {
     private s3Repository: S3Interface,
     private propertyRepository: PropertyInterface) { }
 
-  async addProperty(files: Express.Multer.File[], formData: any): Promise<Property> {
+  async addProperty(files: Express.Multer.File[], formData: any,id:string): Promise<Property> {
     console.log(files, "checking from usecase");
 
     const uploadPromises = files.map((file) => this.s3Repository.uploadImage(file));
     const uploadedFiles = await Promise.all(uploadPromises);
     const imageUrls = uploadedFiles.map((file) => file);
-
+    formData.createdBy = id
     const propertyData: Property = {
       ...formData,
       mediaFiles: imageUrls,

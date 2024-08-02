@@ -3,7 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import Home from '../pages/user/Home';
 import Profile from '../pages/user/Profile';
 import ChatPage from '../pages/user/ChatPage';
-import FavoritePage from '../pages/user/FavoritePage';
+import PropertiesPage from '../pages/user/Properties';
 import PaymentPage from '../pages/user/PaymentPage';
 import AdminLogin from '../pages/admin/AdminLogin';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -14,6 +14,7 @@ import ProtectedRoute from './Protected'
 import VerifyRoute from './Verify'
 import PropertyDetailsForm from '../pages/user/PropertyAdd';
 import PropertyListing from '../pages/user/PropertyList';
+import PropertyDetails from '../pages/user/PropertyDetails';
 const AppRoutes = () => {
   return (
     <Router>
@@ -22,12 +23,13 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/properties" element={< PropertyListing/>} />
+          <Route path="/property/:id" element={<PropertyDetails />} />
 
           <Route path="/addproperty" element={<PropertyDetailsForm />} />
 
-
+ 
           <Route path="/profile/details" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
-          <Route path="/profile/favorite" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={FavoritePage} />} />
+          <Route path="/profile/properties" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
           <Route path="/profile/chat" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={ChatPage} />} />
           <Route path="/admin" element={< VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
