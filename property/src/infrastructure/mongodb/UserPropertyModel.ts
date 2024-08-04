@@ -1,21 +1,19 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface UserDocument extends Document {
-    userId: mongoose.Types.ObjectId;
     name: string;
     email: string;
     phone: string;
-    favourites: mongoose.Types.ObjectId[]; 
+    favourites: mongoose.Types.ObjectId[]; // Array of ObjectIds
 }
 
 const UserSchema: Schema = new Schema({
-    userId: { type: Schema.Types.ObjectId, required: true, ref: 'Property' }, 
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true },
-    favourites: { type: [Schema.Types.ObjectId], ref: 'Property', default: [] }
+    email: { type: String, required: true, unique: true }, // Email should be unique
+    phone: { type: String, required: true, unique: true }, // Phone should be unique
+    favourites: { type: [Schema.Types.ObjectId], ref: 'Property', default: [] } // Array of ObjectIds
 }, {
-    timestamps: true
+    timestamps: true // Automatically adds createdAt and updatedAt fields
 });
 
 const UserModel = mongoose.model<UserDocument>('User', UserSchema);

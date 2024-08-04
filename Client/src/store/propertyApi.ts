@@ -56,9 +56,16 @@ const propertyApi = createApi({
         body: credentials,
       }),
     }), 
+    toggleFavorite: builder.mutation({
+      query: (credentials) => ({
+        url: `${URL}/favorite-update`,
+        method: 'PATCH',
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation} = propertyApi;
+export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation} = propertyApi;
 
 export default propertyApi;

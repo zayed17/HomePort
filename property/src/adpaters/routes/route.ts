@@ -1,7 +1,7 @@
 import { Router } from "express";
 import express, { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase} from '../../usecase';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase} from '../../usecase';
 import { S3Repository, PropertyRepository,UserPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import upload from '../../infrastructure/middleware/multerMiddleware'
@@ -26,10 +26,12 @@ const findAdminPropertiesUseCase = new FindAdminPropertiesUseCase(propertyReposi
 const blockUnblockUseCase = new BlockUnblockUseCase(propertyRepository)
 const addUserUseCase = new AddUserUseCase(userPropertyRepository)
 const findUserUseCase = new FindUserUseCase(userPropertyRepository)
+const toggleFavouriteUseCaseUseCase = new ToggleFavouriteUseCaseUseCase(userPropertyRepository)
+
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase);
 
 const router = Router();
 
@@ -37,9 +39,9 @@ router.post('/add-property',authenticateToken(['user']), upload ,(req, res, next
 router.get('/list-properties', async (req: Request, res: Response, next: NextFunction) => {
     try {
         console.log('this is workding')
-      const properties = await PropertyModel.find({status:'verified'}); 
-      console.log(properties)
-                res.json(properties); 
+      const properties = await PropertyModel.find({status:'verified'}).populate('createdBy')
+      console.log(properties,"consoleing")
+      res.json(properties); 
     } catch (error) {
       next(error); 
     }
@@ -52,6 +54,7 @@ router.get('/properties',authenticateToken(['user']),(req, res, next) => propert
 router.get('/adminProperties',(req, res, next) => propertyController.findAdminProperties(req, res, next));
 router.patch('/block-unblock',(req, res, next) => propertyController.blockUblock(req, res, next));
 
+router.patch('/favorite-update',authenticateToken(['user']),(req, res, next) => propertyController.toggleFavourite(req, res, next));
 
   
 export default router;

@@ -41,6 +41,16 @@ class UserServiceImpl implements IUserServiceServer {
         return UserModel.findOne({ _id: userId })
     }
 }
-
-export const server = new grpc.Server();
+const server = new grpc.Server();
 server.addService(UserServiceService, new UserServiceImpl());
+
+export function main() {
+    const res =  server.bindAsync('localhost:50011', grpc.ServerCredentials.createInsecure(), (error, port) => {
+         if (error) {
+             console.error('Server failed to start:', error);
+             
+         }
+         console.log(`User service started on port ${port}`);
+     });
+   }
+   

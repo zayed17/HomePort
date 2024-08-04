@@ -3,22 +3,6 @@ import userRoutes from './adapters/frameworks/routes/userRoutes';
 import cors from 'cors'
 import errorHandler from './infrastructure/middleware/ErrorMiddleware';
 
-
-import { server } from './UserServer';
-import * as grpc from '@grpc/grpc-js';
-
-// function main() {
-//  const res =  server.bindAsync('localhost:5001', grpc.ServerCredentials.createInsecure(), (error, port) => {
-//       if (error) {
-//           console.error('Server failed to start:', error);
-          
-//       }
-//       console.log(`User service started on port ${port}`);
-//   });
-//   console.log(res,"res sceojs")
-// }
-
-// main();
 const app = express();
 
 const corsOptions = {

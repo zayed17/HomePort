@@ -9,7 +9,7 @@ export class AddUserUseCase {
   async addUser(user: any): Promise<void> {
     try {
       const userData: UserData = {
-        userId:user.id,
+        _id:user.id,
         name: user.firstname,
         email: user.email,
         phone: user.phone,

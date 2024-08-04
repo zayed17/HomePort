@@ -80,7 +80,7 @@ const PropertySchema: Schema = new Schema({
   lookingFor: { type: String, required: false },
   status: { type: String, enum: PropertyStatus, default: PropertyStatus.PENDING, required: true },
   reason: { type: String, required: false },
-  createdBy: { type: String, required: true },
+  createdBy: { type: Schema.Types.ObjectId, required: true ,ref: 'User'},
   isBlock: { type: Boolean, required: true, default:false },
 
 }, {

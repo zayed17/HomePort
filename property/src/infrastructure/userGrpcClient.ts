@@ -2,7 +2,7 @@ import * as grpc from '@grpc/grpc-js';
 import { UserServiceClient } from '../proto/user_grpc_pb';
 import { GetUserRequest } from '../proto/user_pb';
 
-const userClient = new UserServiceClient('localhost:5001', grpc.credentials.createInsecure());
+const userClient = new UserServiceClient('localhost:50011', grpc.credentials.createInsecure());
 
 export async function fetchUserDetails(userId: string): Promise<any> {
   console.log(userId,"cfdjwe")

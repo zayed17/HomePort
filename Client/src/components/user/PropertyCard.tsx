@@ -9,7 +9,6 @@ interface PropertyCardProps {
   depositAmount?: number;
   sellPrice?: number;
   totalArea: string;
-  pricePerSqft: string;
   bedrooms: number;
   bathrooms: number;
   balconies: string;

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase , FindPropertyUseCase, FindAllPropertiesUseCase,FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase} from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase } from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 
 export class PropertyController {
@@ -13,21 +13,23 @@ export class PropertyController {
     private findAdminPropertiesUseCase: FindAdminPropertiesUseCase,
     private blockUnblockUseCase: BlockUnblockUseCase,
     private findUserUseCase: FindUserUseCase,
-    private addUserUseCase: AddUserUseCase
-  ) {}
+    private addUserUseCase: AddUserUseCase,
+    private toggleFavouriteUseCaseUseCase: ToggleFavouriteUseCaseUseCase
+
+  ) { }
 
   async addProperty(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       const files = req.files as Express.Multer.File[];
       const id = req.user._id
       const user = await this.findUserUseCase.FindUser(id)
-      if(!user){
+      if (!user) {
         const userDetails = await fetchUserDetails(id);
         await this.addUserUseCase.addUser(userDetails)
       }
       const formData = req.body;
-      const result = await this.addPropertyUseCase.addProperty(files, formData,id);
-      res.status(201).json({ message: 'Property added successfully',result });
+      const result = await this.addPropertyUseCase.addProperty(files, formData, id);
+      res.status(201).json({ message: 'Property added successfully', result });
     } catch (error) {
       next(error);
     }
@@ -55,7 +57,7 @@ export class PropertyController {
   async rejectProperty(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
-      console.log(req.body,"checking what si ")
+      console.log(req.body, "checking what si ")
       const { reason } = req.body;
       await this.rejectPropertyUseCase.rejectProperty(id, reason);
       res.status(200).send({ message: 'Property rejected successfully' });
@@ -66,7 +68,7 @@ export class PropertyController {
 
   async getProperty(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const {id} = req.params
+      const { id } = req.params
       const result = await this.findPropertyUseCase.findProperty(id);
       res.status(201).json(result);
     } catch (error) {
@@ -93,13 +95,26 @@ export class PropertyController {
   }
 
   async blockUblock(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log(req.body,"from the current body")
-    const {_id,newStatus} = req.body
+    console.log(req.body, "from the current body")
+    const { _id, newStatus } = req.body
     try {
-        await this.blockUnblockUseCase.BlockUnblock(_id,newStatus)
-        res.status(200).json({ success: true });
+      await this.blockUnblockUseCase.BlockUnblock(_id, newStatus)
+      res.status(200).json({ success: true });
     } catch (error) {
-        next(error)
+      next(error)
     }
-}
+  }
+
+  
+  async toggleFavourite(req: any, res: Response, next: NextFunction): Promise<void> {
+    console.log(req.body, "from the current body")
+    const { propertyId, action } = req.body;
+    const userId = req.user._id
+    try {
+      await this.toggleFavouriteUseCaseUseCase.toggleFavourite({propertyId,userId,action})
+      res.status(200).json({ success: true });
+    } catch (error) {
+      next(error)
+    }
+  }
 }

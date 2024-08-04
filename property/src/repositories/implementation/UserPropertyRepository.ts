@@ -12,4 +12,9 @@ export class UserPropertyRepository implements UserPropertyInterface {
   async findUser(filter: any): Promise<UserData | null> {
     return UserModel.findOne(filter).lean();
   }
+
+
+  async updateUser(_id: string, user: Partial<UserData>): Promise<void> {
+    await UserModel.updateOne({ _id }, { $set: user })
+  }
 }
