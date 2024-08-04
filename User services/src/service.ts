@@ -4,6 +4,8 @@ import app from './app';
 import cookieParser from 'cookie-parser'
 dotenv.config();
 
+
+
 const PORT = process.env.PORT || 5001;
 const MONGO_URL = process.env.MONGO_URL || ""
 app.use(cookieParser());

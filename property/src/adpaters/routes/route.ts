@@ -1,8 +1,8 @@
 import { Router } from "express";
 import express, { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase} from '../../usecase';
-import { S3Repository, PropertyRepository } from '../../repositories';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase} from '../../usecase';
+import { S3Repository, PropertyRepository,UserPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import upload from '../../infrastructure/middleware/multerMiddleware'
 import PropertyModel from "../../infrastructure/mongodb/PropertyModel";
@@ -13,6 +13,7 @@ const s3Service = new S3Service();
 // Initialize repositories with required services
 const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
+const userPropertyRepository = new UserPropertyRepository()
 
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository);
@@ -23,10 +24,12 @@ const findPropertyUseCase = new FindPropertyUseCase(propertyRepository)
 const findAllPropertiesUseCase = new FindAllPropertiesUseCase(propertyRepository)
 const findAdminPropertiesUseCase = new FindAdminPropertiesUseCase(propertyRepository)
 const blockUnblockUseCase = new BlockUnblockUseCase(propertyRepository)
+const addUserUseCase = new AddUserUseCase(userPropertyRepository)
+const findUserUseCase = new FindUserUseCase(userPropertyRepository)
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase);
 
 const router = Router();
 

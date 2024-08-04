@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase , FindPropertyUseCase, FindAllPropertiesUseCase,FindAdminPropertiesUseCase, BlockUnblockUseCase} from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase , FindPropertyUseCase, FindAllPropertiesUseCase,FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase} from '../../usecase';
+import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 
 export class PropertyController {
   constructor(
@@ -11,22 +12,27 @@ export class PropertyController {
     private findAllPropertiesUseCase: FindAllPropertiesUseCase,
     private findAdminPropertiesUseCase: FindAdminPropertiesUseCase,
     private blockUnblockUseCase: BlockUnblockUseCase,
+    private findUserUseCase: FindUserUseCase,
+    private addUserUseCase: AddUserUseCase
   ) {}
 
   async addProperty(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log(req.user,"user checking please resopon")
       const files = req.files as Express.Multer.File[];
       const id = req.user._id
-      console.log(files, "from controller ");
-
+      const user = await this.findUserUseCase.FindUser(id)
+      if(!user){
+        const userDetails = await fetchUserDetails(id);
+        await this.addUserUseCase.addUser(userDetails)
+      }
       const formData = req.body;
       const result = await this.addPropertyUseCase.addProperty(files, formData,id);
-      res.status(201).json({ message: 'Property added successfully', result });
+      res.status(201).json({ message: 'Property added successfully',result });
     } catch (error) {
       next(error);
     }
   }
+
 
   async getPendingProperties(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
