@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase } from '../../../../usecases';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase,PublishUserUpdateUseCase } from '../../../../usecases';
 
 
 export class UserController {
@@ -16,7 +16,9 @@ export class UserController {
         private forgotPasswordUseCase: ForgotPasswordUseCase,
         private changePasswordUseCase: ChangePasswordUseCase,
         private findAllUserUseCase: FindAllUserUseCase,
-        private blockUnblockUseCase: BlockUnblockUseCase
+        private blockUnblockUseCase: BlockUnblockUseCase,
+        private publishUserUpdateUseCase: PublishUserUpdateUseCase
+
     ) { }
 
     async signUpUser(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -76,6 +78,7 @@ export class UserController {
         const { firstName, lastName, email, phone } = req.body;
         try {
             const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
+           await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
             res.status(200).json({ message: 'User updated successfully', updatedUser });
         } catch (error) {
             next(error);

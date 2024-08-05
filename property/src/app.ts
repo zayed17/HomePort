@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./infrastructure/mongodb/connection";
 import propertyRoute from "./adpaters/routes/route";
+import { startConsumers } from "./adpaters/messaging/consumerStartup";
 const app = express();
 
 const corsOptions = {
@@ -25,6 +26,8 @@ const startServer = async () => {
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
+  startConsumers().catch(error => console.error("Failed to start the consumer:", error));
+
 };
 
 startServer()
