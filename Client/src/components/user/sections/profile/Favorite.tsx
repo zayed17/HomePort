@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllPropertiesQuery } from '../../../../store/propertyApi';
 
@@ -12,6 +12,9 @@ interface Property {
   status: string;
   mediaFiles: string[];
   totalArea?: number;
+  sponsorship?: {
+    isSponsored: boolean;
+  };
 }
 
 const Properties = () => {
@@ -29,8 +32,12 @@ const Properties = () => {
     navigate(`/property/${id}`);
   };
 
+  const handleSponsorNavigate = (id: string) => {
+    navigate(`/sponsor/${id}`);
+  };
+
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading properties: {error.message}</div>;
+  if (error) return <div>Error loading properties</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -57,12 +64,19 @@ const Properties = () => {
                 >
                   {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
                 </span>
+                {property.sponsorship?.isSponsored && (
+                  <span
+                    className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800"
+                  >
+                    Sponsored
+                  </span>
+                )}
               </div>
               <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-800">{property.propertyType}</h2>
                 <p className="text-sm text-gray-600">{property.city}</p>
                 
-                {property.rentAmount !=0 && (
+                {property.rentAmount && (
                   <>
                     <div className="mt-2 text-sm font-medium text-green-600">
                       ₹{property.rentAmount.toLocaleString('en-IN')} / month
@@ -72,7 +86,7 @@ const Properties = () => {
                     </p>
                   </>
                 )}
-                {property.sellPrice !=0 && (
+                {property.sellPrice && (
                   <>
                     <div className="mt-2 text-sm font-medium text-green-600">
                       ₹{property.sellPrice.toLocaleString('en-IN')} 
@@ -82,6 +96,18 @@ const Properties = () => {
                 
                 {property.totalArea && (
                   <p className="text-xs text-gray-500">Area: {property.totalArea} sq ft</p>
+                )}
+
+                {!property.sponsorship?.isSponsored && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering the parent div's onClick
+                      handleSponsorNavigate(property._id);
+                    }}
+                    className="mt-4 w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+                  >
+                    Make Sponsored
+                  </button>
                 )}
               </div>
             </div>
@@ -94,17 +120,16 @@ const Properties = () => {
   );
 };
 
-// Function to get status color class
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'approved':
-      return 'bg-green-200 text-green-600'; // Green color for approved
+      return 'bg-green-200 text-green-600';
     case 'rejected':
-      return 'bg-red-200 text-red-600'; // Red color for rejected
+      return 'bg-red-200 text-red-600';
     case 'pending':
-      return 'bg-blue-200 text-blue-600'; // Blue color for pending
+      return 'bg-blue-200 text-blue-600';
     default:
-      return 'bg-gray-200 text-gray-600'; // Default color for unknown status
+      return 'bg-gray-200 text-gray-600';
   }
 };
 

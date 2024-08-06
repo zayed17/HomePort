@@ -15,6 +15,8 @@ import VerifyRoute from './Verify'
 import PropertyDetailsForm from '../pages/user/PropertyAdd';
 import PropertyListing from '../pages/user/PropertyList';
 import PropertyDetails from '../pages/user/PropertyDetails';
+import SponserPage from '../pages/user/SponserPage';
+import PaymentSuccess from '../pages/user/SuccessPage';
 const AppRoutes = () => {
   return (
     <Router>
@@ -24,10 +26,12 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/properties" element={< PropertyListing/>} />
           <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route path="/sponsor/:id" element={<SponserPage />} />
 
           <Route path="/addproperty" element={<PropertyDetailsForm />} />
 
- 
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+
           <Route path="/profile/details" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
           <Route path="/profile/properties" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />

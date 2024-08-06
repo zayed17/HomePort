@@ -5,7 +5,14 @@ enum PropertyStatus {
   APPROVED = 'verified',
   REJECTED = 'rejected'
 }
-
+interface Sponsorship {
+  isSponsored: boolean;
+  details?: {
+    startDate?: Date;
+    endDate?: Date; 
+    amount?: number; 
+  };
+}
 interface PropertyDocument extends Document {
   propertyType: string;
   reason?: string;
@@ -40,7 +47,10 @@ interface PropertyDocument extends Document {
   sellPrice?: number;
   propertyCondition?: string;
   status: PropertyStatus;
-  lookingFor:string;
+  lookingFor: string;
+  createdBy: Schema.Types.ObjectId; 
+  isBlock: boolean;
+  sponsorship?: Sponsorship; 
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -80,9 +90,16 @@ const PropertySchema: Schema = new Schema({
   lookingFor: { type: String, required: false },
   status: { type: String, enum: PropertyStatus, default: PropertyStatus.PENDING, required: true },
   reason: { type: String, required: false },
-  createdBy: { type: Schema.Types.ObjectId, required: true ,ref: 'User'},
-  isBlock: { type: Boolean, required: true, default:false },
-
+  createdBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  isBlock: { type: Boolean, required: true, default: false },
+  sponsorship: {
+    isSponsored: { type: Boolean, default: false },
+    details: {
+      startDate: { type: Date },
+      endDate: { type: Date },
+      amount: { type: Number }
+    }
+  }
 }, {
   timestamps: true
 });

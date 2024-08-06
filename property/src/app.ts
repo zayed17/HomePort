@@ -26,7 +26,7 @@ const startServer = async () => {
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
-  startConsumers().catch(error => console.error("Failed to start the consumer:", error));
+  // startConsumers().catch(error => console.error("Failed to start the consumer:", error));
 
 };
 

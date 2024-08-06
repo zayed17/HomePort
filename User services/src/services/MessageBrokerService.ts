@@ -1,8 +1,8 @@
 import amqp from 'amqplib';
-import { createConnection, createChannel } from '../infrastructure/rabbitMq/amqp';
+// import { createConnection, createChannel } from '../infrastructure/rabbitMq/amqp';
 
 export class MessageBrokerService {
-    private connection!: amqp.Connection;
+    // private connection!: amqp.Connection;
     private channel!: amqp.Channel;
     private exchange = 'user_updates';
 
@@ -11,9 +11,9 @@ export class MessageBrokerService {
     }
 
     private async initialize() {
-        this.connection = await createConnection();
-        this.channel = await createChannel(this.connection);
-        await this.channel.assertExchange(this.exchange, 'topic', { durable: true });
+        // this.connection = await createConnection();
+        // this.channel = await createChannel(this.connection);
+        // await this.channel.assertExchange(this.exchange, 'topic', { durable: true });
     }
 
     public async publishUserUpdate(userId: string, data: any) {

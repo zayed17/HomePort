@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase } from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase } from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 
 export class PropertyController {
@@ -14,7 +14,9 @@ export class PropertyController {
     private blockUnblockUseCase: BlockUnblockUseCase,
     private findUserUseCase: FindUserUseCase,
     private addUserUseCase: AddUserUseCase,
-    private toggleFavouriteUseCaseUseCase: ToggleFavouriteUseCaseUseCase
+    private toggleFavouriteUseCaseUseCase: ToggleFavouriteUseCaseUseCase,
+    private successPaymentUseCase: SuccessPaymentUseCase
+
 
   ) { }
 
@@ -105,7 +107,6 @@ export class PropertyController {
     }
   }
 
-  
   async toggleFavourite(req: any, res: Response, next: NextFunction): Promise<void> {
     console.log(req.body, "from the current body")
     const { propertyId, action } = req.body;
@@ -117,4 +118,13 @@ export class PropertyController {
       next(error)
     }
   }
-}
+
+  async SuccessPayment(req: any, res: Response, next: NextFunction): Promise<void> {
+    const { sessionId, propertyId } = req.body;
+    try {
+      const result =  await this.successPaymentUseCase.successPayment(sessionId, propertyId);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }}

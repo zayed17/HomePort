@@ -73,17 +73,17 @@ export class UserController {
         }
     }
 
-    async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-        console.log(req.body, "checking in updateuser")
-        const { firstName, lastName, email, phone } = req.body;
-        try {
-            const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
-           await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
-            res.status(200).json({ message: 'User updated successfully', updatedUser });
-        } catch (error) {
-            next(error);
-        }
-    }
+    // async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+    //     console.log(req.body, "checking in updateuser")
+    //     const { firstName, lastName, email, phone } = req.body;
+    //     try {
+    //         const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
+    //        await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
+    //         res.status(200).json({ message: 'User updated successfully', updatedUser });
+    //     } catch (error) {
+    //         next(error);
+    //     }
+    // }
 
     async uploadImage(req: any, res: Response, next: NextFunction): Promise<void> {
         try {
