@@ -20,6 +20,7 @@ import PaymentSuccess from '../pages/user/SuccessPage';
 import AdsPage from '../pages/user/AdsPage';
 import CreateAdPage from '../pages/user/CreateAds';
 import Favourites from '../pages/user/Favourites';
+import Subscription from '../pages/admin/Subscription';
 const AppRoutes = () => {
   return (
     <Router>
@@ -39,10 +40,15 @@ const AppRoutes = () => {
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
           <Route path="/profile/chat" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={ChatPage} />} />
           <Route path="/profile/ads" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={AdsPage} />} />
+
+
+          //admin Side
           <Route path="/admin" element={< VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
           <Route path="/admin/dashboard" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminDashboard} />}/>
           <Route path="/admin/property" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminProperty} />}/>
           <Route path="/admin/user" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminUser} />}/>
+          <Route path="/admin/subscription" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={Subscription} />}/>
+
         </Routes>
       </GoogleOAuthProvider>
     </Router>

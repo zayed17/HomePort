@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AdminUseCase } from '../../../useCase/AdminUseCase';
+import { AdminUseCase } from '../../useCase';
 
 export class AdminController {
   constructor(private adminUseCase: AdminUseCase) { }
