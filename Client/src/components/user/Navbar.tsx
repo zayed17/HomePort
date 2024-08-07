@@ -64,6 +64,9 @@ const Navbar: React.FC = () => {
         <Link to="/properties" className="hover:text-gray-300">
           Property
         </Link>
+        <Link to="/favourites" className="hover:text-gray-300">
+          favourites
+        </Link>
       </div>
 
       {isOpen && !token && <LoginModal isOpen={isOpen} onClose={toggleMenu} />}

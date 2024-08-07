@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase } from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase , FindFavouritesUseCase} from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 
 export class PropertyController {
@@ -15,9 +15,8 @@ export class PropertyController {
     private findUserUseCase: FindUserUseCase,
     private addUserUseCase: AddUserUseCase,
     private toggleFavouriteUseCaseUseCase: ToggleFavouriteUseCaseUseCase,
-    private successPaymentUseCase: SuccessPaymentUseCase
-
-
+    private successPaymentUseCase: SuccessPaymentUseCase,
+    private findFavouritesUseCase: FindFavouritesUseCase
   ) { }
 
   async addProperty(req: any, res: Response, next: NextFunction): Promise<void> {
@@ -127,4 +126,16 @@ export class PropertyController {
     } catch (error) {
       res.status(400).send(error);
     }
-  }}
+  }
+
+  async findFavourites(req: any, res: Response, next: NextFunction): Promise<void> {
+    const userId = req.user._id
+    try {
+      const result =  await this.findFavouritesUseCase.findFavourites(userId);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
+
+}

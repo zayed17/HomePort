@@ -1,7 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaUser, FaHome, FaCreditCard, FaComments, FaSignOutAlt } from 'react-icons/fa'; // Import necessary icons
+import { FaUser, FaHome, FaCreditCard, FaComments, FaSignOutAlt , FaAd} from 'react-icons/fa'; // Import necessary icons
 import { removeCookie } from '../../helpers/removeCookie';
 
 const ProfileSidebar: React.FC = () => {
@@ -35,6 +35,15 @@ const ProfileSidebar: React.FC = () => {
             >
               <FaHome className="md:mr-2" />
               <span className="hidden md:block">Properties</span>
+            </NavLink>
+          </li>
+          <li className="my-6">
+            <NavLink 
+              to="/profile/ads" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/ads' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
+            >
+              <FaAd className="md:mr-2" />
+              <span className="hidden md:block">ADs </span>
             </NavLink>
           </li>
           <li className="my-6">

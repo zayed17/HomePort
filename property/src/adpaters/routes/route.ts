@@ -1,7 +1,7 @@
 import { Router } from "express";
 import express, { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase} from '../../usecase';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase} from '../../usecase';
 import { S3Repository, PropertyRepository,UserPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import upload from '../../infrastructure/middleware/multerMiddleware'
@@ -33,11 +33,13 @@ const addUserUseCase = new AddUserUseCase(userPropertyRepository)
 const findUserUseCase = new FindUserUseCase(userPropertyRepository)
 const toggleFavouriteUseCaseUseCase = new ToggleFavouriteUseCaseUseCase(userPropertyRepository)
 const successPaymentUseCase = new SuccessPaymentUseCase(propertyRepository,stripeService)
+const findFavouritesUseCase = new FindFavouritesUseCase(userPropertyRepository)
+
 
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase);
 
 const router = Router();
 
@@ -92,4 +94,6 @@ router.post('/payment-intent', async (req, res) => {
 });
 
 router.post('/payment-success',(req, res, next) => propertyController.SuccessPayment(req, res, next));
+router.get('/favourite-property',authenticateToken(['user']),(req, res, next) => propertyController.findFavourites(req, res, next));
+
 export default router;

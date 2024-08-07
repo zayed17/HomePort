@@ -84,7 +84,6 @@ const Banner: React.FC = () => {
                 </div>
               </div>
             </div>
-            {/* Additional Featured Property Cards */}
           </div>
         </div>
       </div>
