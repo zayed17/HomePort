@@ -5,6 +5,7 @@ import PropertyModel from '../../infrastructure/mongodb/PropertyModel';
 export class PropertyRepository implements PropertyInterface {
 
   async addProperty(property: Property): Promise<any> {
+    console.log(property)
     const newProperty = new PropertyModel(property);
     return  newProperty.save();
   }
@@ -14,7 +15,11 @@ export class PropertyRepository implements PropertyInterface {
   }
 
   async findOne(filter: any): Promise<Property | null> {
-    return PropertyModel.findOne(filter).lean();
+    return PropertyModel.findOne(filter)
+  }
+
+  async findOneWithPopulation(filter: any,populate:string): Promise<any | null> {
+    return PropertyModel.findOne(filter).populate(populate)
   }
 
   async updateProperty(_id: string, property: Partial<Property>): Promise<void> {

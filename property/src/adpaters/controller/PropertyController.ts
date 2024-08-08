@@ -24,6 +24,7 @@ export class PropertyController {
       const files = req.files as Express.Multer.File[];
       const id = req.user._id
       const user = await this.findUserUseCase.FindUser(id)
+      console.log(user,"chic")
       if (!user) {
         const userDetails = await fetchUserDetails(id);
         await this.addUserUseCase.addUser(userDetails)

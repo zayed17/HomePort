@@ -31,7 +31,7 @@ interface PropertyDocument extends Document {
   totalArea: number;
   hasWell: string;
   furnisherType: string;
-  electronics?: Record<string, boolean>;
+  electronics?: object;
   rentAmount?: number;
   isNegotiable: string;
   areBillsIncluded?: string;
@@ -72,7 +72,7 @@ const PropertySchema: Schema = new Schema({
   totalArea: { type: Number, required: true },
   hasWell: { type: String, required: true },
   furnisherType: { type: String, required: true },
-  electronics: { type: Map, of: Boolean, required: false },
+  electronics: { type: Object, required: false },
   rentAmount: { type: Number, required: false },
   isNegotiable: { type: String, required: true },
   areBillsIncluded: { type: String, required: false },

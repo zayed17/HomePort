@@ -23,7 +23,7 @@ export interface PropertyData {
   totalArea: number;
   hasWell: string;
   furnisherType: string;
-  electronics?: Record<string, boolean>; 
+  electronics?: object; 
   rentAmount?: number;
   isNegotiable: string;
   areBillsIncluded?: string;
@@ -67,7 +67,7 @@ export class Property {
   totalArea: number;
   hasWell: string;
   furnisherType: string;
-  electronics?: Record<string, boolean>; 
+  electronics?: object; 
   rentAmount?: number;
   isNegotiable: string;
   areBillsIncluded?: string;

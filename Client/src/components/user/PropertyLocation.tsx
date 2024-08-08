@@ -210,7 +210,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { TextInput } from '../admin/ReuseableForm';
 
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiemF5ZWQxNyIsImEiOiJjbHl6Zm05a3EyNjdhMmlyNHRmNDN0dnY0In0.FZ9b6XoiUkxTkscj0mClcA';
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiemF5ZWQxNyIsImEiOiJjbHpqbnl5d3YwdHJsMmpzaXRkcHc1NW55In0.C91Rt8F6i6zkC2mHGqubcg';
 
 interface FormData {
   address: string;

@@ -5,6 +5,9 @@ import { FaBuilding, FaDoorOpen } from 'react-icons/fa';
 import '../../style/property.css';
 import { SelectButton, TextInput, propertyTypes, propertyFacings, propertyAges, furnisherTypes, electronicsList, hasWell } from '../admin/ReuseableForm';
 import { ChangeEvent } from 'react';
+const selectableElectronicsList = [
+  'Fridge', 'Microwave', 'Washing Machine', 'Stove', 'Vacuum Cleaner', 'TV', 'BathTub', 'Chimney', 'Exhaust Fan', 
+];
 
 const PropertyDetailsForm = ({ formData, setFormData }) => {
 
@@ -159,36 +162,54 @@ const PropertyDetailsForm = ({ formData, setFormData }) => {
           </div>
         </div>
         {formData.furnisherType && formData.furnisherType !== 'Unfurnished' && (
-          <div className="mb-8">
-            <label className="block text-gray-700 mb-2 font-semibold text-lg ">Electronics</label>
-            <div className="flex flex-wrap gap-4">
-              {electronicsList.map((electronic) => (
-                <div key={electronic} className="flex flex-col items-center">
-                  <label className="block text-gray-700 mb-1 capitalize">{electronic}</label>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => handleElectronicsChange(electronic, formData.electronics?.[electronic] - 1)}
-                      className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
-                    >
-                      -
-                    </button>
-                    <span className="w-8 text-center">{formData.electronics?.[electronic] || 0}</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleElectronicsChange(electronic, (formData.electronics?.[electronic] || 0) + 1)
-                      }
-                      className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              ))}
+  <div className="mb-8">
+    <label className="block text-gray-700 mb-2 font-semibold text-lg">Electronics and Home items</label>
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-4">
+        {electronicsList.map((electronic) => (
+          <div key={electronic} className="flex flex-col items-center">
+            <label className="block text-gray-700 mb-1 capitalize">{electronic}</label>
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={() => handleElectronicsChange(electronic, (formData.electronics?.[electronic] || 0) - 1)}
+                className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
+              >
+                -
+              </button>
+              <span className="w-8 text-center">{formData.electronics?.[electronic] || 0}</span>
+              <button
+                type="button"
+                onClick={() => handleElectronicsChange(electronic, (formData.electronics?.[electronic] || 0) + 1)}
+                className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
+              >
+                +
+              </button>
             </div>
           </div>
-        )}
+        ))}
+      </div>
+
+      <div className="flex flex-wrap gap-4">
+        {selectableElectronicsList.map((electronic) => (
+          <div key={electronic} className="flex items-center">
+            <input
+              type="checkbox"
+              id={electronic}
+              value={electronic}
+              checked={!!formData.electronics?.[electronic]}
+              onChange={() =>
+                handleElectronicsChange(electronic, formData.electronics?.[electronic] ? 0 : 1)
+              }
+              className="mr-2"
+            />
+            <label htmlFor={electronic} className="text-gray-700 capitalize">{electronic}</label>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
         <div className="grid grid-cols-2 gap-4">
           <div className="mb-8">
             <h3 className="font-semibold text-lg mb-2 flex items-center">

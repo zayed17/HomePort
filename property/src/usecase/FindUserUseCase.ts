@@ -6,7 +6,7 @@ export class FindUserUseCase {
     private userPropertyInterface: UserPropertyInterface) { }
 
   async FindUser(_id:string): Promise<UserData | null> {
-    const user = await this.userPropertyInterface.findUser({userId:_id})
+    const user = await this.userPropertyInterface.findUser({_id})
     return user
   }
 }

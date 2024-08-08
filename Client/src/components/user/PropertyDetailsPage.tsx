@@ -1,16 +1,85 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetPropertyQuery } from '../../store/propertyApi';
-import {
-  FaBed, FaBath, FaCar, FaMotorcycle, FaBicycle, FaRupeeSign, FaMapMarkerAlt, FaDollarSign
-} from 'react-icons/fa';
-import { GiBo } from 'react-icons/gi';
-import { AiOutlineCalendar, AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai';
+import { FaRegFlag, FaHeart, FaFan, FaRegWindowMaximize, FaLightbulb, FaBuilding, FaMapMarkerAlt, FaCompass, FaTv, FaRuler, FaCalendarAlt, FaCouch, FaWater, FaBed, FaShower, FaWindowMaximize, FaChair, FaCar, FaMotorcycle } from 'react-icons/fa';
+import { MdBalcony, MdOutlineMicrowave } from "react-icons/md";
+import { BiFridge, BiCabinet } from "react-icons/bi";
+import { TbAirConditioningDisabled } from "react-icons/tb";
+import { PiFanThin } from "react-icons/pi";
+import { LuSofa } from "react-icons/lu";
+import { GiWashingMachine, GiVacuumCleaner, GiTable, GiScooter } from 'react-icons/gi';
+
+const electronicsIcons = {
+  "AC": <TbAirConditioningDisabled />,
+  "BathTub": <FaShower />,
+  "Bed": <FaBed />,
+  "Chair": <FaChair />,
+  "Chimney": <FaRegWindowMaximize />,
+  "Exhaust Fan": <PiFanThin />,
+  "Fans": <FaFan />,
+  "Fridge": <BiFridge />,
+  "Lights": <FaLightbulb />,
+  "Microwave": <MdOutlineMicrowave />,
+  "Sofa": <LuSofa />,
+  "Stove": <LuSofa />,
+  "TV": <FaTv />,
+  "Table": <GiTable />,
+  "Vacuum Cleaner": <GiVacuumCleaner />,
+  "Wardrobe": <BiCabinet />,
+  "Washing Machine": <GiWashingMachine />
+};
 
 const PropertyDetailsPage: React.FC = () => {
+
+  const basicInfoRef = useRef<HTMLDivElement | null>(null);
+  const propertySpecsRef = useRef<HTMLDivElement | null>(null);
+  const furinsherRef = useRef<HTMLDivElement | null>(null);
+  const featuresRef = useRef<HTMLDivElement | null>(null);
+
+  const sectionRefs: { [key: string]: React.RefObject<HTMLDivElement> } = {
+    'Basic Information': basicInfoRef,
+    'Property Specifications': propertySpecsRef,
+    'Furinsher': furinsherRef,
+    'Parking Space and Property Features': featuresRef,
+  };
+
+  const [activeSection, setActiveSection] = useState<string>('Basic Information');
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY + 150;
+
+    for (const section in sectionRefs) {
+      const ref = sectionRefs[section].current;
+      if (ref && ref.offsetTop <= scrollPosition && ref.offsetTop + ref.offsetHeight > scrollPosition) {
+        setActiveSection(section);
+        break;
+      }
+    }
+  };
+
+  const scrollToSection = (section: string) => {
+    const ref = sectionRefs[section].current;
+    if (ref) {
+      window.scrollTo({
+        top: ref.offsetTop - 70,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
+
+
   const { id } = useParams<{ id: string }>();
   const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
-
+  console.log(property)
   if (isLoading) {
     return (
       <div className="container mx-auto p-4">
@@ -22,187 +91,241 @@ const PropertyDetailsPage: React.FC = () => {
   if (error) {
     return (
       <div className="container mx-auto p-4 text-red-600">
-        <p>Error: {error.message}</p>
+        <p>Error: </p>
+      </div>
+    );
+  }
+
+  if (!property) {
+    return (
+      <div className="container mx-auto p-4 text-gray-600">
+        <p>Property not found</p>
       </div>
     );
   }
 
   return (
-    property && (
-      <div className="container mx-auto p-6 min-h-screen">
-        {/* Property Media */}
-        <div className="relative mb-8">
-          <div className="flex overflow-x-auto space-x-4 py-4">
-            {property.mediaFiles.map((url: string, index: number) => (
-              <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
-                <img
-                  src={url}
-                  alt={`Property Image ${index + 1}`}
-                  className="w-full h-80 object-cover rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
-                />
+    <div className="container mx-auto p-6 min-h-screen ">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">{property.propertyType}</h1>
+          <p className="text-xl text-gray-600">{property.address}</p>
+        </div>
+        <div className="flex items-center space-x-6">
+          <button
+            onClick={() => console.log("Report")}
+            className="border-LightdarkBlue border text-LightdarkBlue font-bold py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+          >
+            <FaRegFlag className="text-LightdarkBlue" />
+            <span>Report</span>
+          </button>
+          <FaHeart
+            onClick={() => console.log("Favorite")}
+            className="text-LightdarkBlue cursor-pointer text-xl"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        {property.mediaFiles.slice(0, 1).map((url: string, index: number) => (
+          <div key={index} className="col-span-2 row-span-2">
+            <img
+              src={url}
+              alt={`Property Image ${index + 1}`}
+              className="w-full h-auto object-cover rounded-lg shadow-lg transition-transform duration-300"
+            />
+          </div>
+        ))}
+        {property.mediaFiles.slice(1).map((url: string, index: number) => (
+          <div key={index} className="col-span-1">
+            <img
+              src={url}
+              alt={`Property Image ${index + 2}`}
+              className="w-full h-48 object-cover rounded-lg shadow-lg transition-transform duration-300"
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="flex space-x-4">
+
+        <div className="w-[70%] rounded-2xl">
+          <div className='mb-3 flex bg-gray-200 p-3 font-bold justify-evenly sticky top-0 rounded-lg shadow-md'>
+            {Object.keys(sectionRefs).map((section) => (
+              <div
+                key={section}
+                className={`${activeSection === section ? 'border-b-4 border-gray-400 text-gray-500' : 'text-DarkBlue'
+                  } cursor-pointer transition-colors duration-300  py-2 px-4 rounded-md`}
+                onClick={() => scrollToSection(section)}
+              >
+                {section}
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Property Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{property.propertyType}</h1>
-            <p className="text-xl text-gray-600">{property.address}</p>
+          <div ref={basicInfoRef} className="mb-8 p-6 bg-gray-100 rounded-lg">
+            <h2 className="text-xl font-bold text-black border-b-2 pb-2">Basic Information</h2>
+            <div className="grid grid-cols-1 mt-3 gap-3">
+              <div className="flex items-center text-gray-600">
+                <FaBuilding className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Property Type: </strong> {property.propertyType}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaMapMarkerAlt className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Address: </strong> {property.address}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaCompass className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Direction Tips: </strong> {property.directionTips}
+              </div>
+            </div>
           </div>
-          <div>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full">
-              Contact Agent
+
+          <div ref={propertySpecsRef} className="mb-8 p-6 bg-gray-100 rounded-lg">
+            <h2 className="text-xl font-bold text-black border-b-2 pb-2">Property Specifications</h2>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div className="flex items-center text-gray-600">
+                <FaBed className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Bedrooms:</strong> {property.bedrooms}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaShower className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Bathrooms:</strong> {property.bathrooms}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <MdBalcony className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Balconies:</strong> {property.balconies}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaRuler className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Total Area:</strong> {property.totalArea} sqft
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaBuilding className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Total Floors:</strong> {property.totalFloors}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaCalendarAlt className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Property Age:</strong> {property.propertyAge}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaCouch className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Furnisher Type:</strong> {property.furnisherType}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaCompass className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Facing:</strong> {property.facing}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaWindowMaximize className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Openings:</strong> {property.openings}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaWater className="mr-2 text-gray-800" />
+                <strong className="text-gray-800 px-1">Has Well:</strong> {property.hasWell ? 'Yes' : 'No'}
+              </div>
+            </div>
+          </div>
+          <div ref={furinsherRef} className="p-6 bg-gray-100 rounded-lg">
+            <h2 className="text-xl font-bold text-black border-b-2 pb-2">
+              Furinsher
+            </h2>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              {Object.entries(property.electronics || {}).map(([item, count]) => (
+                <div key={item} className="flex items-center text-gray-600">
+                  {electronicsIcons[item] || <FaTv />}
+                  <strong className="text-gray-800 px-1">{item}:</strong> {count}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div ref={featuresRef} className="p-6 my-8 bg-gray-100 rounded-lg">
+            <h2 className="text-xl font-bold text-black border-b-2 pb-2">Parking Space and Property Features</h2>
+            <div className="grid grid-cols-3 gap-4 mt-4">
+              <div className="flex items-center text-gray-600">
+                <FaCar className="mr-2 text-gray-800" />
+                <strong className="text-gray-800">Cars:</strong> {property.noOfCars}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <FaMotorcycle className="mr-2 text-gray-800" />
+                <strong className="text-gray-800">Bikes:</strong> {property.noOfBikes}
+              </div>
+              <div className="flex items-center text-gray-600">
+                <GiScooter className="mr-2 text-gray-800" />
+                <strong className="text-gray-800">Scooters:</strong> {property.noOfScooters}
+              </div>
+            </div>
+            {property.propertyFeatures?.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-800">Property Features:</h3>
+                <ul className="list-disc list-inside text-gray-600 mt-2">
+                  {property.propertyFeatures.map((feature: string, index: number) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {property.propertyAdvantages?.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-800">Property Advantages:</h3>
+                <ul className="list-disc list-inside text-gray-600 mt-2">
+                  {property.propertyAdvantages.map((advantage: string, index: number) => (
+                    <li key={index}>{advantage}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="w-[30%] p-6 rounded-2xl bg-white shadow-lg sticky top-0 h-fit border border-gray-200">
+          <div className="mb-6 flex flex-col items-center space-y-4">
+            {property.lookingFor === 'rent' ? (
+              <>
+                <div className="text-center flex flex-col items-center space-y-4">
+                  <div className="flex flex-col items-center">
+                    <h2 className="text-4xl font-extrabold text-gray-800 mb-1">
+                      ₹{property.rentAmount}
+                    </h2>
+                    <span className='text-sm text-gray-500'>
+                      Rent/month
+                    </span>
+                  </div>
+                  <div className="text-3xl font-bold text-gray-300">
+                    |
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h3 className="text-4xl font-extrabold text-gray-800 mb-1">
+                      ₹{property.depositAmount}
+                    </h3>
+                    <span className='text-sm text-gray-500'>
+                      Deposit
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center">
+                <h2 className="text-4xl font-extrabold text-gray-800 mb-1">
+                  ₹{property.sellPrice}
+                </h2>
+                <span className='text-sm text-gray-500'>
+                  Sell Price
+                </span>
+              </div>
+            )}
+            <button className='rounded-full p-3 bg-LightdarkBlue text-white w-full font-semibold hover:bg-darkBlue transition-all'>
+              Book now
             </button>
           </div>
-        </div>
-
-        {/* Property Basic Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Property Details</h3>
-            <ul className="list-disc list-inside">
-              <li className="text-lg mb-2 flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-gray-600" />
-                Address: {property.address}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                <FaBed className="mr-2 text-gray-600" />
-                Bedrooms: {property.bedrooms}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                <FaBath className="mr-2 text-gray-600" />
-                Bathrooms: {property.bathrooms}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                <GiBo className="mr-2 text-gray-600" />
-                Balconies: {property.balconies}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-gray-600" />
-                Total Area: {property.totalArea} sq. ft.
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-gray-600" />
-                Facing: {property.facing}
-              </li>
-            </ul>
+          <hr className='my-6 border-gray-300' />
+          <div className="text-center">
+            <h3 className='font-bold text-2xl text-gray-700 mb-4'>Property Owner</h3>
+            <p className='text-gray-600 mb-2'><strong>Name:</strong> {property.createdBy.name}</p>
+            <p className='text-gray-600 mb-2'><strong>Email:</strong> {property.createdBy.email}</p>
+            <p className='text-gray-600'><strong>Phone:</strong> {property.createdBy.phone}</p>
           </div>
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Property Features</h3>
-            <ul className="list-disc list-inside">
-              <li className="text-lg mb-2 flex items-center">
-                {property.hasWell === 'Yes' ? (
-                  <AiOutlineCheckCircle className="mr-2 text-green-500" />
-                ) : (
-                  <AiOutlineCloseCircle className="mr-2 text-red-500" />
-                )}
-                Has Well: {property.hasWell}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                {property.furnisherType ? (
-                  <AiOutlineCheckCircle className="mr-2 text-green-500" />
-                ) : (
-                  <AiOutlineCloseCircle className="mr-2 text-red-500" />
-                )}
-                Furnisher Type: {property.furnisherType || 'N/A'}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                {property.isNegotiable === 'Yes' ? (
-                  <AiOutlineCheckCircle className="mr-2 text-green-500" />
-                ) : (
-                  <AiOutlineCloseCircle className="mr-2 text-red-500" />
-                )}
-                Rent Negotiable: {property.isNegotiable}
-              </li>
-              <li className="text-lg mb-2 flex items-center">
-                {property.areBillsIncluded === 'Yes' ? (
-                  <AiOutlineCheckCircle className="mr-2 text-green-500" />
-                ) : (
-                  <AiOutlineCloseCircle className="mr-2 text-red-500" />
-                )}
-                Bills Included: {property.areBillsIncluded}
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Property Price & Availability */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Rent</h3>
-            <p className="text-3xl font-bold text-gray-800 mb-2 flex items-center">
-              <FaDollarSign className="mr-2" />
-              ${property.rentAmount}
-            </p>
-            <p className="text-lg mb-2 flex items-center">
-              <FaRupeeSign className="mr-2 text-gray-600" />
-              Deposit Amount: {property.depositAmount}
-            </p>
-          </div>
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Availability</h3>
-            <p className="text-lg mb-2 flex items-center">
-              <AiOutlineCalendar className="mr-2 text-gray-600" />
-              Property Age: {property.propertyAge}
-            </p>
-            <p className="text-lg mb-2 flex items-center">
-              <AiOutlineCalendar className="mr-2 text-gray-600" />
-              Available From: {property.availableFrom}
-            </p>
-          </div>
-        </div>
-
-        {/* Property Advantages */}
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6 mb-6">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">Advantages</h3>
-          <ul className="list-disc list-inside">
-            {property.propertyAdvantages.map((advantage: string, index: number) => (
-              <li key={index} className="text-lg mb-2 flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-gray-600" />
-                {advantage}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Additional Details */}
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden p-6">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">Additional Details</h3>
-          <ul className="list-disc list-inside">
-            <li className="text-lg mb-2 flex items-center">
-              <FaMapMarkerAlt className="mr-2 text-gray-600" />
-              Total Floors: {property.totalFloors}
-            </li>
-            <li className="text-lg mb-2 flex items-center">
-              <FaMapMarkerAlt className="mr-2 text-gray-600" />
-              Openings: {property.openings}
-            </li>
-            <li className="text-lg mb-2 flex items-center">
-              <FaMapMarkerAlt className="mr-2 text-gray-600" />
-              Other Rooms: {Array.isArray(property.otherRooms) ? property.otherRooms.join(', ') : 'N/A'}
-            </li>
-                        <li className="text-lg mb-2 flex items-center">
-              <FaCar className="mr-2 text-gray-600" />
-              No. of Cars: {property.noOfCars}
-            </li>
-            <li className="text-lg mb-2 flex items-center">
-              <FaMotorcycle className="mr-2 text-gray-600" />
-              No. of Scooters: {property.noOfScooters}
-            </li>
-            <li className="text-lg mb-2 flex items-center">
-              <FaBicycle className="mr-2 text-gray-600" />
-              No. of Bikes: {property.noOfBikes}
-            </li>
-            <li className="text-lg mb-2 flex items-center">
-              <FaMapMarkerAlt className="mr-2 text-gray-600" />
-              Nearby Places: {Array.isArray(property.nearbyPlaces) ? property.nearbyPlaces.join(', ') : 'N/A'}
-            </li>
-          </ul>
         </div>
       </div>
-    )
+    </div>
   );
 };
 
