@@ -8,6 +8,7 @@ import { TbAirConditioningDisabled } from "react-icons/tb";
 import { PiFanThin } from "react-icons/pi";
 import { LuSofa } from "react-icons/lu";
 import { GiWashingMachine, GiVacuumCleaner, GiTable, GiScooter } from 'react-icons/gi';
+import ReportModal from './ReportModal';
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,
@@ -30,7 +31,7 @@ const electronicsIcons = {
 };
 
 const PropertyDetailsPage: React.FC = () => {
-
+  const [isModalOpen, setModalOpen] = useState(false);
   const basicInfoRef = useRef<HTMLDivElement | null>(null);
   const propertySpecsRef = useRef<HTMLDivElement | null>(null);
   const furinsherRef = useRef<HTMLDivElement | null>(null);
@@ -74,12 +75,16 @@ const PropertyDetailsPage: React.FC = () => {
     };
   }, []);
 
+  const openModal = () => {
+    setModalOpen(true);
+  };
 
-
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const { id } = useParams<{ id: string }>();
   const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
-  console.log(property)
   if (isLoading) {
     return (
       <div className="container mx-auto p-4">
@@ -113,7 +118,7 @@ const PropertyDetailsPage: React.FC = () => {
         </div>
         <div className="flex items-center space-x-6">
           <button
-            onClick={() => console.log("Report")}
+            onClick={openModal}
             className="border-LightdarkBlue border text-LightdarkBlue font-bold py-2 px-4 rounded-full flex items-center justify-center space-x-2"
           >
             <FaRegFlag className="text-LightdarkBlue" />
@@ -125,6 +130,8 @@ const PropertyDetailsPage: React.FC = () => {
           />
         </div>
       </div>
+
+      <ReportModal isOpen={isModalOpen} propertyId={property._id} onClose={closeModal} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {property.mediaFiles.slice(0, 1).map((url: string, index: number) => (

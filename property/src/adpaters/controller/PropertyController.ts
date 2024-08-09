@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase , FindFavouritesUseCase} from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase } from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 
 export class PropertyController {
@@ -16,7 +16,11 @@ export class PropertyController {
     private addUserUseCase: AddUserUseCase,
     private toggleFavouriteUseCaseUseCase: ToggleFavouriteUseCaseUseCase,
     private successPaymentUseCase: SuccessPaymentUseCase,
-    private findFavouritesUseCase: FindFavouritesUseCase
+    private findFavouritesUseCase: FindFavouritesUseCase,
+    private addReportUseCase: AddReportUseCase,
+    private findAllReportsUseCase: FindAllReportsUseCase
+
+
   ) { }
 
   async addProperty(req: any, res: Response, next: NextFunction): Promise<void> {
@@ -24,7 +28,7 @@ export class PropertyController {
       const files = req.files as Express.Multer.File[];
       const id = req.user._id
       const user = await this.findUserUseCase.FindUser(id)
-      console.log(user,"chic")
+      console.log(user, "chic")
       if (!user) {
         const userDetails = await fetchUserDetails(id);
         await this.addUserUseCase.addUser(userDetails)
@@ -112,7 +116,7 @@ export class PropertyController {
     const { propertyId, action } = req.body;
     const userId = req.user._id
     try {
-      await this.toggleFavouriteUseCaseUseCase.toggleFavourite({propertyId,userId,action})
+      await this.toggleFavouriteUseCaseUseCase.toggleFavourite({ propertyId, userId, action })
       res.status(200).json({ success: true });
     } catch (error) {
       next(error)
@@ -122,20 +126,43 @@ export class PropertyController {
   async SuccessPayment(req: any, res: Response, next: NextFunction): Promise<void> {
     const { sessionId, propertyId } = req.body;
     try {
-      const result =  await this.successPaymentUseCase.successPayment(sessionId, propertyId);
+      const result = await this.successPaymentUseCase.successPayment(sessionId, propertyId);
       res.status(200).json(result);
     } catch (error) {
-      res.status(400).send(error);
+      next(error)
     }
   }
 
   async findFavourites(req: any, res: Response, next: NextFunction): Promise<void> {
     const userId = req.user._id
     try {
-      const result =  await this.findFavouritesUseCase.findFavourites(userId);
+      const result = await this.findFavouritesUseCase.findFavourites(userId);
       res.status(200).json(result);
     } catch (error) {
-      res.status(400).send(error);
+      next(error)
+    }
+  }
+
+  async addReport(req: any, res: Response, next: NextFunction): Promise<void> {
+    const userId = req.user._id
+    const report = {
+      ...req.body,
+      reportId: userId
+    }
+     try {
+      const result = await this.addReportUseCase.addReport(report);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async findReports(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await this.findAllReportsUseCase.findAllReports();
+      res.status(200).json(result);
+    } catch (error) {
+      next(error)
     }
   }
 

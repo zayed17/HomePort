@@ -1,8 +1,8 @@
 import { Router } from "express";
 import express, { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase} from '../../usecase';
-import { S3Repository, PropertyRepository,UserPropertyRepository } from '../../repositories';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase} from '../../usecase';
+import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import upload from '../../infrastructure/middleware/multerMiddleware'
 import PropertyModel from "../../infrastructure/mongodb/PropertyModel";
@@ -19,6 +19,7 @@ const stripeService = new StripeService()
 const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
+const reportPropertyRepository = new ReportPropertyRepository()
 
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository);
@@ -34,12 +35,16 @@ const findUserUseCase = new FindUserUseCase(userPropertyRepository)
 const toggleFavouriteUseCaseUseCase = new ToggleFavouriteUseCaseUseCase(userPropertyRepository)
 const successPaymentUseCase = new SuccessPaymentUseCase(propertyRepository,stripeService)
 const findFavouritesUseCase = new FindFavouritesUseCase(userPropertyRepository)
+const addReportUseCase = new AddReportUseCase(reportPropertyRepository)
+const findAllReportsUseCase = new FindAllReportsUseCase(reportPropertyRepository)
+
+
 
 
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase);
 
 const router = Router();
 
@@ -95,5 +100,7 @@ router.post('/payment-intent', async (req, res) => {
 
 router.post('/payment-success',(req, res, next) => propertyController.SuccessPayment(req, res, next));
 router.get('/favourite-property',authenticateToken(['user']),(req, res, next) => propertyController.findFavourites(req, res, next));
+router.post('/report-property',authenticateToken(['user']),(req, res, next) => propertyController.addReport(req, res, next));
+router.get('/reports',(req, res, next) => propertyController.findReports(req, res, next));
 
 export default router;
