@@ -288,24 +288,26 @@ const PropertyDetailsPage: React.FC = () => {
             {property.lookingFor === 'rent' ? (
               <>
                 <div className="text-center flex flex-col items-center space-y-4">
-                  <div className="flex flex-col items-center">
-                    <h2 className="text-4xl font-extrabold text-gray-800 mb-1">
-                      ₹{property.rentAmount}
-                    </h2>
-                    <span className='text-sm text-gray-500'>
-                      Rent/month
-                    </span>
-                  </div>
-                  <div className="text-3xl font-bold text-gray-300">
-                    |
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <h3 className="text-4xl font-extrabold text-gray-800 mb-1">
-                      ₹{property.depositAmount}
-                    </h3>
-                    <span className='text-sm text-gray-500'>
-                      Deposit
-                    </span>
+                  <div className="flex flex-row items-center justify-center space-x-8">
+                    <div className="flex flex-col items-center">
+                      <h2 className="text-4xl font-extrabold text-gray-800 mb-1">
+                        ₹{property.rentAmount}
+                      </h2>
+                      <span className="text-sm text-gray-500">
+                        Rent/month
+                      </span>
+                    </div>
+                    <div className=" text-3xl items-center">
+                      |
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <h3 className="text-4xl font-extrabold text-gray-800 mb-1">
+                        ₹{property.depositAmount}
+                      </h3>
+                      <span className="text-sm text-gray-500">
+                        Deposit
+                      </span>
+                    </div>
                   </div>
                 </div>
               </>

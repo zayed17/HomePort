@@ -1,11 +1,12 @@
-// import React, { useState } from 'react';
+// import React, { useState } from 'react'
 // import PropertyCard from '../../components/user/PropertyCard';
 // import Nav from '../../components/user/Nav';
 // import Filters from '../../components/user/Filter';
-// import { useGetPropertiesQuery, useToggleFavoriteMutation} from '../../store/propertyApi';
+// import { useGetPropertiesQuery, useToggleFavoriteMutation } from '../../store/propertyApi';
 // import Skeleton from 'react-loading-skeleton';
 // import 'react-loading-skeleton/dist/skeleton.css';
 // import { FaHeart, FaRegHeart } from 'react-icons/fa';
+// import '../../style/favourite.css';
 
 // interface Property {
 //   _id: string;
@@ -29,18 +30,22 @@
 // }
 
 // const PropertyListing: React.FC = () => {
-//   const { data: properties = [], isLoading, isError ,refetch} = useGetPropertiesQuery();
+//   const { data: properties = [], isLoading, isError, refetch } = useGetPropertiesQuery();
 //   const [updateFavorites] = useToggleFavoriteMutation();
+//   const [animatedId, setAnimatedId] = useState<string | null>(null);
 
 //   const handleFavoriteClick = async (propertyId: string, isFavorited: boolean) => {
 //     try {
+//       setAnimatedId(propertyId);
 
 //       if (isFavorited) {
 //         await updateFavorites({ propertyId, action: 'remove' });
 //       } else {
 //         await updateFavorites({ propertyId, action: 'add' });
 //       }
-//       refetch()
+//       refetch();
+
+//       setTimeout(() => setAnimatedId(null), 500); 
 //     } catch (error) {
 //       console.error('Failed to update favorites', error);
 //     }
@@ -74,6 +79,7 @@
 //               <div className="space-y-4">
 //                 {properties.map((property: Property) => {
 //                   const isFavorited = property.createdBy.favourites.includes(property._id);
+//                   const animationClass = animatedId === property._id ? (isFavorited ? 'broken' : 'animated') : '';
 
 //                   return (
 //                     <div key={property._id} className="relative">
@@ -94,7 +100,7 @@
 //                       />
 //                       <button
 //                         onClick={() => handleFavoriteClick(property._id, isFavorited)}
-//                         className="absolute top-2 right-2 p-2 rounded-full bg-white shadow-md"
+//                         className={`absolute top-2 right-2 p-2 rounded-full bg-white shadow-md heart-icon ${animationClass}`}
 //                         aria-label={
 //                           isFavorited ? 'Remove from favorites' : 'Add to favorites'
 //                         }
@@ -125,6 +131,7 @@
 
 
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import PropertyCard from '../../components/user/PropertyCard';
 import Nav from '../../components/user/Nav';
 import Filters from '../../components/user/Filter';
@@ -133,7 +140,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import '../../style/favourite.css';
-
+import { getCookie } from '../../helpers/getCookie';
 interface Property {
   _id: string;
   address: string;
@@ -150,7 +157,7 @@ interface Property {
   lookingFor: string;
   description: string;
   lastUpdated: string;
-  createdBy: {
+  createdBy?: {
     favourites: string[];
   };
 }
@@ -160,7 +167,18 @@ const PropertyListing: React.FC = () => {
   const [updateFavorites] = useToggleFavoriteMutation();
   const [animatedId, setAnimatedId] = useState<string | null>(null);
 
+  const isAuthenticated = () => {
+    const token = getCookie('token')
+
+    return !!token;
+  };
+
   const handleFavoriteClick = async (propertyId: string, isFavorited: boolean) => {
+    if (!isAuthenticated()) {
+      toast.error('Please Login for favourite');
+      return;
+    }
+
     try {
       setAnimatedId(propertyId);
 
@@ -204,7 +222,7 @@ const PropertyListing: React.FC = () => {
             {!isLoading && !isError && properties.length > 0 ? (
               <div className="space-y-4">
                 {properties.map((property: Property) => {
-                  const isFavorited = property.createdBy.favourites.includes(property._id);
+                  const isFavorited = isAuthenticated() && property.createdBy?.favourites.includes(property._id);
                   const animationClass = animatedId === property._id ? (isFavorited ? 'broken' : 'animated') : '';
 
                   return (
