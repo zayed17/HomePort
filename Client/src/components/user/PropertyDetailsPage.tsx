@@ -339,3 +339,6 @@ const PropertyDetailsPage: React.FC = () => {
 };
 
 export default PropertyDetailsPage;
+
+
+

@@ -10,7 +10,8 @@ const UserSchema = new mongoose.Schema<User>({
     active:{type:Boolean,default:false},
     image:{type:String,default:null},
     roles:{type:[String],default:[]},
-    favourite:{type:[String],default:[]}
+    favourite:{type:[String],default:[]},
+    subscriptionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
 });
 
 const UserModel = mongoose.model<User>('User', UserSchema);

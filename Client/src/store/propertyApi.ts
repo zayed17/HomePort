@@ -78,9 +78,16 @@ const propertyApi = createApi({
       query: () => `${URL}/reports`,  
       keepUnusedDataFor: 60, 
     }),
+    updateProperty: builder.mutation({
+      query: (credentials) => ({
+        url: `${URL}/favorite-update`,
+        method: 'PATCH',
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery} = propertyApi;
+export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation} = propertyApi;
 
 export default propertyApi;

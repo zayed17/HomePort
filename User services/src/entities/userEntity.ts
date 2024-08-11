@@ -9,6 +9,7 @@ export interface UserData {
     image:string | null;
     roles:string[];
     favourite:string[];
+    subscriptionId?:string;
 }
 
 export class User {
@@ -22,9 +23,9 @@ export class User {
     image:string | null;
     roles:string[];
     favourite:string[];
+    subscriptionId?:string;
 
-
-    constructor({ firstName, lastName, email, phone, password, active, image ,roles,_id,favourite}: UserData) {
+    constructor({ firstName, lastName, email, phone, password, active, image ,roles,_id,favourite,subscriptionId}: UserData) {
         this._id = _id
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,5 +36,6 @@ export class User {
         this.image = image
         this.roles = roles
         this.favourite = favourite
+        this.subscriptionId = subscriptionId
     }
 }

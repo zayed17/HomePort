@@ -22,6 +22,7 @@ import CreateAdPage from '../pages/user/CreateAds';
 import Favourites from '../pages/user/Favourites';
 import Subscription from '../pages/admin/Subscription';
 import BookingPage from '../pages/user/BookingPage';
+import SubscriptionPage from '../pages/user/SubscriptionPage';
 const AppRoutes = () => {
   return (
     <Router>
@@ -37,12 +38,12 @@ const AppRoutes = () => {
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/create-ad" element={<CreateAdPage />} />
           <Route path="/booking/:id" element={<BookingPage />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/profile/details" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
           <Route path="/profile/properties" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
           <Route path="/profile/chat" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={ChatPage} />} />
           <Route path="/profile/ads" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={AdsPage} />} />
-
 
           //admin Side
           <Route path="/admin" element={< VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
