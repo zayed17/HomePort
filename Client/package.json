@@ -19,6 +19,7 @@
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^4.1.0",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "mapbox-gl": "^3.5.2",

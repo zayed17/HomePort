@@ -1,10 +1,18 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { UserController } from '../express/controllers/UserController';
 import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase ,BlockUnblockUseCase,PublishUserUpdateUseCase} from '../../../usecases';
 import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository } from '../../../repositories';
 import { authenticateToken } from 'homepackage'
 import upload from '../express/middleware/uploadMiddleware'
 import { MessageBrokerService } from '../../../services/MessageBrokerService';
+
+import Stripe from 'stripe';
+import UserModel from '../../../infrastructure/database/models/UserModel';
+import SubscriptionModel from '../../../infrastructure/database/models/SubscriptionModel';
+const stripe =new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
+
+const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0'; 
+
 
 
 const userRepository = new UserRepository();
@@ -51,6 +59,68 @@ router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'),
 router.get('/findAll', (req, res, next) => userController.findAllUsers(req, res, next));
 router.patch('/block-unblock', (req, res, next) => userController.blockUblock(req, res, next));
 
+router.post('/subscription', async (req: any, res: express.Response) => {
+    const sig = req.headers['stripe-signature'] as string;
+    const rawBody = req.body as Buffer;
+  
+    if (!sig) {
+      return res.status(400).send('Missing Stripe signature');
+    }
+  
+    let event: Stripe.Event;
+    try {
+      event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+    } catch (err: any) {
+      console.error('Webhook error:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+  
+      const userId = session?.metadata?.userId;
+      const subscriptionType = session?.metadata?.subscriptionType;
+      const startDate = new Date();
+      const durationInDays = parseInt(session?.metadata?.durationInDays!, 10);
+            const endDate = new Date();
+      endDate.setDate(startDate.getDate() + durationInDays);
+  
+      try {
+       const subscription = await SubscriptionModel.findOneAndUpdate(
+        { userId }, 
+        {
+            $set: {
+                type: subscriptionType,
+                startDate,
+                endDate,
+            }
+        },
+        { upsert: true, new: true } 
+    );
 
+    if (!subscription) {
+        throw new Error('Failed to create or update subscription');
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+        { _id: userId }, 
+        { subscriptionId: subscription._id }, 
+        { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+        throw new Error('Failed to update user with subscription reference');
+    }
+        console.log('User subscription updated successfully.');
+      } catch (err) {
+        console.error('Failed to update user subscription:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+    } else {
+      console.warn(`Unhandled event type: ${event.type}`);
+    }
+  
+    res.json({ received: true });
+  });
 
 export default router;

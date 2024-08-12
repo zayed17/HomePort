@@ -13,6 +13,7 @@ const corsOptions = {
 };
 // main()
 app.use(cors(corsOptions));
+app.use('/user/subscription', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use('/user', userRoutes);

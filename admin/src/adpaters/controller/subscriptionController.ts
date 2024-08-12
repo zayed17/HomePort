@@ -20,7 +20,6 @@ export class SubscriptionController {
     async getSubscriptions(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const result = await this.findAllSubscriptionUseCase.findAllSubscription()
-            console.log(result)
             res.json({ subscriptions: result });
         } catch (error) {
             next(error)

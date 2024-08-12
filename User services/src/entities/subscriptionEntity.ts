@@ -1,28 +1,28 @@
 export interface SubscriptionData {
     _id?: string;
-    userId: string;
-    planId: string;
+    userId:string;
     startDate: Date;
     endDate: Date;
+    type:string
 }
 export class Subscription {
     _id?: string;
-    userId: string;
-    planId: string;
+    userId:string;
     startDate: Date;
     endDate: Date;
+    type:string
 
     constructor({
         _id,
         userId,
-        planId,
         startDate,
-        endDate
+        endDate,
+        type
     }: SubscriptionData) {
         this._id = _id;
-        this.userId = userId;
-        this.planId = planId;
+        this.userId = userId,
         this.startDate = startDate;
         this.endDate = endDate;
+        this.type=type
     }
 }

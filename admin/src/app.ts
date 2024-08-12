@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import adminRoutes from './adpaters/routes/Adminroute';
+import adminRoutes from './adpaters/routes/AdminRoute';
 import subscriptionRoutes from './adpaters/routes/SubscriptionRoute';
 
 import connectDB from './infrastructure/mongoDB/connection/connection';
@@ -15,8 +15,9 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 app.use('/admin', adminRoutes);
