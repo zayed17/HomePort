@@ -1,28 +1,32 @@
 import { Router } from "express";
-import express, { Request, Response, NextFunction } from 'express';
+import  { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase} from '../../usecase';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase} from '../../usecase';
 import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
+import { RabbitMQPublisher } from '../../infrastructure/rabbitMq/RabbitMQPulisher';
 import upload from '../../infrastructure/middleware/multerMiddleware'
 import PropertyModel from "../../infrastructure/mongodb/PropertyModel";
 import { StripeService } from '../../infrastructure/Stripe/StripeService';
+import { PaymentService } from '../../service/PaymentService';
 import { authenticateToken } from 'homepackage'
 
 import Stripe from 'stripe';
+import { checking } from "./Just";
 
 const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB')
 
 const s3Service = new S3Service();
 const stripeService = new StripeService()
+const paymentService = new PaymentService()
 // Initialize repositories with required services
 const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
-
+const rabbitMQPublisher = new RabbitMQPublisher('amqp://localhost')
 // Initialize use cases with required repositories
-const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository);
+const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);
 const findPendingPropertyUseCase = new FindPendingPropertyUseCase(propertyRepository)
 const rejectPropertyUseCase = new RejectPropertyUseCase(propertyRepository)
 const verifyPropertyUseCase = new VerifyPropertyUseCase(propertyRepository)
@@ -37,6 +41,7 @@ const successPaymentUseCase = new SuccessPaymentUseCase(propertyRepository,strip
 const findFavouritesUseCase = new FindFavouritesUseCase(userPropertyRepository)
 const addReportUseCase = new AddReportUseCase(reportPropertyRepository)
 const findAllReportsUseCase = new FindAllReportsUseCase(reportPropertyRepository)
+const paymentUseCase = new PaymentUseCase(paymentService,rabbitMQPublisher)
 
 
 
@@ -44,11 +49,11 @@ const findAllReportsUseCase = new FindAllReportsUseCase(reportPropertyRepository
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase);
 
 const router = Router();
 
-router.post('/add-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.addProperty(req, res, next));
+router.post('/add-property',authenticateToken(['user']),checking, upload ,(req, res, next) => propertyController.addProperty(req, res, next));
 router.get('/list-properties', async (req: Request, res: Response, next: NextFunction) => {
     try {
         console.log('this is workding')
@@ -68,36 +73,36 @@ router.get('/adminProperties',(req, res, next) => propertyController.findAdminPr
 router.patch('/block-unblock',(req, res, next) => propertyController.blockUblock(req, res, next));
 
 router.patch('/favorite-update',authenticateToken(['user']),(req, res, next) => propertyController.toggleFavourite(req, res, next));
-router.post('/payment-intent', async (req, res) => {
-  const { amount, propertyId } = req.body;
+// router.post('/payment-intent',authenticateToken(['user']),checking,  async (req, res) => {
+//   const { amount, propertyId } = req.body;
 
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'inr',
-            product_data: {
-              name: 'Property Sponsorship',
-            },
-            unit_amount: amount, 
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}`,
-      cancel_url: 'http://localhost:5173/payment-error',
-    });
+//   try {
+//     const session = await stripe.checkout.sessions.create({
+//       payment_method_types: ['card'],
+//       line_items: [
+//         {
+//           price_data: {
+//             currency: 'inr',
+//             product_data: {
+//               name: 'Property Sponsorship',
+//             },
+//             unit_amount: amount, 
+//           },
+//           quantity: 1,
+//         },
+//       ],
+//       mode: 'payment',
+//       success_url: `http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}`,
+//       cancel_url: 'http://localhost:5173/payment-error',
+//     });
 
-    res.json({ id: session.id });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "error.message "});
-  }
-});
-
+//     res.json({ id: session.id });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "error.message "});
+//   }
+// });
+router.post('/payment-intent',authenticateToken(['user']),checking,(req, res, next) => propertyController.createPaymentIntent(req, res, next));
 router.post('/payment-success',(req, res, next) => propertyController.SuccessPayment(req, res, next));
 router.get('/favourite-property',authenticateToken(['user']),(req, res, next) => propertyController.findFavourites(req, res, next));
 router.post('/report-property',authenticateToken(['user']),(req, res, next) => propertyController.addReport(req, res, next));

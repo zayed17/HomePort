@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { UserController } from '../express/controllers/UserController';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase ,BlockUnblockUseCase,PublishUserUpdateUseCase} from '../../../usecases';
-import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository } from '../../../repositories';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase } from '../../../usecases';
+import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository ,UserSubscriptionRepository} from '../../../repositories';
 import { authenticateToken } from 'homepackage'
 import upload from '../express/middleware/uploadMiddleware'
 import { MessageBrokerService } from '../../../services/MessageBrokerService';
@@ -9,9 +9,11 @@ import { MessageBrokerService } from '../../../services/MessageBrokerService';
 import Stripe from 'stripe';
 import UserModel from '../../../infrastructure/database/models/UserModel';
 import SubscriptionModel from '../../../infrastructure/database/models/SubscriptionModel';
-const stripe =new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
+import { RabbitMQConsumer } from '../../../infrastructure/rabbitMq/RabbitMQConsumer';
+import { RabbitMQClient } from '../../../infrastructure/rabbitMq/RabbitMQClient';
+const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
 
-const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0'; 
+const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0';
 
 
 
@@ -21,6 +23,7 @@ const emailService = new EmailRepository();
 const s3Repository = new S3Repository();
 const googleAuthRepository = new GoogleAuthRepository()
 const messageBrokerService = new MessageBrokerService()
+const userSubscriptionRepository = new UserSubscriptionRepository()
 
 
 const signUpUseCase = new SignUpUseCase(userRepository, otpService, emailService);
@@ -37,9 +40,14 @@ const changePasswordUseCase = new ChangePasswordUseCase(userRepository)
 const findAllUserUseCase = new FindAllUserUseCase(userRepository)
 const blockUnblockUseCase = new BlockUnblockUseCase(userRepository)
 const publishUserUpdateUseCase = new PublishUserUpdateUseCase(messageBrokerService)
+const updateUserSubscriptionUsecase = new UpdateUserSubscriptionUsecase(userRepository)
 
+const rabbitMQClient= new RabbitMQClient()
+const rabbitMQConsumer = new RabbitMQConsumer(rabbitMQClient, updateUserSubscriptionUsecase);
 
-const userController = new UserController(signUpUseCase, loginUseCase, otpVerificationUseCase, getUserDetailUseCase, updateUseCase, uploadImageUseCase, resendOTPUseCase, googleAuthUseCase, verifyEmailUseCase, forgotPasswordUseCase, changePasswordUseCase, findAllUserUseCase, blockUnblockUseCase,publishUserUpdateUseCase);
+rabbitMQConsumer.start().catch(console.error);
+
+const userController = new UserController(signUpUseCase, loginUseCase, otpVerificationUseCase, getUserDetailUseCase, updateUseCase, uploadImageUseCase, resendOTPUseCase, googleAuthUseCase, verifyEmailUseCase, forgotPasswordUseCase, changePasswordUseCase, findAllUserUseCase, blockUnblockUseCase, publishUserUpdateUseCase);
 
 
 const router = Router();
@@ -51,76 +59,84 @@ router.post('/verifyOtp', (req, res, next) => userController.verifyOTP(req, res,
 router.post('/resendOTP', (req, res, next) => userController.resendOTP(req, res, next));
 router.post('/google', (req, res, next) => userController.googleAuth(req, res, next));
 router.post('/verifyEmail', (req, res, next) => userController.verifyEmail(req, res, next));
-router.put('/forgetPassword',(req, res, next) => userController.forgotPassword(req, res, next));
+router.put('/forgetPassword', (req, res, next) => userController.forgotPassword(req, res, next));
 router.put('/changePassword', authenticateToken(['user']), (req, res, next) => userController.changePassword(req, res, next));
 router.get('/getUser', authenticateToken(['user']), (req, res, next) => userController.getUser(req, res, next));
+
+router.get('/details/:id',(req, res, next) => userController.getDetails(req, res, next));
+
+
 // router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
 router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));
 router.get('/findAll', (req, res, next) => userController.findAllUsers(req, res, next));
 router.patch('/block-unblock', (req, res, next) => userController.blockUblock(req, res, next));
 
 router.post('/subscription', async (req: any, res: express.Response) => {
-    const sig = req.headers['stripe-signature'] as string;
-    const rawBody = req.body as Buffer;
-  
-    if (!sig) {
-      return res.status(400).send('Missing Stripe signature');
-    }
-  
-    let event: Stripe.Event;
+  const sig = req.headers['stripe-signature'] as string;
+  const rawBody = req.body as Buffer;
+
+  if (!sig) {
+    return res.status(400).send('Missing Stripe signature');
+  }
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+  } catch (err: any) {
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    const userId = session?.metadata?.userId;
+    const subscriptionType = session?.metadata?.subscriptionType;
+    const propertyLimit = session?.metadata?.propertyLimit;
+    const sponsoredLimit = session?.metadata?.sponsoredLimit;
+    const startDate = new Date();
+    const durationInDays = parseInt(session?.metadata?.durationInDays!, 10);
+    const endDate = new Date();
+    endDate.setDate(startDate.getDate() + durationInDays);
+
     try {
-      event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
-    } catch (err: any) {
-      console.error('Webhook error:', err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-  
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session;
-  
-      const userId = session?.metadata?.userId;
-      const subscriptionType = session?.metadata?.subscriptionType;
-      const startDate = new Date();
-      const durationInDays = parseInt(session?.metadata?.durationInDays!, 10);
-            const endDate = new Date();
-      endDate.setDate(startDate.getDate() + durationInDays);
-  
-      try {
-       const subscription = await SubscriptionModel.findOneAndUpdate(
-        { userId }, 
+      const subscription = await SubscriptionModel.findOneAndUpdate(
+        { userId },
         {
-            $set: {
-                type: subscriptionType,
-                startDate,
-                endDate,
-            }
+          $set: {
+            type: subscriptionType,
+            startDate,
+            endDate,
+            propertyLimit,
+            sponsoredLimit
+          }
         },
-        { upsert: true, new: true } 
-    );
+        { upsert: true, new: true }
+      );
 
-    if (!subscription) {
+      if (!subscription) {
         throw new Error('Failed to create or update subscription');
-    }
-
-    const updatedUser = await UserModel.findOneAndUpdate(
-        { _id: userId }, 
-        { subscriptionId: subscription._id }, 
-        { new: true } // Return the updated document
-    );
-
-    if (!updatedUser) {
-        throw new Error('Failed to update user with subscription reference');
-    }
-        console.log('User subscription updated successfully.');
-      } catch (err) {
-        console.error('Failed to update user subscription:', err);
-        return res.status(500).send('Internal Server Error');
       }
-    } else {
-      console.warn(`Unhandled event type: ${event.type}`);
+
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { subscriptionId: subscription._id },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new Error('Failed to update user with subscription reference');
+      }
+      console.log('User subscription updated successfully.');
+    } catch (err) {
+      console.error('Failed to update user subscription:', err);
+      return res.status(500).send('Internal Server Error');
     }
-  
-    res.json({ received: true });
-  });
+  } else {
+    console.warn(`Unhandled event type: ${event.type}`);
+  }
+
+  res.json({ received: true });
+});
 
 export default router;

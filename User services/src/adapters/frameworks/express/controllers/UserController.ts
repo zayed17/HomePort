@@ -23,10 +23,10 @@ export class UserController {
 
     async signUpUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         console.log("req.body on controller", req.body);
-        const { firstName, lastName, email, phone, password, role } = req.body;
+        const formData = req.body;
 
         try {
-            const newUser = await this.signUpUseCase.execute({ firstName, lastName, email, phone, password, role });
+            const newUser = await this.signUpUseCase.execute(formData);
             res.status(201).json(newUser);
         } catch (error) {
             next(error);
@@ -61,10 +61,11 @@ export class UserController {
     }
 
     async getUser(req: any, res: Response, next: NextFunction): Promise<void> {
-        const userEmail = req.user
+  
+        const user = req.user
         console.log(req.user, "req.user kittunundo ?")
         try {
-            const userDetails = await this.getUserDetailUseCase.getDetail(userEmail)
+            const userDetails = await this.getUserDetailUseCase.getDetail(user)
             console.log(userDetails, "console")
             res.status(200).json({ message: 'success', userDetails });
         } catch (error) {
@@ -73,17 +74,31 @@ export class UserController {
         }
     }
 
-    // async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-    //     console.log(req.body, "checking in updateuser")
-    //     const { firstName, lastName, email, phone } = req.body;
-    //     try {
-    //         const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
-    //        await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
-    //         res.status(200).json({ message: 'User updated successfully', updatedUser });
-    //     } catch (error) {
-    //         next(error);
-    //     }
-    // }
+    async getDetails(req: any, res: Response, next: NextFunction): Promise<void> {
+        const id= req.params.id
+  
+        try {
+            const userDetails = await this.getUserDetailUseCase.getDetail(id)
+            console.log(userDetails, "console")
+            res.status(200).json(userDetails);
+        } catch (error) {
+            res.status(400).json({ message: "Something happened" });
+            next(error)
+        }
+    }
+
+
+    async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+        console.log(req.body, "checking in updateuser")
+        const { firstName, lastName, email, phone } = req.body;
+        try {
+            const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
+           await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
+            res.status(200).json({ message: 'User updated successfully', updatedUser });
+        } catch (error) {
+            next(error);
+        }
+    }
 
     async uploadImage(req: any, res: Response, next: NextFunction): Promise<void> {
         try {

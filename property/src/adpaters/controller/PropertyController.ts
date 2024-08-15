@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase } from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase } from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
+
 
 export class PropertyController {
   constructor(
@@ -18,7 +19,8 @@ export class PropertyController {
     private successPaymentUseCase: SuccessPaymentUseCase,
     private findFavouritesUseCase: FindFavouritesUseCase,
     private addReportUseCase: AddReportUseCase,
-    private findAllReportsUseCase: FindAllReportsUseCase
+    private findAllReportsUseCase: FindAllReportsUseCase,
+    private paymentUseCase: PaymentUseCase
 
 
   ) { }
@@ -28,7 +30,6 @@ export class PropertyController {
       const files = req.files as Express.Multer.File[];
       const id = req.user._id
       const user = await this.findUserUseCase.FindUser(id)
-      console.log(user, "chic")
       if (!user) {
         const userDetails = await fetchUserDetails(id);
         await this.addUserUseCase.addUser(userDetails)
@@ -166,4 +167,15 @@ export class PropertyController {
     }
   }
 
+
+  async createPaymentIntent(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { amount, propertyId } = req.body;
+      const id = req.user._id;
+      const session = await this.paymentUseCase.execute(amount, propertyId, id);
+      res.json({ id: session.id });
+    } catch (error) {
+      next(error)
+    }
+  }
 }

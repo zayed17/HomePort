@@ -7,6 +7,11 @@ export class UserRepository implements UserInterface {
         return UserModel.findOne(filter).lean();
     }
 
+    async findOneWithPopulation(filter: any,populate:string): Promise<any | null> {
+        return UserModel.findOne(filter).populate(populate)
+      }
+    
+
     async save(user: User): Promise<void> {
         const newUser = new UserModel(user);
         await newUser.save();

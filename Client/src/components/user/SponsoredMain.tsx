@@ -3,10 +3,14 @@ import { useParams } from 'react-router-dom';
 import { FaInfoCircle, FaCheckCircle } from 'react-icons/fa';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useCreatePaymentIntentMutation } from '../../store/propertyApi';
+
 
 const stripePromise = loadStripe('pk_test_51Pkesm094jYnWAeuuyD2MBhHKbpxz6YKkdPIcN3EE9WcXBDYrRlht9fkrVlgUdyBfAG81e9ljwp9gKhwqyUWl7UN00zLEfOptE'); // Replace with your publishable key
 
 const SponsoredMain = () => {
+  const [makePayment] = useCreatePaymentIntentMutation()
   const { id } = useParams<{ id: string }>();
   console.log(id,"chickdf")
   const [selectedDays, setSelectedDays] = useState<number>(30);
@@ -22,7 +26,7 @@ const SponsoredMain = () => {
     setLoading(true);
 
     try {
-      const { data: { id: sessionId } } = await axios.post('http://localhost:5003/property/payment-intent', { amount: cost * 100,propertyId:id });
+      const { id: sessionId } = await makePayment({ amount: cost * 100, propertyId: id }).unwrap();
 
       const stripe = await stripePromise;
       const { error  } = await stripe?.redirectToCheckout({ sessionId });
@@ -30,7 +34,8 @@ const SponsoredMain = () => {
       if (error) {
         console.error('Payment failed', error);
       }
-    } catch (error) {
+    } catch (error:any) {
+      toast.error(error.data.message);
       console.error('Payment failed', error);
     } finally {
       setLoading(false);

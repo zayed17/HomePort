@@ -60,6 +60,7 @@ const PropertyAddPage = () => {
   ];
 
   const handleFormSubmit = async (event: FormEvent) => {
+    
     event.preventDefault();
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -121,8 +122,8 @@ const PropertyAddPage = () => {
       setLookingFor(null); 
       setCurrentSection(1);
       navigate('/')
-    } catch (error) {
-      console.error('Error submitting property:', error);
+    } catch (error:any) {
+      toast.error(error.data.message);
     }
   };
 

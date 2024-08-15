@@ -1,14 +1,7 @@
 import { User } from '../entities';
 import { UserInterface, RedisOtpInterface, EmailInterface } from '../repositories/interface';
 
-interface SignUpParams {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    password: string;
-    role: string;
-}
+
 
 export class SignUpUseCase {
     constructor(
@@ -17,7 +10,8 @@ export class SignUpUseCase {
         private emailService: EmailInterface
     ) { }
 
-    async execute({ firstName, lastName, email, phone, password, role }: SignUpParams): Promise<User> {
+    async execute(formData:Partial<User>): Promise<void> {
+        const email = formData.email!
         const existingUser = await this.userRepository.findOne({email});
 
         if (existingUser) {
@@ -29,26 +23,14 @@ export class SignUpUseCase {
                 const otp = this.emailService.generateOTP();
                 await this.otpService.storeOTP(email, otp);
                 await this.emailService.sendEmail(email, "OTP Verification", `Your OTP is ${otp}`);
-                return existingUser;
+                return 
             }
         }
 
-        const newUser = new User({
-            firstName,
-            lastName,
-            email,
-            phone,
-            password,
-            image: null,
-            active: false,
-            roles: [role],
-            favourite:[]
-        });
-
-        await this.userRepository.save(newUser);
+        await this.userRepository.save(formData);
         const otp = this.emailService.generateOTP();
         await this.otpService.storeOTP(email, otp);
         await this.emailService.sendEmail(email, "OTP Verification", `Your OTP is ${otp}`);
-        return newUser;
+
     }
 }

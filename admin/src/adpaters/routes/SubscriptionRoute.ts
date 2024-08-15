@@ -23,7 +23,7 @@ router.post('/add-subscription' ,(req, res, next) => subscriptionController.addS
 router.get('/subscriptions' ,(req, res, next) => subscriptionController.getSubscriptions(req, res,next));
 
 router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) => {
-  const { amount, planId, autoRenew, durationInDays, subscriptionType } = req.body;
+  const { amount, planId, autoRenew, durationInDays, subscriptionType, propertyLimit , sponsoredLimit} = req.body;
   const userId = req.user._id
 
   try {
@@ -31,23 +31,25 @@ router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) 
           payment_method_types: ['card'],
           line_items: [{
               price_data: {
-                  currency: 'inr', // Ensure your Stripe account supports INR
+                  currency: 'inr', 
                   product_data: {
-                      name: `Subscription for plan ${planId}`, // Adjust if needed
+                      name: `Subscription for plan ${planId}`,
                   },
-                  unit_amount: amount, // Ensure this is in paise (1 INR = 100 paise)
+                  unit_amount: amount, 
               },
               quantity: 1,
           }],
           mode: 'payment',
-          success_url: 'http://localhost:5173/subscription?session_id={CHECKOUT_SESSION_ID}', // Adjust as needed
-          cancel_url: 'http://localhost:3000/cancel', // Adjust as needed
+          success_url: 'http://localhost:5173/subscription?session_id={CHECKOUT_SESSION_ID}', 
+          cancel_url: 'http://localhost:3000/cancel', 
           metadata: {
             userId, 
               planId,
               autoRenew,
               subscriptionType,
-              durationInDays
+              durationInDays,
+              propertyLimit,
+              sponsoredLimit,
           }
       });
 

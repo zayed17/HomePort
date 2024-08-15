@@ -1,10 +1,12 @@
-import { S3Interface, PropertyInterface } from '../repositories';
+import { S3Interface, PropertyInterface,RabbitMQPublisherInterface } from '../repositories';
 import { Property } from '../entities/propertyEntity';
 
 export class AddPropertyUseCase {
   constructor(
     private s3Repository: S3Interface,
-    private propertyRepository: PropertyInterface) { }
+    private propertyRepository: PropertyInterface,
+    private rabbitMQPublisher: RabbitMQPublisherInterface
+  ) { }
 
   async addProperty(files: Express.Multer.File[], formData: any,id:string): Promise<Property> {
     console.log(files, "checking from usecase");
@@ -17,7 +19,7 @@ export class AddPropertyUseCase {
       ...formData,
       mediaFiles: imageUrls,
     };
-
+    await this.rabbitMQPublisher.publish('user_updates', 'update', { id,count:1,change:'postedProperty' });
     return this.propertyRepository.addProperty(propertyData);
   }
 }

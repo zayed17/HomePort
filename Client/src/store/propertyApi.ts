@@ -85,9 +85,16 @@ const propertyApi = createApi({
         body: credentials,
       }),
     }),
+    createPaymentIntent: builder.mutation({
+      query: (credentials) => ({
+        url: `${URL}/payment-intent`,
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation} = propertyApi;
+export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation} = propertyApi;
 
 export default propertyApi;
