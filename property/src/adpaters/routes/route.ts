@@ -54,11 +54,12 @@ const propertyController = new PropertyController(addPropertyUseCase,findPending
 const router = Router();
 
 router.post('/add-property',authenticateToken(['user']),checking, upload ,(req, res, next) => propertyController.addProperty(req, res, next));
-router.get('/list-properties', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
     try {
+      const userId = req.user._id
         console.log('this is workding')
-      const properties = await PropertyModel.find({status:'verified'}).populate('createdBy')
-      console.log(properties,"consoleing")
+        const properties = await PropertyModel.find({status: 'verified',createdBy: { $ne: userId }}).populate('createdBy').sort({ 'sponsorship.isSponsored': -1 });
+        console.log(properties,"consoleing")
       res.json(properties); 
     } catch (error) {
       next(error); 
@@ -73,35 +74,6 @@ router.get('/adminProperties',(req, res, next) => propertyController.findAdminPr
 router.patch('/block-unblock',(req, res, next) => propertyController.blockUblock(req, res, next));
 
 router.patch('/favorite-update',authenticateToken(['user']),(req, res, next) => propertyController.toggleFavourite(req, res, next));
-// router.post('/payment-intent',authenticateToken(['user']),checking,  async (req, res) => {
-//   const { amount, propertyId } = req.body;
-
-//   try {
-//     const session = await stripe.checkout.sessions.create({
-//       payment_method_types: ['card'],
-//       line_items: [
-//         {
-//           price_data: {
-//             currency: 'inr',
-//             product_data: {
-//               name: 'Property Sponsorship',
-//             },
-//             unit_amount: amount, 
-//           },
-//           quantity: 1,
-//         },
-//       ],
-//       mode: 'payment',
-//       success_url: `http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}`,
-//       cancel_url: 'http://localhost:5173/payment-error',
-//     });
-
-//     res.json({ id: session.id });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "error.message "});
-//   }
-// });
 router.post('/payment-intent',authenticateToken(['user']),checking,(req, res, next) => propertyController.createPaymentIntent(req, res, next));
 router.post('/payment-success',(req, res, next) => propertyController.SuccessPayment(req, res, next));
 router.get('/favourite-property',authenticateToken(['user']),(req, res, next) => propertyController.findFavourites(req, res, next));

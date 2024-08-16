@@ -50,7 +50,7 @@ const PropertyAddPage = () => {
     propertyCondition: '',
     lookingFor: ''  
   });
-
+console.log(formData.availableFrom,"consoling the setFormData")
   const sectionTitles = [
     { title: 'Property Details', icon: <FaHome title="Property Details" /> },
     { title: 'Location Details', icon: <FaMapMarkerAlt title="Location Details" /> },
@@ -81,7 +81,7 @@ const PropertyAddPage = () => {
         formDataToSend.append(key, value as Blob);
       }
     });
-
+console.log(formDataToSend,"another checking")
     try {
       await addProperty(formDataToSend).unwrap();
       setFormData({
@@ -159,9 +159,7 @@ const PropertyAddPage = () => {
                 title={section.title}>
                 {section.icon}
               </div>
-              <span
-                className={`mt-2 text-xs ${currentSection === index + 1 ? 'text-LightdarkBlue' : 'text-gray-600'}`}
-              >
+              <span className={`mt-2 text-xs ${currentSection === index + 1 ? 'text-LightdarkBlue' : 'text-gray-600'}`}>
                 {section.title}
               </span>
             </div>

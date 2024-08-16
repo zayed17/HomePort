@@ -1,7 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaUser, FaHome, FaCreditCard, FaComments, FaSignOutAlt , FaAd} from 'react-icons/fa'; // Import necessary icons
+import { FaUser, FaHome, FaCreditCard, FaMapMarkerAlt, FaSignOutAlt , FaAd} from 'react-icons/fa'; // Import necessary icons
 import { removeCookie } from '../../helpers/removeCookie';
 
 const ProfileSidebar: React.FC = () => {
@@ -46,7 +46,7 @@ const ProfileSidebar: React.FC = () => {
               <span className="hidden md:block">ADs </span>
             </NavLink>
           </li>
-          <li className="my-6">
+          {/* <li className="my-6">
             <NavLink 
               to="/profile/payment" 
               className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/payment' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
@@ -54,14 +54,14 @@ const ProfileSidebar: React.FC = () => {
               <FaCreditCard className="md:mr-2" />
               <span className="hidden md:block">Payment</span>
             </NavLink>
-          </li>
+          </li> */}
           <li className="my-6">
             <NavLink 
-              to="/profile/chat" 
-              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/chat' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
+              to="/profile/booked" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/booked' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
             >
-              <FaComments className="md:mr-2" />
-              <span className="hidden md:block">Chat</span>
+              <FaMapMarkerAlt className="md:mr-2" />
+              <span className="hidden md:block">Booked</span>
             </NavLink>
           </li>
         </ul>

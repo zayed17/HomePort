@@ -6,6 +6,7 @@ export interface Sponsorship {
 
 export interface PropertyData {
   status: string;
+  isBooked:boolean;
   reason?: string;
   propertyType: string;
   address: string;
@@ -51,6 +52,7 @@ export interface PropertyData {
 export class Property {
   status: string;
   reason?: string;
+  isBooked:boolean;
   propertyType: string;
   address: string;
   city: string;
@@ -93,6 +95,7 @@ export class Property {
   constructor({
     status,
     reason,
+    isBooked,
     propertyType,
     address,
     city,
@@ -131,6 +134,7 @@ export class Property {
   }: PropertyData) {
     this.status = status;
     this.reason = reason;
+    this.isBooked = isBooked;
     this.propertyType = propertyType;
     this.address = address;
     this.city = city;

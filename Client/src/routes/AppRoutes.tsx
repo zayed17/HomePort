@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from '../pages/user/Home';
 import Profile from '../pages/user/Profile';
-import ChatPage from '../pages/user/ChatPage';
+import PostedPage from '../pages/user/PostProperties';
 import PropertiesPage from '../pages/user/Properties';
 import PaymentPage from '../pages/user/PaymentPage';
 import AdminLogin from '../pages/admin/AdminLogin';
@@ -42,7 +42,7 @@ const AppRoutes = () => {
           <Route path="/profile/details" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
           <Route path="/profile/properties" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
-          <Route path="/profile/chat" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={ChatPage} />} />
+          <Route path="/profile/booked" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PostedPage} />} />
           <Route path="/profile/ads" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={AdsPage} />} />
 
           //admin Side

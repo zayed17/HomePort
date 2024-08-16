@@ -48,6 +48,7 @@ const PropertyRent: React.FC = ({ formData, setFormData }) => {
   };
 
   const handleAvailabilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value,"chekcing",typeof(e.target.value))
     setFormData({
       ...formData,
       availableFrom: e.target.value,

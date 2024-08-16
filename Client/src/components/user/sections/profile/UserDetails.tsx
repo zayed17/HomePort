@@ -283,16 +283,16 @@ const UserDetails: React.FC = () => {
   };
 
   const getSubscriptionBadgeStyle = (type) => {
-    const baseStyle = "text-xs font-bold py-1 px-3 rounded-full uppercase shadow-md";
+    const baseStyle = "text-xs font-bold py-1 px-3 rounded-full uppercase shadow-lg transform transition-transform duration-300";
     switch (type?.toLowerCase()) {
       case 'basic':
-        return `${baseStyle} bg-gradient-to-r from-green-400 to-green-600 text-white`;
+        return `${baseStyle} bg-gradient-to-r from-green-400 to-green-600 text-white border-2 border-green-700 hover:scale-105`;
       case 'standard':
-        return `${baseStyle} bg-gradient-to-r from-blue-400 to-blue-600 text-white`;
+        return `${baseStyle} bg-gradient-to-r from-blue-400 to-blue-600 text-white border-2 border-blue-700 hover:scale-105`;
       case 'premium':
-        return `${baseStyle} bg-gradient-to-r from-yellow-400 to-yellow-600 text-white`;
+        return `${baseStyle} bg-gradient-to-r from-yellow-400 to-yellow-600 text-white border-2 border-yellow-700 hover:scale-105`;
       default:
-        return `${baseStyle} bg-gradient-to-r from-gray-400 to-gray-600 text-white`;
+        return `${baseStyle} bg-gradient-to-r from-gray-400 to-gray-600 text-white border-2 border-gray-700 hover:scale-105`;
     }
   };
 
@@ -305,14 +305,14 @@ const UserDetails: React.FC = () => {
       <div className="absolute top-0 right-0 mt-2 mr-2">
         <FaEdit className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={handleEditClick} />
       </div>
-      
-      {/* Improved Subscription Badge */}
-      <div className="absolute top-0 left-0 mt-4 ml-4">
+      {user.subscriptionId?.type && <>
+        <div className="absolute top-0 left-0 mt-4 ml-4">
         <span className={getSubscriptionBadgeStyle(user.subscriptionId?.type)}>
-          {user.subscriptionId?.type || 'No Plan'}
+          {user.subscriptionId?.type}
         </span>
       </div>
-
+      </>} 
+      
       <div className="mb-4 text-center">
         <label className="block text-DarkBlue text-sm font-bold mb-2" htmlFor="photo">
           Photo

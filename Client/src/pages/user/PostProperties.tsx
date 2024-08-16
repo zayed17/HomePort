@@ -1,10 +1,10 @@
 import ProfileSidebar from '../../components/user/ProfileSidebar'
 import ProfileNav from '../../components/user/ProfileNav'
-import Chat from '../../components/user/sections/profile/Chat'
+import Chat from '../../components/user/sections/profile/Posted'
 
-const ChatPage = () => {
+const PostProperties = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-100">
       <ProfileSidebar />
       <div className="flex-1 md:ml-64 ml-20 transition-all duration-300">
         <ProfileNav />
@@ -16,4 +16,4 @@ const ChatPage = () => {
   )
 }
 
-export default ChatPage
+export default PostProperties

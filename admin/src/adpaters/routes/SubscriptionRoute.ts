@@ -55,7 +55,7 @@ router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) 
 
       res.json({ id: session.id });
   } catch (error:any) {
-      console.error('Error creating checkout session:', error.message); // Log the actual error message
+      console.error('Error creating checkout session:', error.message); 
       res.status(500).json({ error: 'Internal Server Error' });
   }
 });

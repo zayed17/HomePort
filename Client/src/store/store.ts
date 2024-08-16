@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userApi from './user/userApi';
 import adminApi from './admin/adminApi';
+import bookingApi from './bookingApi'
 import userReducer from './user/userSlice';
 import propertyApi from './propertyApi';
 
@@ -10,12 +11,14 @@ const store = configureStore({
     [userApi.reducerPath]: userApi.reducer, 
     [propertyApi.reducerPath]: propertyApi.reducer, 
     [adminApi.reducerPath]: adminApi.reducer,  
+    [bookingApi.reducerPath]: bookingApi.reducer,  
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(userApi.middleware) 
       .concat(propertyApi.middleware)  
-      .concat(adminApi.middleware), 
+      .concat(adminApi.middleware)
+      .concat(bookingApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

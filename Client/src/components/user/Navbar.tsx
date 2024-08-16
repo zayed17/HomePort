@@ -67,6 +67,9 @@ const Navbar: React.FC = () => {
         <Link to="/favourites" className="hover:text-gray-300">
           favourites
         </Link>
+        <Link to="/subscription" className="hover:text-gray-300">
+          Subscription
+        </Link>
       </div>
 
       {isOpen && !token && <LoginModal isOpen={isOpen} onClose={toggleMenu} />}

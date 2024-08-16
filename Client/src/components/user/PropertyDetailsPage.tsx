@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { useGetPropertyQuery } from '../../store/propertyApi';
 import { FaRegFlag, FaHeart, FaFan, FaRegWindowMaximize, FaLightbulb, FaBuilding, FaMapMarkerAlt, FaCompass, FaTv, FaRuler, FaCalendarAlt, FaCouch, FaWater, FaBed, FaShower, FaWindowMaximize, FaChair, FaCar, FaMotorcycle } from 'react-icons/fa';
 import { MdBalcony, MdOutlineMicrowave } from "react-icons/md";
@@ -9,6 +9,7 @@ import { PiFanThin } from "react-icons/pi";
 import { LuSofa } from "react-icons/lu";
 import { GiWashingMachine, GiVacuumCleaner, GiTable, GiScooter } from 'react-icons/gi';
 import ReportModal from './ReportModal';
+
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,
@@ -31,6 +32,7 @@ const electronicsIcons = {
 };
 
 const PropertyDetailsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const basicInfoRef = useRef<HTMLDivElement | null>(null);
   const propertySpecsRef = useRef<HTMLDivElement | null>(null);
@@ -84,7 +86,14 @@ const PropertyDetailsPage: React.FC = () => {
   };
 
   const { id } = useParams<{ id: string }>();
+  
   const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
+
+  const handleBooking = () => {
+    navigate(`/booking/${property._id}`);
+  };
+
+
   if (isLoading) {
     return (
       <div className="container mx-auto p-4">
@@ -321,7 +330,7 @@ const PropertyDetailsPage: React.FC = () => {
                 </span>
               </div>
             )}
-            <button className='rounded-full p-3 bg-LightdarkBlue text-white w-full font-semibold hover:bg-darkBlue transition-all'>
+            <button onClick={handleBooking} className='rounded-full p-3 bg-LightdarkBlue text-white w-full font-semibold hover:bg-darkBlue transition-all'>
               Book now
             </button>
           </div>

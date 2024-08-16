@@ -16,6 +16,7 @@ interface Sponsorship {
 interface PropertyDocument extends Document {
   propertyType: string;
   reason?: string;
+  isBooked:boolean;
   address: string;
   city: string;
   mediaFiles: string[];
@@ -57,6 +58,7 @@ interface PropertyDocument extends Document {
 
 const PropertySchema: Schema = new Schema({
   propertyType: { type: String, required: true },
+  isBooked:{type:Boolean,default:false},
   address: { type: String, required: true },
   city: { type: String, required: true },
   mediaFiles: { type: [String], required: true },
