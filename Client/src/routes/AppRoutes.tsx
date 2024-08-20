@@ -23,6 +23,7 @@ import Favourites from '../pages/user/Favourites';
 import Subscription from '../pages/admin/Subscription';
 import BookingPage from '../pages/user/BookingPage';
 import SubscriptionPage from '../pages/user/SubscriptionPage';
+import ChatInterface from '../components/chat';
 const AppRoutes = () => {
   return (
     <Router>
@@ -44,6 +45,7 @@ const AppRoutes = () => {
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
           <Route path="/profile/booked" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PostedPage} />} />
           <Route path="/profile/ads" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={AdsPage} />} />
+          <Route path="/chat/:chatId" element={<ChatInterface />} />
 
           //admin Side
           <Route path="/admin" element={< VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />

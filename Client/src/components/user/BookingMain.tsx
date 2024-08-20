@@ -6,7 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { FaBed, FaBath, FaRulerCombined, FaCalendarAlt, FaUserCircle, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { useMakePaymentMutation } from '../../store/bookingApi';
 import toast from 'react-hot-toast';
-const stripePromise = loadStripe('pk_test_51Pkesm094jYnWAeuuyD2MBhHKbpxz6YKkdPIcN3EE9WcXBDYrRlht9fkrVlgUdyBfAG81e9ljwp9gKhwqyUWl7UN00zLEfOptE'); // Replace with your publishable key
+const stripePromise =  loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!); 
 
 const BookingMain: React.FC = () => {
   const { id } = useParams<{ id: string }>();

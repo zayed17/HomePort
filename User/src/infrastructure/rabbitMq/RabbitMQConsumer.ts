@@ -1,6 +1,6 @@
 import { RabbitMQClient } from './RabbitMQClient';
 import { rabbitmqConfig } from '../../config/rabbitmqConfig';
-import { UpdateUserSubscriptionUsecase } from '../../usecases/';
+import { UpdateUserSubscriptionUsecase } from '../../usecases';
 
 export class RabbitMQConsumer {
     private client: RabbitMQClient;

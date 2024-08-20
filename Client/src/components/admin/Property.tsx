@@ -10,14 +10,14 @@ interface Property {
   rentAmount: number;
   sellPrice?: number;
   status: string;
-  eligibility: string
-  isBlock: boolean
+  eligibility: string;
+  isBlock: boolean;
+  noOfReports: number; 
 }
 
 const PropertyList = () => {
-  const [BlockUnblock] = useBlockAndUnblockMutation()
-  const { data: properties = [], error, isLoading,refetch } = useGetAdminPropertiesQuery();
-  console.log(properties, "consoling")
+  const [BlockUnblock] = useBlockAndUnblockMutation();
+  const { data: properties = [], error, isLoading, refetch } = useGetAdminPropertiesQuery({});
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [viewType, setViewType] = useState<'rent' | 'sell'>('rent');
@@ -41,15 +41,15 @@ const PropertyList = () => {
     );
   }, [searchTerm, properties, viewType]);
 
-  const handleBLockUnblock = async(propertyId:string,currentStatus:boolean)=>{
-    const newStatus = !currentStatus
+  const handleBLockUnblock = async (propertyId: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus;
     try {
-      await BlockUnblock({_id:propertyId,newStatus})
-      refetch()
+      await BlockUnblock({ _id: propertyId, newStatus });
+      refetch();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading properties</div>;
@@ -94,6 +94,7 @@ const PropertyList = () => {
               <th className="py-3 px-6 text-left">Area</th>
               <th className="py-3 px-6 text-center">Eligibility</th>
               <th className="py-3 px-6 text-center">Status</th>
+              <th className="py-3 px-6 text-center">No. of Reports</th> {/* Added No. of Reports column */}
               <th className="py-3 px-6 text-center">Action</th>
             </tr>
           </thead>
@@ -112,8 +113,9 @@ const PropertyList = () => {
                       {property.status}
                     </span>
                   </td>
+                  <td className="py-3 px-6 text-center">{property.noOfReports}</td> {/* Display noOfReports */}
                   <td className="py-3 px-6 text-center">
-                    <span onClick={()=>handleBLockUnblock(property._id,property.isBlock)} className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${property.isBlock ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}>
+                    <span onClick={() => handleBLockUnblock(property._id, property.isBlock)} className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${property.isBlock ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}>
                       {property.isBlock ? 'Blocked' : 'Active'}
                     </span>
                   </td>
@@ -121,7 +123,7 @@ const PropertyList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={8} className="py-4 px-6 text-center">No properties found</td>
+                <td colSpan={9} className="py-4 px-6 text-center">No properties found</td>
               </tr>
             )}
           </tbody>

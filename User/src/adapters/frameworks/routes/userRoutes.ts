@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { UserController } from '../express/controllers/UserController';
 import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase } from '../../../usecases';
-import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository ,UserSubscriptionRepository} from '../../../repositories';
+import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository } from '../../../repositories';
 import { authenticateToken } from 'homepackage'
 import upload from '../express/middleware/uploadMiddleware'
 import { MessageBrokerService } from '../../../services/MessageBrokerService';
@@ -23,7 +23,6 @@ const emailService = new EmailRepository();
 const s3Repository = new S3Repository();
 const googleAuthRepository = new GoogleAuthRepository()
 const messageBrokerService = new MessageBrokerService()
-const userSubscriptionRepository = new UserSubscriptionRepository()
 
 
 const signUpUseCase = new SignUpUseCase(userRepository, otpService, emailService);

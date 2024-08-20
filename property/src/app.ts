@@ -55,7 +55,7 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import connectDB from "./infrastructure/mongodb/connection";
 import propertyRoute from "./adpaters/routes/route";
-// import { startConsumers } from "./adpaters/messaging/consumerStartup";
+import { startConsumers } from "./adpaters/messaging/consumerStartup";
 
 const app = express();
 const server = http.createServer(app);
@@ -99,7 +99,7 @@ const startServer = async () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
   
-  // startConsumers().catch(error => console.error("Failed to start the consumer:", error));
+  startConsumers().catch(error => console.error("Failed to start the consumer:", error));
 };
 
 startServer();

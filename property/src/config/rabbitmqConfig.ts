@@ -1,7 +1,27 @@
+// export const rabbitmqConfig = {
+//     url: process.env.RABBITMQ_URL || "amqp://localhost",
+//     exchange: 'user_updates', 
+//     queues: {
+//         updateUser: 'user_updates_queue', 
+//     }
+// };
+
 export const rabbitmqConfig = {
-    url: process.env.RABBITMQ_URL || "amqp://localhost",
-    exchange: 'user_updates', 
+    url: "amqp://localhost",
+
+    // Exchange and queue configuration for user updates
+    exchanges: {
+        userUpdates: 'user_updates',
+        bookingUpdates: 'booking_exchange' 
+    },
+
     queues: {
-        updateUser: 'user_updates_queue', 
+        updateUser: 'user_updates_queue',
+        bookings: 'bookings_queue' // New queue for booking updates
+    },
+
+    routingKeys: {
+        userUpdateKey: 'update',
+        bookingKey: 'booking_key' // New routing key for booking updates
     }
 };

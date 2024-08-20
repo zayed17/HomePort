@@ -16,4 +16,4 @@ const PostProperties = () => {
   )
 }
 
-export default PostProperties
+export default PostProperties 

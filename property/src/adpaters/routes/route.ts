@@ -1,7 +1,7 @@
 import { Router } from "express";
 import  { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase} from '../../usecase';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase} from '../../usecase';
 import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import { RabbitMQPublisher } from '../../infrastructure/rabbitMq/RabbitMQPulisher';
@@ -42,14 +42,14 @@ const findFavouritesUseCase = new FindFavouritesUseCase(userPropertyRepository)
 const addReportUseCase = new AddReportUseCase(reportPropertyRepository)
 const findAllReportsUseCase = new FindAllReportsUseCase(reportPropertyRepository)
 const paymentUseCase = new PaymentUseCase(paymentService,rabbitMQPublisher)
-
+const updatePropertyUseCase = new UpdatePropertyUseCase(propertyRepository)
 
 
 
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase);
 
 const router = Router();
 
@@ -59,7 +59,6 @@ router.get('/list-properties',authenticateToken(['user']), async (req: any, res:
       const userId = req.user._id
         console.log('this is workding')
         const properties = await PropertyModel.find({status: 'verified',createdBy: { $ne: userId }}).populate('createdBy').sort({ 'sponsorship.isSponsored': -1 });
-        console.log(properties,"consoleing")
       res.json(properties); 
     } catch (error) {
       next(error); 

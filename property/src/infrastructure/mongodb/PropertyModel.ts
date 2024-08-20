@@ -13,11 +13,19 @@ interface Sponsorship {
     amount?: number; 
   };
 }
+
+interface BookingDetails {
+  userId: Schema.Types.ObjectId;
+  userName: string;
+  bookingDate: Date;
+}
+
 interface PropertyDocument extends Document {
   propertyType: string;
   reason?: string;
   isBooked:boolean;
   address: string;
+  bookedDetails?: BookingDetails[]; 
   city: string;
   mediaFiles: string[];
   depositAmount?: number;
@@ -51,6 +59,7 @@ interface PropertyDocument extends Document {
   lookingFor: string;
   createdBy: Schema.Types.ObjectId; 
   isBlock: boolean;
+  noOfReports:number;
   sponsorship?: Sponsorship; 
   createdAt?: Date;
   updatedAt?: Date;
@@ -59,6 +68,11 @@ interface PropertyDocument extends Document {
 const PropertySchema: Schema = new Schema({
   propertyType: { type: String, required: true },
   isBooked:{type:Boolean,default:false},
+  bookedDetails: [{
+      userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      userName: { type: String, required: true },
+      bookingDate: { type: Date, required: true },
+    }],
   address: { type: String, required: true },
   city: { type: String, required: true },
   mediaFiles: { type: [String], required: true },
@@ -86,6 +100,7 @@ const PropertySchema: Schema = new Schema({
   noOfCars: { type: Number, required: true },
   noOfScooters: { type: Number, required: true },
   noOfBikes: { type: Number, required: true },
+  noOfReports: { type: Number, default:0},
   directionTips: { type: String, required: true },
   sellPrice: { type: Number, required: false },
   propertyCondition: { type: String, required: false },
@@ -101,7 +116,7 @@ const PropertySchema: Schema = new Schema({
       endDate: { type: Date },
       amount: { type: Number }
     }
-  }
+  },
 }, {
   timestamps: true
 });

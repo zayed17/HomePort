@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useGetPropertyQuery } from '../../store/propertyApi';
 import { FaRegFlag, FaHeart, FaFan, FaRegWindowMaximize, FaLightbulb, FaBuilding, FaMapMarkerAlt, FaCompass, FaTv, FaRuler, FaCalendarAlt, FaCouch, FaWater, FaBed, FaShower, FaWindowMaximize, FaChair, FaCar, FaMotorcycle } from 'react-icons/fa';
 import { MdBalcony, MdOutlineMicrowave } from "react-icons/md";
@@ -9,7 +9,11 @@ import { PiFanThin } from "react-icons/pi";
 import { LuSofa } from "react-icons/lu";
 import { GiWashingMachine, GiVacuumCleaner, GiTable, GiScooter } from 'react-icons/gi';
 import ReportModal from './ReportModal';
-
+import loaderGif from '/assets/gifff.gif';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
+import ConnectWithOwnerButton from '../connectButton';
+import ChatInterface from '../chat';
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,
@@ -32,6 +36,17 @@ const electronicsIcons = {
 };
 
 const PropertyDetailsPage: React.FC = () => {
+
+
+  const [chatId, setChatId] = useState<string | null>(null);
+
+  const handleChatStart = (id: string) => {
+    setChatId(id);
+    console.log("Chat ID received:", id); // Debugging log
+
+  };
+
+
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const basicInfoRef = useRef<HTMLDivElement | null>(null);
@@ -86,9 +101,11 @@ const PropertyDetailsPage: React.FC = () => {
   };
 
   const { id } = useParams<{ id: string }>();
-  
-  const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
 
+  const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
+  const mainImage = property?.mediaFiles[0];
+  const otherImages = property?.mediaFiles.slice(1, 4);
+  const hasMoreImages = property?.mediaFiles.length > 4;
   const handleBooking = () => {
     navigate(`/booking/${property._id}`);
   };
@@ -96,8 +113,8 @@ const PropertyDetailsPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex justify-center items-center h-screen">
+        <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
       </div>
     );
   }
@@ -133,38 +150,57 @@ const PropertyDetailsPage: React.FC = () => {
             <FaRegFlag className="text-LightdarkBlue" />
             <span>Report</span>
           </button>
-          <FaHeart
-            onClick={() => console.log("Favorite")}
-            className="text-LightdarkBlue cursor-pointer text-xl"
-          />
+        <ConnectWithOwnerButton
+        ownerId={property.createdBy._id}
+        ownerName={property.createdBy.name}
+        ownerPhoto={property.mediaFiles[0]}
+        onChatStart={handleChatStart} />
+{chatId && <ChatInterface chatId={chatId} />}
         </div>
       </div>
 
       <ReportModal isOpen={isModalOpen} propertyId={property._id} onClose={closeModal} />
+      <PhotoProvider>
+        <div className="flex flex-col lg:flex-row gap-4 mb-8">
+          {mainImage && (
+            <div className="flex-shrink-0 w-full lg:w-2/3">
+              <PhotoView src={mainImage}>
+                <img
+                  src={mainImage}
+                  alt="Main Property"
+                  className="w-full h-[500px] object-cover rounded-lg shadow-lg cursor-pointer"
+                  style={{ objectFit: 'cover' }}
+                />
+              </PhotoView>
+            </div>
+          )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        {property.mediaFiles.slice(0, 1).map((url: string, index: number) => (
-          <div key={index} className="col-span-2 row-span-2">
-            <img
-              src={url}
-              alt={`Property Image ${index + 1}`}
-              className="w-full h-auto object-cover rounded-lg shadow-lg transition-transform duration-300"
-            />
+          <div className="flex flex-col w-full lg:w-1/3 gap-4">
+            <div className="relative grid grid-cols-1 gap-4">
+              {otherImages.slice(0, 3).map((url: string, index: number) => (
+                <div key={index} className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer">
+                  <PhotoView src={url}>
+                    <img
+                      src={url}
+                      alt={`Property Image ${index + 2}`}
+                      className="w-full h-32 object-cover transition-transform duration-300"
+                      style={{ aspectRatio: '1 / 1' }}
+                    />
+                  </PhotoView>
+                  {hasMoreImages && index === 2 && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-center cursor-pointer">
+                      <PhotoView src={otherImages[3]}>
+                        <span className="text-xl font-bold">See More</span>
+                      </PhotoView>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-        {property.mediaFiles.slice(1).map((url: string, index: number) => (
-          <div key={index} className="col-span-1">
-            <img
-              src={url}
-              alt={`Property Image ${index + 2}`}
-              className="w-full h-48 object-cover rounded-lg shadow-lg transition-transform duration-300"
-            />
-          </div>
-        ))}
-      </div>
-
-      <div className="flex space-x-4">
-
+        </div>
+      </PhotoProvider>
+      <div className="flex space-x-4 ">
         <div className="w-[70%] rounded-2xl">
           <div className='mb-3 flex bg-gray-200 p-3 font-bold justify-evenly sticky top-0 rounded-lg shadow-md'>
             {Object.keys(sectionRefs).map((section) => (

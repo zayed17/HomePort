@@ -62,7 +62,7 @@ export class UserController {
 
     async getUser(req: any, res: Response, next: NextFunction): Promise<void> {
   
-        const user = req.user
+        const user = req.user._id
         console.log(req.user, "req.user kittunundo ?")
         try {
             const userDetails = await this.getUserDetailUseCase.getDetail(user)

@@ -35,7 +35,7 @@ router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) 
                   product_data: {
                       name: `Subscription for plan ${planId}`,
                   },
-                  unit_amount: amount, 
+                  unit_amount: Math.floor(amount), 
               },
               quantity: 1,
           }],

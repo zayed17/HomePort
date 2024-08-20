@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaInfoCircle, FaCheckCircle } from 'react-icons/fa';
 import { loadStripe } from '@stripe/stripe-js';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useCreatePaymentIntentMutation } from '../../store/propertyApi';
 
 
-const stripePromise = loadStripe('pk_test_51Pkesm094jYnWAeuuyD2MBhHKbpxz6YKkdPIcN3EE9WcXBDYrRlht9fkrVlgUdyBfAG81e9ljwp9gKhwqyUWl7UN00zLEfOptE'); // Replace with your publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!); 
 
 const SponsoredMain = () => {
   const [makePayment] = useCreatePaymentIntentMutation()

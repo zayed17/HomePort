@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase } from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase} from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 
 
@@ -20,7 +20,9 @@ export class PropertyController {
     private findFavouritesUseCase: FindFavouritesUseCase,
     private addReportUseCase: AddReportUseCase,
     private findAllReportsUseCase: FindAllReportsUseCase,
-    private paymentUseCase: PaymentUseCase
+    private paymentUseCase: PaymentUseCase,
+    private updatePropertyUseCase: UpdatePropertyUseCase
+
 
 
   ) { }
@@ -152,6 +154,7 @@ export class PropertyController {
     }
      try {
       const result = await this.addReportUseCase.addReport(report);
+      await this.updatePropertyUseCase.Update(req.body.propertyId,1)
       res.status(200).json(result);
     } catch (error) {
       next(error)

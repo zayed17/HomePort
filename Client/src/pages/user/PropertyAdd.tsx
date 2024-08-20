@@ -9,12 +9,13 @@ import { FaHome, FaMapMarkerAlt, FaVideo, FaDollarSign, FaTag, FaInfoCircle } fr
 import { useAddPropertyMutation } from '../../store/propertyApi';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import loaderGif from '/assets/gifff.gif';
 
 
 const PropertyAddPage = () => {
   const [lookingFor, setLookingFor] = useState<string | null>(null); 
   const [currentSection, setCurrentSection] = useState(1);
-  const [addProperty] = useAddPropertyMutation();
+  const [addProperty, { isLoading }] = useAddPropertyMutation(); 
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     propertyType: '',
@@ -144,6 +145,14 @@ console.log(formDataToSend,"another checking")
           <button onClick={() => handleLookingForSelection('rent')} className="px-4 py-2 bg-LightdarkBlue text-white rounded">Rent</button>
           <button onClick={() => handleLookingForSelection('sell')} className="px-4 py-2 bg-lightViolet text-white rounded">Sell</button>
         </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
       </div>
     );
   }

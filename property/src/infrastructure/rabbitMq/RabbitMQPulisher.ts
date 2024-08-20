@@ -4,13 +4,12 @@ import { RabbitMQPublisherInterface } from '../../repositories';
 export class RabbitMQPublisher implements RabbitMQPublisherInterface {
   private connection!: amqp.Connection;
   private channel!: amqp.Channel;
-  private exchange = 'user_updates'; // Default exchange, can be changed as needed
+  private exchange = 'user_updates'; 
 
   constructor(private url: string) {
-    this.initialize(); // Initialize connection and channel upon instantiation
+    this.initialize(); 
   }
 
-  // Initialize connection and channel
   private async initialize(): Promise<void> {
     try {
       console.log(this.url, "Connecting to RabbitMQ...");
@@ -24,7 +23,6 @@ export class RabbitMQPublisher implements RabbitMQPublisherInterface {
     }
   }
 
-  // Publish a message to the exchange
   public async publish(exchange: string = this.exchange, routingKey: string, message: any): Promise<void> {
     try {
       const payload = Buffer.from(JSON.stringify(message));

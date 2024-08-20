@@ -4,6 +4,12 @@ export interface Sponsorship {
   amount?: number;
 }
 
+interface BookingDetails {
+  userId: string;
+  userName: string;
+  bookingDate: Date;
+}
+
 export interface PropertyData {
   status: string;
   isBooked:boolean;
@@ -37,15 +43,17 @@ export interface PropertyData {
   noOfScooters: number;
   noOfBikes: number;
   directionTips: string;
+  noOfReports?:number;
   sellPrice?: number;
   propertyCondition?: string;
   lookingFor: string;
   createdBy: string;
-  isBlock: boolean;
+  isBlock: boolean
   sponsorship?: {
     isSponsored: boolean;
     details?: Sponsorship; 
   };
+  bookedDetails?: BookingDetails[]; 
 }
 
 
@@ -72,6 +80,7 @@ export class Property {
   electronics?: object; 
   rentAmount?: number;
   isNegotiable: string;
+  noOfReports?:number;
   areBillsIncluded?: string;
   eligibility: string;
   availableFrom: string;
@@ -91,6 +100,7 @@ export class Property {
     isSponsored: boolean;
     details?: Sponsorship;
   };
+  bookedDetails?: BookingDetails[]; 
 
   constructor({
     status,
@@ -127,10 +137,12 @@ export class Property {
     directionTips,
     sellPrice,
     propertyCondition,
+    noOfReports,
     lookingFor,
     createdBy,
     isBlock,
-    sponsorship
+    sponsorship,
+    bookedDetails
   }: PropertyData) {
     this.status = status;
     this.reason = reason;
@@ -149,6 +161,7 @@ export class Property {
     this.bathrooms = bathrooms;
     this.balconies = balconies;
     this.totalArea = totalArea;
+    this.noOfReports = noOfReports;
     this.hasWell = hasWell;
     this.furnisherType = furnisherType;
     this.electronics = electronics;
@@ -170,5 +183,6 @@ export class Property {
     this.createdBy = createdBy;
     this.isBlock = isBlock;
     this.sponsorship = sponsorship;
+    this.bookedDetails = bookedDetails;
   }
 }

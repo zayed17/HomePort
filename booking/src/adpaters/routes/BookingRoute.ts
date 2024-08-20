@@ -7,6 +7,7 @@ import UserModel from "../../infrastrucuture/mongoDb/models/UserModel";
 import PropertyModel from "../../infrastrucuture/mongoDb/models/PropertyModel";
 const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
 import { authenticateToken } from 'homepackage'
+import { RabbitMQPublisher } from '../../infrastrucuture/rabbitmq/rabbitmqPublisher';
 
 const router = Router();
 
@@ -57,7 +58,9 @@ router.post('/make-payment',authenticateToken(['user']), async (req:any, res) =>
   });
 
 
-  router.post('/booking', async (req: any, res: Response) => {
+router.post('/booking', async (req: any, res: Response) => {
+  const publisher = new RabbitMQPublisher();
+
     const sig = req.headers['stripe-signature'] as string;
     const rawBody = req.body as Buffer;
   
@@ -137,11 +140,12 @@ router.post('/make-payment',authenticateToken(['user']), async (req:any, res) =>
         });
   
         await newBooking.save();
-
+const fullname = userData.firstName + " " + userData.lastName
         await UserModel.findByIdAndUpdate(filteredUser._id, filteredUser, { upsert: true, new: true });
-      await PropertyModel.findByIdAndUpdate(filteredProperty._id, filteredProperty, { upsert: true, new: true });
+        await PropertyModel.findByIdAndUpdate(filteredProperty._id, filteredProperty, { upsert: true, new: true });
+        const bookingDateObj = bookingDate ? new Date(bookingDate) : new Date();
 
-  
+        await publisher.publishBookingData(filteredProperty._id,userId!,bookingDateObj,fullname)
         res.json({ received: true });
     } catch (error) {
         console.error('Error handling Stripe webhook:', error);

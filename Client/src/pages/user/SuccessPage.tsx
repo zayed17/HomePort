@@ -10,28 +10,28 @@ const PaymentSuccess = () => {
   const [hasProcessed, setHasProcessed] = useState(false);
   const hasFetchedRef = useRef(false); 
 
-  useEffect(() => {
-    if (!hasProcessed ) {
-      const queryParams = new URLSearchParams(location.search);
-      const sessionId = queryParams.get('session_id');
-      const propertyId = queryParams.get('property_id');
+  // useEffect(() => {
+  //   if (!hasProcessed ) {
+  //     const queryParams = new URLSearchParams(location.search);
+  //     const sessionId = queryParams.get('session_id');
+  //     const propertyId = queryParams.get('property_id');
 
-      if (sessionId && propertyId && !hasFetchedRef.current) {
-        hasFetchedRef.current = true;
-        axios.post('http://localhost:5003/property/payment-success', {
-          sessionId,
-          propertyId,
-        })
-        .then(response => {
-          setPaymentDetails(response.data);
-          setHasProcessed(true); 
-        })
-        .catch(error => {
-          console.error('Payment success handling failed', error);
-        });
-      }
-    }
-  }, [location.search, hasProcessed]);
+  //     if (sessionId && propertyId && !hasFetchedRef.current) {
+  //       hasFetchedRef.current = true;
+  //       axios.post('http://localhost:5003/property/payment-success', {
+  //         sessionId,
+  //         propertyId,
+  //       })
+  //       .then(response => {
+  //         setPaymentDetails(response.data);
+  //         setHasProcessed(true); 
+  //       })
+  //       .catch(error => {
+  //         console.error('Payment success handling failed', error);
+  //       });
+  //     }
+  //   }
+  // }, [location.search, hasProcessed]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
