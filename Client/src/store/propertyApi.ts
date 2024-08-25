@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 const URL = '/property';
 
 const propertyApi = createApi({
@@ -18,6 +17,10 @@ const propertyApi = createApi({
     }),
     getProperties: builder.query({
       query: () => `${URL}/list-properties`,  
+      keepUnusedDataFor: 60, 
+    }),
+    getPublicProperties: builder.query({
+      query: () => `${URL}/list-properties-public`,  
       keepUnusedDataFor: 60, 
     }),
     getPendingProperties: builder.query({
@@ -78,10 +81,18 @@ const propertyApi = createApi({
       query: () => `${URL}/reports`,  
       keepUnusedDataFor: 60, 
     }),
+    // updateProperty: builder.mutation({
+    //   query: (credentials) => ({
+    //     url: `${URL}/favorite-update`,
+    //     method: 'PATCH',
+    //     body: credentials,
+    //   }),
+    // }),
+
     updateProperty: builder.mutation({
       query: (credentials) => ({
-        url: `${URL}/favorite-update`,
-        method: 'PATCH',
+        url: `${URL}/update-property`,
+        method: 'POST',
         body: credentials,
       }),
     }),
@@ -92,9 +103,13 @@ const propertyApi = createApi({
         body: credentials,
       }),
     }),
+    getDashboard: builder.query({
+      query: () => `${URL}/dashboard-properties`,  
+      keepUnusedDataFor: 60, 
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation} = propertyApi;
+export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery} = propertyApi;
 
 export default propertyApi;

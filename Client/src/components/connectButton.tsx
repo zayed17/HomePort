@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetUserQuery } from '../store/user/userApi';
+import { useUserDetails } from '../hooks/useUserDetails';
 
 interface ConnectWithOwnerButtonProps {
   ownerId: string;
@@ -16,14 +16,7 @@ const ConnectWithOwnerButton: React.FC<ConnectWithOwnerButtonProps> = ({
   onChatStart,
 }) => {
   const navigate = useNavigate();
-
-  const { data: { userDetails } = {}, isLoading, isError, error } = useGetUserQuery({});
-
-  useEffect(() => {
-    if (isError) {
-      console.error('Error fetching user details:', error);
-    }
-  }, [isError, error]);
+  const { userDetails, isLoading, isError } = useUserDetails();
 
   const handleConnect = async () => {
     if (isLoading) {
@@ -33,13 +26,13 @@ const ConnectWithOwnerButton: React.FC<ConnectWithOwnerButtonProps> = ({
 
     if (userDetails) {
       try {
-        const response = await fetch('http://localhost:3000/api/chats', {
+        const response = await fetch('http://localhost:3000/chat/chats', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             participants: [
               { userId: ownerId, name: ownerName, photo: ownerPhoto },
-              { userId: userDetails._id, name: userDetails.firstName, photo: userDetails.photo },
+              { userId: userDetails._id, name: userDetails.firstName, photo: userDetails.image },
             ],
           }),
         });

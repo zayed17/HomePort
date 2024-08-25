@@ -23,9 +23,8 @@ export class UserController {
 
     async signUpUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         console.log("req.body on controller", req.body);
-        const formData = req.body;
-
         try {
+            const formData = req.body;
             const newUser = await this.signUpUseCase.execute(formData);
             res.status(201).json(newUser);
         } catch (error) {
@@ -50,9 +49,9 @@ export class UserController {
     }
 
     async verifyOTP(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { email, otp } = req.body;
         console.log(req.body, "from verifyOtp");
         try {
+            const { email, otp } = req.body;
             const { token, user } = await this.otpVerificationUseCase.VerifyOtp(email, otp);
             res.status(200).json({ message: 'OTP verified successfully', token, user });
         } catch (error) {
@@ -61,10 +60,9 @@ export class UserController {
     }
 
     async getUser(req: any, res: Response, next: NextFunction): Promise<void> {
-  
-        const user = req.user._id
         console.log(req.user, "req.user kittunundo ?")
         try {
+            const user = req.user._id
             const userDetails = await this.getUserDetailUseCase.getDetail(user)
             console.log(userDetails, "console")
             res.status(200).json({ message: 'success', userDetails });
@@ -75,9 +73,8 @@ export class UserController {
     }
 
     async getDetails(req: any, res: Response, next: NextFunction): Promise<void> {
-        const id= req.params.id
-  
         try {
+            const id= req.params.id
             const userDetails = await this.getUserDetailUseCase.getDetail(id)
             console.log(userDetails, "console")
             res.status(200).json(userDetails);
@@ -90,8 +87,8 @@ export class UserController {
 
     async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         console.log(req.body, "checking in updateuser")
-        const { firstName, lastName, email, phone } = req.body;
         try {
+            const { firstName, lastName, email, phone } = req.body;
             const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
            await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
             res.status(200).json({ message: 'User updated successfully', updatedUser });
@@ -120,8 +117,8 @@ export class UserController {
     }
 
     async resendOTP(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { email } = req.body
         try {
+            const { email } = req.body
             console.log(email)
             await this.resendOTPUseCase.ResendOTP(email)
             res.status(200).json({ message: 'OTP resent successfully' });
@@ -131,9 +128,8 @@ export class UserController {
     }
 
     async googleAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { code } = req.body
-        console.log(code, "code get in con")
         try {
+            const { code } = req.body
             const { token, userDetails } = await this.googleAuthUseCase.GoogleAuth(code)
             const ress = res.cookie('token', token, {
                 maxAge: 3600000,
@@ -146,8 +142,8 @@ export class UserController {
     }
 
     async verifyEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { email } = req.body
         try {
+            const { email } = req.body
             console.log(email)
             await this.verifyEmailUseCase.VerifyEmail(email)
             res.status(200).json({ message: "verify succefully" });
@@ -157,8 +153,8 @@ export class UserController {
     }
 
     async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { email, newPassword } = req.body
         try {
+            const { email, newPassword } = req.body
             await this.forgotPasswordUseCase.ForgotPassword(email, newPassword)
             res.status(200).json({ success: true });
         } catch (error) {
@@ -167,9 +163,9 @@ export class UserController {
     }
 
     async changePassword(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const { email, password, newPassword } = req.body
         console.log(req.body, "getting or not ?")
         try {
+            const { email, password, newPassword } = req.body
             await this.changePasswordUseCase.ChangePassword(email, password, newPassword)
             res.status(200).json({ success: true });
         } catch (error) {
@@ -180,15 +176,15 @@ export class UserController {
     async findAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const users = await this.findAllUserUseCase.FindAllUsers()
-            res.status(200).json({ success: true, users });
+            res.status(200).json( users );
         } catch (error) {
             next(error)
         }
     }
 
     async blockUblock(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const {userId,newStatus} = req.body
         try {
+            const {userId,newStatus} = req.body
             await this.blockUnblockUseCase.BlockUnblock(userId,newStatus)
             res.status(200).json({ success: true });
         } catch (error) {

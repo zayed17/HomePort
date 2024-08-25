@@ -4,6 +4,7 @@ import adminApi from './admin/adminApi';
 import bookingApi from './bookingApi'
 import userReducer from './user/userSlice';
 import propertyApi from './propertyApi';
+import chattingApi from './chattingApi';
 
 const store = configureStore({
   reducer: {
@@ -11,14 +12,16 @@ const store = configureStore({
     [userApi.reducerPath]: userApi.reducer, 
     [propertyApi.reducerPath]: propertyApi.reducer, 
     [adminApi.reducerPath]: adminApi.reducer,  
-    [bookingApi.reducerPath]: bookingApi.reducer,  
+    [bookingApi.reducerPath]: bookingApi.reducer,
+    [chattingApi.reducerPath]: chattingApi.reducer,    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(userApi.middleware) 
       .concat(propertyApi.middleware)  
       .concat(adminApi.middleware)
-      .concat(bookingApi.middleware),
+      .concat(bookingApi.middleware)
+      .concat(chattingApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

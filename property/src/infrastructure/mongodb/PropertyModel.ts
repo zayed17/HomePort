@@ -18,6 +18,8 @@ interface BookingDetails {
   userId: Schema.Types.ObjectId;
   userName: string;
   bookingDate: Date;
+  amountPaid:number;
+  _id: Schema.Types.ObjectId;
 }
 
 interface PropertyDocument extends Document {
@@ -72,6 +74,8 @@ const PropertySchema: Schema = new Schema({
       userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
       userName: { type: String, required: true },
       bookingDate: { type: Date, required: true },
+      amountPaid:{type:Number,required:true},
+      _id:{type:Schema.Types.ObjectId,required:true}
     }],
   address: { type: String, required: true },
   city: { type: String, required: true },

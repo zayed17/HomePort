@@ -1,320 +1,41 @@
-// import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useGetAllPropertiesQuery } from '../../../../store/propertyApi';
-// import loaderGif from '/assets/gifff.gif'; 
-
-// interface Property {
-//   _id: string;
-//   propertyType: string;
-//   city: string;
-//   rentAmount?: number;
-//   depositAmount?: number;
-//   sellPrice?: number;
-//   status: string;
-//   mediaFiles: string[];
-//   totalArea?: number;
-//   sponsorship?: {
-//     isSponsored: boolean;
-//   };
-// }
-
-// const Properties = () => {
-//   const navigate = useNavigate();
-//   const { data: properties = [], error, isLoading } = useGetAllPropertiesQuery();
-//   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
-
-//   useEffect(() => {
-//     if (properties) {
-//       setFilteredProperties(properties);
-//     }
-//   }, [properties]);
-
-//   const handleNavigate = (id: string) => {
-//     navigate(`/property/${id}`);
-//   };
-
-//   const handleSponsorNavigate = (id: string) => {
-//     navigate(`/sponsor/${id}`);
-//   };
-
-//   if (isLoading) return <div>Loading...</div>;
-//   if (error) return (
-//     <div className="flex justify-center items-center h-screen">
-//       <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
-//     </div>
-//   );
-
-//   return (
-//     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-2xl font-semibold text-center mb-6">My Listed Properties</h1>
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-//         {filteredProperties.length > 0 ? (
-//           filteredProperties.map((property) => (
-//             <div
-//               key={property._id}
-//               onClick={() => handleNavigate(property._id)}
-//               className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
-//               aria-label={`View details of ${property.propertyType} in ${property.city}`}
-//             >
-//               <div className="relative h-40">
-//                 <img
-//                   src={property.mediaFiles[0] || '/placeholder.jpg'}
-//                   alt={property.propertyType}
-//                   className="w-full h-full object-cover"
-//                 />
-//                 <span
-//                   className={`absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-//                     property.status
-//                   )}`}
-//                 >
-//                   {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
-//                 </span>
-//                 {property.sponsorship?.isSponsored && (
-//                   <span
-//                     className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800"
-//                   >
-//                     Sponsored
-//                   </span>
-//                 )}
-//               </div>
-//               <div className="p-4">
-//                 <h2 className="text-lg font-semibold text-gray-800">{property.propertyType}</h2>
-//                 <p className="text-sm text-gray-600">{property.city}</p>
-                
-//                 {property.rentAmount && (
-//                   <>
-//                     <div className="mt-2 text-sm font-medium text-green-600">
-//                       ₹{property.rentAmount.toLocaleString('en-IN')} / month
-//                     </div>
-//                     <p className="text-xs text-gray-500">
-//                       Deposit: ₹{property.depositAmount?.toLocaleString('en-IN')}
-//                     </p>
-//                   </>
-//                 )}
-//                 {property.sellPrice && (
-//                   <>
-//                     <div className="mt-2 text-sm font-medium text-green-600">
-//                       ₹{property.sellPrice.toLocaleString('en-IN')} 
-//                     </div>
-//                   </>
-//                 )}
-                
-//                 {property.totalArea && (
-//                   <p className="text-xs text-gray-500">Area: {property.totalArea} sq ft</p>
-//                 )}
-
-//                 {!property.sponsorship?.isSponsored && (
-//                   <button
-//                     onClick={(e) => {
-//                       e.stopPropagation(); // Prevent triggering the parent div's onClick
-//                       handleSponsorNavigate(property._id);
-//                     }}
-//                     className="mt-4 w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors"
-//                   >
-//                     Make Sponsored
-//                   </button>
-//                 )}
-//               </div>
-//             </div>
-//           ))
-//         ) : (
-//           <div className="text-center text-gray-600">No properties found</div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// const getStatusColor = (status: string) => {
-//   switch (status) {
-//     case 'approved':
-//       return 'bg-green-200 text-green-600';
-//     case 'rejected':
-//       return 'bg-red-200 text-red-600';
-//     case 'pending':
-//       return 'bg-blue-200 text-blue-600';
-//     default:
-//       return 'bg-gray-200 text-gray-600';
-//   }
-// };
-
-// export default Properties;
-
-
-// import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useGetAllPropertiesQuery } from '../../../../store/propertyApi';
-// import loaderGif from '/assets/gifff.gif'; 
-// interface BookedDetail {
-//   userId: string;
-//   bookingDate: Date;
-//   userName: string;
-// }
-
-// interface Property {
-//   _id: string;
-//   propertyType: string;
-//   city: string;
-//   rentAmount?: number;
-//   depositAmount?: number;
-//   sellPrice?: number;
-//   status: string;
-//   mediaFiles: string[];
-//   totalArea?: number;
-//   sponsorship?: {
-//     isSponsored: boolean;
-//   };
-//   bookedDetails?: BookedDetail[];
-// }
-// const Properties = () => {
-//   const navigate = useNavigate();
-//   const { data: properties = [], error, isLoading } = useGetAllPropertiesQuery({});
-//   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
-
-//   useEffect(() => {
-//     if (properties) {
-//       setFilteredProperties(properties);
-//     }
-//   }, [properties]);
-
-//   const handleNavigate = (id: string) => {
-//     navigate(`/property/${id}`);
-//   };
-
-//   const handleSponsorNavigate = (id: string) => {
-//     navigate(`/sponsor/${id}`);
-//   };
-
-//   if (error || isLoading) return (
-//     <div className="flex justify-center items-center h-screen">
-//       <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
-//     </div>
-//   );
-
-//   return (
-//     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-2xl font-semibold text-center mb-6">My Listed Properties</h1>
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-//         {filteredProperties.length > 0 ? (
-//           filteredProperties.map((property) => (
-//             <div
-//               key={property._id}
-//               onClick={() => handleNavigate(property._id)}
-//               className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
-//               aria-label={`View details of ${property.propertyType} in ${property.city}`}
-//             >
-//               <div className="relative h-40">
-//                 <img
-//                   src={property.mediaFiles[0] || '/placeholder.jpg'}
-//                   alt={property.propertyType}
-//                   className="w-full h-full object-cover"
-//                 />
-//                 <span
-//                   className={`absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-//                     property.status
-//                   )}`}
-//                 >
-//                   {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
-//                 </span>
-//                 {property.sponsorship?.isSponsored && (
-//                   <span
-//                     className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800"
-//                   >
-//                     Sponsored
-//                   </span>
-//                 )}
-//               </div>
-//               <div className="p-4">
-//                 <h2 className="text-lg font-semibold text-gray-800">{property.propertyType}</h2>
-//                 <p className="text-sm text-gray-600">{property.city}</p>
-                
-//                 {property.rentAmount && (
-//                   <>
-//                     <div className="mt-2 text-sm font-medium text-green-600">
-//                       ₹{property.rentAmount.toLocaleString('en-IN')} / month
-//                     </div>
-//                     <p className="text-xs text-gray-500">
-//                       Deposit: ₹{property.depositAmount?.toLocaleString('en-IN')}
-//                     </p>
-//                   </>
-//                 )}
-//                 {property.sellPrice && (
-//                   <>
-//                     <div className="mt-2 text-sm font-medium text-green-600">
-//                       ₹{property.sellPrice.toLocaleString('en-IN')} 
-//                     </div>
-//                   </>
-//                 )}
-                
-//                 {property.totalArea && (
-//                   <p className="text-xs text-gray-500">Area: {property.totalArea} sq ft</p>
-//                 )}
-
-//                 {property.bookedDetails && property.bookedDetails.length > 0 && (
-//                   <div className="mt-4">
-//                     <h3 className="text-sm font-semibold text-gray-800">Booking Details:</h3>
-//                     {property.bookedDetails.map((detail, index) => (
-//                       <div key={index} className="text-xs text-gray-500">
-//                         <p>Booked by: {detail.userName}</p>
-//                         <p>Date: {new Date(detail.bookingDate).toLocaleDateString()}</p>
-//                       </div>
-//                     ))}
-//                   </div>
-//                 )}
-
-//                 {!property.sponsorship?.isSponsored && (
-//                   <button
-//                     onClick={(e) => {
-//                       e.stopPropagation(); // Prevent triggering the parent div's onClick
-//                       handleSponsorNavigate(property._id);
-//                     }}
-//                     className="mt-4 w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors"
-//                   >
-//                     Make Sponsored
-//                   </button>
-//                 )}
-//               </div>
-//             </div>
-//           ))
-//         ) : (
-//           <div className="text-center text-gray-600">No properties found</div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// const getStatusColor = (status: string) => {
-//   switch (status) {
-//     case 'approved':
-//       return 'bg-green-200 text-green-600';
-//     case 'rejected':
-//       return 'bg-red-200 text-red-600';
-//     case 'pending':
-//       return 'bg-blue-200 text-blue-600';
-//     case 'booked': // Adding status for booked
-//       return 'bg-purple-200 text-purple-600';
-//     default:
-//       return 'bg-gray-200 text-gray-600';
-//   }
-// };
-
-// export default Properties;
-
-
-
-// import { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { useGetAllPropertiesQuery } from '../../../../store/propertyApi';
 // import loaderGif from '/assets/gifff.gif';
 // import Modal from 'react-modal';
+// import { FaRegTimesCircle } from "react-icons/fa";
+// import { useCloseDealMutation } from '../../../../store/bookingApi';
 
-// const Properties = () => {
+// interface Property {
+//   _id: string;
+//   propertyType: string;
+//   city: string;
+//   rentAmount?: number;
+//   depositAmount?: number;
+//   sellPrice?: number;
+//   totalArea?: number;
+//   status: string;
+//   mediaFiles: string[];
+//   sponsorship?: { isSponsored: boolean };
+//   bookedDetails?: BookedDetail[];
+//   lookingFor: string;
+// }
+
+// interface BookedDetail {
+//   _id: string;
+//   userName: string;
+//   bookingDate: string;
+//   amountPaid: number;
+//   totalAmount: number;
+//   isDealClosed: boolean;
+// }
+
+// const Properties: React.FC = () => {
 //   const navigate = useNavigate();
-//   const { data: properties = [], error, isLoading } = useGetAllPropertiesQuery();
+//   const { data: properties = [], error, isLoading } = useGetAllPropertiesQuery({});
 //   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
 //   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
-
+//   const [closeDeal]  = useCloseDealMutation()
 //   useEffect(() => {
 //     if (properties) {
 //       setFilteredProperties(properties);
@@ -337,103 +58,97 @@
 //     setSelectedProperty(null);
 //   };
 
-//   const handleCloseDeal = (propertyId: string, booking: BookedDetail) => {
-//     // Check if full payment is made
-//     if (booking.amountPaid === booking.totalAmount) {
-//       // Call a function or dispatch an action to update the deal as closed
-//       console.log(`Closing deal for ${booking.userName}`);
-
-//       // Update logic to close the deal in the backend would go here
-//     } else {
-//       alert('Cannot close the deal until full payment is made.');
-//     }
+//   const handleCloseDeal = async(bookingId: string) => {
+//     console.log(bookingId)
+//     await closeDeal({bookingId}).unwrap()
 //   };
 
-//   if (isLoading) return <div>Loading...</div>;
-//   if (error) return (
+//   if (isLoading) return (
 //     <div className="flex justify-center items-center h-screen">
 //       <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
 //     </div>
 //   );
 
+//   if (error) return <div className="text-center text-red-600 mt-8">Error loading properties. Please try again later.</div>;
+
 //   return (
-//     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-2xl font-semibold text-center mb-6">My Listed Properties</h1>
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+//     <div className="container mx-auto px-4 py-8 bg-gradient-to-b">
+//       <h1 className="text-4xl font-bold text-center mb-10 text-gray-800 shadow-text">My Listed Properties</h1>
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 //         {filteredProperties.length > 0 ? (
 //           filteredProperties.map((property) => (
-//             <div
-//               key={property._id}
-//               className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
-//             >
-//               <div onClick={() => handleNavigate(property._id)} className="relative h-40">
+//             <div key={property._id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+//               <div onClick={() => handleNavigate(property._id)} className="relative h-48 cursor-pointer">
 //                 <img
-//                   src={property.mediaFiles[0] || '/placeholder.jpg'}
+//                   src={property.mediaFiles[0]}
 //                   alt={property.propertyType}
 //                   className="w-full h-full object-cover"
 //                 />
 //                 <span
-//                   className={`absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-//                     property.status
-//                   )}`}
+//                   className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(property.status)}`}
 //                 >
 //                   {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
 //                 </span>
 //                 {property.sponsorship?.isSponsored && (
-//                   <span
-//                     className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800"
-//                   >
+//                   <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800">
 //                     Sponsored
 //                   </span>
 //                 )}
 //               </div>
 //               <div className="p-4">
-//                 <h2 className="text-lg font-semibold text-gray-800">{property.propertyType}</h2>
-//                 <p className="text-sm text-gray-600">{property.city}</p>
-
-//                 {property.rentAmount && (
-//                   <>
-//                     <div className="mt-2 text-sm font-medium text-green-600">
-//                       ₹{property.rentAmount.toLocaleString('en-IN')} / month
+//                 <h2 className="text-xl font-semibold text-gray-800 mb-2">{property.propertyType}</h2>
+//                 <p className="text-md text-gray-600 mb-2">{property.city}</p>
+//                 <div className="flex justify-between items-center mb-2">
+//                   {property.rentAmount !== 0 && (
+//                     <div>
+//                       <div className="text-lg font-medium text-green-600">
+//                         ₹{(property.rentAmount ?? 0).toLocaleString('en-IN')} / month
+//                       </div>
+//                       <p className="text-xs text-gray-500">
+//                         Deposit: ₹{property.depositAmount?.toLocaleString('en-IN')}
+//                       </p>
 //                     </div>
-//                     <p className="text-xs text-gray-500">
-//                       Deposit: ₹{property.depositAmount?.toLocaleString('en-IN')}
-//                     </p>
-//                   </>
-//                 )}
-//                 {property.sellPrice && (
-//                   <>
-//                     <div className="mt-2 text-sm font-medium text-green-600">
-//                       ₹{property.sellPrice.toLocaleString('en-IN')}
+//                   )}
+//                   {property.sellPrice !== 0 && (
+//                     <div className="text-lg font-medium text-green-600">
+//                       ₹{(property.sellPrice ?? 0).toLocaleString('en-IN')}
 //                     </div>
-//                   </>
-//                 )}
-                
+//                   )}
+//                 </div>
 //                 {property.totalArea && (
-//                   <p className="text-xs text-gray-500">Area: {property.totalArea} sq ft</p>
+//                   <p className="text-sm text-gray-600 mb-2">Area: {property.totalArea} sq ft</p>
 //                 )}
-
-//                 {property.bookedDetails && property.bookedDetails.length > 0 && (
-//                   <div className="mt-4">
-//                     <div className="text-sm font-semibold text-gray-700">
-//                       {property.bookedDetails.length} booking(s) 
-//                     </div>
+//                 <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
+//                   <div className="flex items-center justify-between mb-2">
+//                     <div className="text-md font-semibold text-blue-900">
+//                       {(property.bookedDetails?.length ?? 0)} {((property.bookedDetails?.length ?? 0) > 1 ? 'Bookings' : 'Booking')}                  </div>
 //                     <button
 //                       onClick={() => openBookingModal(property)}
-//                       className="mt-2 text-sm font-semibold text-blue-600 underline"
+//                       className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors px-2 py-1 border border-blue-500 rounded-full hover:bg-blue-100"
 //                     >
-//                       View Bookings
+//                       View All
 //                     </button>
 //                   </div>
-//                 )}
-
+//                   <div className="text-xs text-blue-700">
+//                     {property.bookedDetails?.slice(0, 1).map((booking, index) => (
+//                       <div key={index}>
+//                         <p className="mb-1">
+//                           <span className="font-medium">Latest Booking:</span> {booking.userName}
+//                         </p>
+//                         <p className="text-xs text-blue-600">
+//                           Booked on {new Date(booking.bookingDate).toLocaleDateString()}
+//                         </p>
+//                       </div>
+//                     ))}
+//                   </div>
+//                 </div>
 //                 {!property.sponsorship?.isSponsored && (
 //                   <button
 //                     onClick={(e) => {
-//                       e.stopPropagation(); 
+//                       e.stopPropagation();
 //                       handleSponsorNavigate(property._id);
 //                     }}
-//                     className="mt-4 w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+//                     className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors text-md font-semibold"
 //                   >
 //                     Make Sponsored
 //                   </button>
@@ -442,84 +157,125 @@
 //             </div>
 //           ))
 //         ) : (
-//           <div className="text-center text-gray-600">No properties found</div>
+//           <div className="col-span-full text-center text-gray-600 text-xl">No properties found</div>
 //         )}
 //       </div>
 
-//       {selectedProperty && (
-//         <Modal
-//           isOpen={!!selectedProperty}
-//           onRequestClose={closeBookingModal}
-//           contentLabel="Booking Details"
-//           className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto mt-20"
-//           overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-//         >
-//           <h2 className="text-2xl font-semibold mb-4">{selectedProperty.propertyType} - {selectedProperty.city}</h2>
-//           <div className="space-y-4">
-//             {selectedProperty.bookedDetails?.map((booking, index) => (
-//               <div key={index} className="border-b pb-2">
-//                 <p><strong>Booked by:</strong> {booking.userName}</p>
-//                 <p><strong>Date:</strong> {new Date(booking.bookingDate).toLocaleDateString()}</p>
-//                 {!booking.isDealClosed ? (
-//                   <button
-//                     onClick={() => handleCloseDeal(selectedProperty._id, booking, index)}
-//                     className={`mt-2 py-1 px-3 rounded-lg text-white ${
-//                       booking.amountPaid === booking.totalAmount
-//                         ? 'bg-green-500 hover:bg-green-600'
-//                         : 'bg-gray-400 cursor-not-allowed'
-//                     }`}
-//                     disabled={booking.amountPaid !== booking.totalAmount}
-//                   >
-//                     Close Deal
-//                   </button>
-//                 ) : (
-//                   <p className="mt-2 text-green-700">Deal Closed</p>
-//                 )}
-//               </div>
-//             ))}
+//       <Modal
+//         isOpen={!!selectedProperty}
+//         onRequestClose={closeBookingModal}
+//         contentLabel="Booking Details"
+//         className="bg-white rounded-lg shadow-2xl max-w-3xl mx-auto mt-20 outline-none"
+//         overlayClassName="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-start overflow-y-auto pt-10"
+//       >
+//         {selectedProperty && (
+//           <div className="relative p-6">
+//             <button
+//               onClick={closeBookingModal}
+//               className="absolute top-2 right-2 text-gray-500 transition-colors"
+//               aria-label="Close modal"
+//             >
+//               <FaRegTimesCircle className="h-6 w-6" />
+//             </button>
+
+//             <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b pb-4">
+//               {selectedProperty.propertyType} - {selectedProperty.city}
+//             </h2>
+
+//             <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+//               {selectedProperty.bookedDetails?.map((booking, index) => {
+//                 const totalAmount =
+//                   selectedProperty.lookingFor === 'rent'
+//                     ? selectedProperty.depositAmount ?? 0
+//                     : selectedProperty.sellPrice ?? 0;
+
+//                 const balanceAmountToPay = totalAmount - booking.amountPaid + 5000;
+
+//                 return (
+//                   <div key={index} className="bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+//                     <p className="text-lg font-semibold mb-2 text-gray-800">Booking by: {booking.userName}</p>
+//                     <p className="text-sm text-gray-600 mb-2">Booked on: {new Date(booking.bookingDate).toLocaleDateString()}</p>
+//                     <p className="text-sm text-gray-600 mb-2">
+//                       Amount Paid: ₹{booking.amountPaid.toLocaleString('en-IN')}
+//                     </p>
+//                     <p className="text-sm text-gray-600 mb-2">
+//                       Total Amount: ₹{totalAmount.toLocaleString('en-IN')}
+//                     </p>
+//                     <p className="text-sm text-gray-600 mb-2">
+//                       Balance Amount: ₹{balanceAmountToPay.toLocaleString('en-IN')} (Including Booking Fee)
+//                     </p>
+//                     <button
+//                       onClick={() => handleCloseDeal(booking._id)}
+//                       className="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold text-sm hover:bg-blue-600 transition-colors"
+//                     >
+//                       Close Deal
+//                     </button>
+//                   </div>
+//                 );
+//               })}
+//             </div>
 //           </div>
-//           <button
-//             onClick={closeBookingModal}
-//             className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
-//           >
-//             Close
-//           </button>
-//         </Modal>
-//       )}
+//         )}
+//       </Modal>
 //     </div>
 //   );
 // };
 
-
 // const getStatusColor = (status: string) => {
 //   switch (status) {
 //     case 'verified':
-//       return 'bg-green-200 text-green-600';
-//     case 'rejected':
-//       return 'bg-red-200 text-red-600';
+//       return 'bg-green-200 text-green-800';
 //     case 'pending':
-//       return 'bg-blue-200 text-blue-600';
-//     case 'booked': // Adding status for booked
-//       return 'bg-purple-200 text-purple-600';
+//       return 'bg-yellow-200 text-yellow-800';
+//     case 'booked':
+//       return 'bg-gray-300 text-gray-700';
+//     case 'rejected':
+//       return 'bg-red-200 text-red-800';
 //     default:
-//       return 'bg-gray-200 text-gray-600';
+//       return 'bg-gray-200 text-gray-800';
 //   }
 // };
 
 // export default Properties;
-
-
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllPropertiesQuery } from '../../../../store/propertyApi';
 import loaderGif from '/assets/gifff.gif';
 import Modal from 'react-modal';
-import toast from 'react-hot-toast'
-const Properties = () => {
+import { FaRegTimesCircle } from "react-icons/fa";
+import { useCloseDealMutation } from '../../../../store/bookingApi';
+
+interface Property {
+  _id: string;
+  propertyType: string;
+  city: string;
+  rentAmount?: number;
+  depositAmount?: number;
+  sellPrice?: number;
+  totalArea?: number;
+  status: string;
+  mediaFiles: string[];
+  sponsorship?: { isSponsored: boolean };
+  bookedDetails?: BookedDetail[];
+  lookingFor: string;
+  rejectedReason?: string;
+}
+
+interface BookedDetail {
+  _id: string;
+  userName: string;
+  bookingDate: string;
+  amountPaid: number;
+  totalAmount: number;
+  isDealClosed: boolean;
+}
+
+const Properties: React.FC = () => {
   const navigate = useNavigate();
-  const { data: properties = [], error, isLoading } = useGetAllPropertiesQuery({});
-  const [filteredProperties, setFilteredProperties] = useState<any[]>([]);
-  const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
+  const { data: properties = [], error, isLoading ,refetch} = useGetAllPropertiesQuery({});
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [closeDeal] = useCloseDealMutation();
 
   useEffect(() => {
     if (properties) {
@@ -543,174 +299,211 @@ const Properties = () => {
     setSelectedProperty(null);
   };
 
-  const handleCloseDeal = (propertyId: string, booking: BookedDetail, bookingIndex: number) => {
-    if (booking.amountPaid === booking.totalAmount) {
-      // Update the selected property state locally
-      const updatedBookingDetails = [...(selectedProperty?.bookedDetails || [])];
-      updatedBookingDetails[bookingIndex] = {
-        ...booking,
-        isDealClosed: true, // Mark the deal as closed
-      };
-
-      const updatedProperty = {
-        ...selectedProperty!,
-        status: 'booked', // Update property status to booked
-        bookedDetails: updatedBookingDetails,
-      };
-
-      // Update the properties array
-      setSelectedProperty(updatedProperty);
-      setFilteredProperties((prev) =>
-        prev.map((property) => (property._id === propertyId ? updatedProperty : property))
-      );
-
-      // Show a success toast message
-      toast.success('Deal closed successfully!');
-    } else {
-      alert('Cannot close the deal until full payment is made.');
-    }
+  const handleCloseDeal = async (bookingId: string) => {
+    await closeDeal({ bookingId }).unwrap();
   };
 
-  if (isLoading)
+  const handleResubmit = async (propertyId: string) => {
+    navigate(`/addproperty/${propertyId}`)
+    refetch()
+  };
+
+  const renderPropertyCard = (property: Property) => {
+    const isBooked = property.status === 'booked';
+
     return (
-      <div className="flex justify-center items-center h-screen">
-        <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
+      <div key={property._id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+        <div onClick={() => handleNavigate(property._id)} className="relative h-48 cursor-pointer">
+          <img
+            src={property.mediaFiles[0]}
+            alt={property.propertyType}
+            className="w-full h-full object-cover"
+          />
+          <span
+            className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(property.status)}`}
+          >
+            {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
+          </span>
+          {!isBooked && property.sponsorship?.isSponsored && (
+            <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800">
+              Sponsored
+            </span>
+          )}
+        </div>
+        <div className="p-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">{property.propertyType}</h2>
+          <p className="text-md text-gray-600 mb-2">{property.city}</p>
+          <div className="flex justify-between items-center mb-2">
+            {property.rentAmount !== 0 && (
+              <div>
+                <div className="text-lg font-medium text-green-600">
+                  ₹{(property.rentAmount ?? 0).toLocaleString('en-IN')} / month
+                </div>
+                <p className="text-xs text-gray-500">
+                  Deposit: ₹{property.depositAmount?.toLocaleString('en-IN')}
+                </p>
+              </div>
+            )}
+            {property.sellPrice !== 0 && (
+              <div className="text-lg font-medium text-green-600">
+                ₹{(property.sellPrice ?? 0).toLocaleString('en-IN')}
+              </div>
+            )}
+          </div>
+          {property.totalArea && (
+            <p className="text-sm text-gray-600 mb-2">Area: {property.totalArea} sq ft</p>
+          )}
+          {property.status === 'rejected' && (
+            <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-3">
+              <h3 className="text-sm font-semibold text-red-800 mb-2">Rejected Reason</h3>
+              <p className="text-xs text-red-700 mb-2">{property.reason}</p>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleResubmit(property._id);
+                }}
+                className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors text-md font-semibold"
+              >
+                Resubmit
+              </button>
+            </div>
+          )}
+          {isBooked ? (
+            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <h3 className="text-sm font-semibold text-blue-800 mb-2">Booking Details</h3>
+              {property.bookedDetails && property.bookedDetails.length > 0 && (
+                <div className="space-y-2">
+                  {property.bookedDetails.slice(0, 2).map((booking, index) => (
+                    <div key={index} className="text-xs text-blue-700">
+                      <p className="font-medium">{booking.userName}</p>
+                      <p>Booked: {new Date(booking.bookingDate).toLocaleDateString()}</p>
+                      <p>Paid: ₹{booking.amountPaid.toLocaleString('en-IN')}</p>
+                    </div>
+                  ))}
+                  {property.bookedDetails.length > 2 && (
+                    <p className="text-xs text-blue-600 font-medium">
+                      +{property.bookedDetails.length - 2} more bookings
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              {property.status !== 'rejected' && (
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-md font-semibold text-blue-900">
+                      {(property.bookedDetails?.length ?? 0)} {((property.bookedDetails?.length ?? 0) > 1 ? 'Bookings' : 'Booking')}
+                    </div>
+                    {property.bookedDetails && property.bookedDetails.length > 0 && (
+                      <button
+                        onClick={() => openBookingModal(property)}
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors px-2 py-1 border border-blue-500 rounded-full hover:bg-blue-100"
+                      >
+                        View All
+                      </button>
+                    )}
+                  </div>
+                  <div className="text-xs text-blue-700">
+                    {property.bookedDetails?.slice(0, 1).map((booking, index) => (
+                      <div key={index}>
+                        <p className="mb-1">
+                          <span className="font-medium">Latest Booking:</span> {booking.userName}
+                        </p>
+                        <p className="text-xs text-blue-600">
+                          Booked on {new Date(booking.bookingDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {!property.sponsorship?.isSponsored && property.status !== 'rejected' && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSponsorNavigate(property._id);
+                  }}
+                  className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors text-md font-semibold"
+                >
+                  Make Sponsored
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </div>
     );
-  if (error) return <div>Error loading properties</div>;
+  };
+
+  if (isLoading) return (
+    <div className="flex justify-center items-center h-screen">
+      <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
+    </div>
+  );
+
+  if (error) return <div className="text-center text-red-600 mt-8">Error loading properties. Please try again later.</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-semibold text-center mb-6">My Listed Properties</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="container mx-auto px-4 py-8 bg-gradient-to-b">
+      <h1 className="text-4xl font-bold text-center mb-10 text-gray-800 shadow-text">My Listed Properties</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProperties.length > 0 ? (
-          filteredProperties.map((property) => (
-            <div
-              key={property._id}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
-            >
-              <div onClick={() => handleNavigate(property._id)} className="relative h-40">
-                <img
-                  src={property.mediaFiles[0] || '/placeholder.jpg'}
-                  alt={property.propertyType}
-                  className="w-full h-full object-cover"
-                />
-                <span
-                  className={`absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                    property.status
-                  )}`}
-                >
-                  {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
-                </span>
-                {property.sponsorship?.isSponsored && (
-                  <span className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-300 text-yellow-800">
-                    Sponsored
-                  </span>
-                )}
-              </div>
-              <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-800">{property.propertyType}</h2>
-                <p className="text-sm text-gray-600">{property.city}</p>
-
-                {property.rentAmount && (
-                  <>
-                    <div className="mt-2 text-sm font-medium text-green-600">
-                      ₹{property.rentAmount.toLocaleString('en-IN')} / month
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      Deposit: ₹{property.depositAmount?.toLocaleString('en-IN')}
-                    </p>
-                  </>
-                )}
-                {property.sellPrice && (
-                  <>
-                    <div className="mt-2 text-sm font-medium text-green-600">
-                      ₹{property.sellPrice.toLocaleString('en-IN')}
-                    </div>
-                  </>
-                )}
-
-                {property.totalArea && (
-                  <p className="text-xs text-gray-500">Area: {property.totalArea} sq ft</p>
-                )}
-
-                {property.bookedDetails && property.bookedDetails.length > 0 && (
-                  <div className="mt-4">
-                    <div className="text-sm font-semibold text-gray-700">
-                      {property.bookedDetails.length} booking(s)
-                    </div>
-                    <button
-                      onClick={() => openBookingModal(property)}
-                      className="mt-2 text-sm font-semibold text-blue-600 underline"
-                    >
-                      View Bookings
-                    </button>
-                  </div>
-                )}
-
-                {!property.sponsorship?.isSponsored && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSponsorNavigate(property._id);
-                    }}
-                    className="mt-4 w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors"
-                  >
-                    Make Sponsored
-                  </button>
-                )}
-              </div>
-            </div>
-          ))
+          filteredProperties.map(renderPropertyCard)
         ) : (
-          <div className="text-center text-gray-600">No properties found</div>
+          <div className="col-span-full text-center text-gray-600
+
+">
+            No properties found.
+          </div>
         )}
       </div>
-
       {selectedProperty && (
         <Modal
           isOpen={!!selectedProperty}
           onRequestClose={closeBookingModal}
-          contentLabel="Booking Details"
-          className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto mt-20"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+          ariaHideApp={false}
+          contentLabel="Booking Details Modal"
+          style={{
+            content: {
+              maxWidth: '500px',
+              margin: 'auto',
+              padding: '20px',
+              borderRadius: '10px',
+              background: '#fff',
+              border: 'none',
+            },
+            overlay: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          }}
         >
-          <h2 className="text-2xl font-semibold mb-4">
-            {selectedProperty.propertyType} - {selectedProperty.city}
-          </h2>
+          <div className="flex justify-end">
+            <FaRegTimesCircle
+              className="cursor-pointer text-2xl text-gray-600 hover:text-red-600"
+              onClick={closeBookingModal}
+            />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Booking Details</h2>
           <div className="space-y-4">
-            {selectedProperty.bookedDetails?.map((booking, index) => (
-              <div key={index} className="border-b pb-2">
-                <p>
-                  <strong>Booked by:</strong> {booking.userName}
-                </p>
-                <p>
-                  <strong>Date:</strong> {new Date(booking.bookingDate).toLocaleDateString()}
-                </p>
-                {!booking.isDealClosed ? (
+            {selectedProperty?.bookedDetails?.map((booking, index) => (
+              <div key={index} className="text-sm text-gray-700">
+                <p className="font-medium">{booking.userName}</p>
+                <p>Booked: {new Date(booking.bookingDate).toLocaleDateString()}</p>
+                <p>Paid: ₹{booking.amountPaid.toLocaleString('en-IN')}</p>
+                <p>Balance: ₹{(booking.totalAmount - booking.amountPaid).toLocaleString('en-IN')}</p>
+                {!booking.isDealClosed && (
                   <button
-                    onClick={() => handleCloseDeal(selectedProperty._id, booking, index)}
-                    className={`mt-2 py-1 px-3 rounded-lg text-white ${
-                      booking.amountPaid === booking.totalAmount
-                        ? 'bg-green-500 hover:bg-green-600'
-                        : 'bg-gray-400 cursor-not-allowed'
-                    }`}
-                    disabled={booking.amountPaid !== booking.totalAmount}
+                    onClick={() => handleCloseDeal(booking._id)}
+                    className="mt-2 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors text-md font-semibold"
                   >
                     Close Deal
                   </button>
-                ) : (
-                  <p className="mt-2 text-green-700">Deal Closed</p>
                 )}
               </div>
             ))}
           </div>
-          <button
-            onClick={closeBookingModal}
-            className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors"
-          >
-            Close
-          </button>
         </Modal>
       )}
     </div>
@@ -719,16 +512,16 @@ const Properties = () => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'verified':
-      return 'bg-green-200 text-green-600';
-    case 'rejected':
-      return 'bg-red-200 text-red-600';
-    case 'pending':
-      return 'bg-blue-200 text-blue-600';
     case 'booked':
-      return 'bg-purple-200 text-purple-600';
+      return 'bg-blue-100 text-blue-800';
+    case 'rejected':
+      return 'bg-red-100 text-red-800';
+    case 'pending':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'approved':
+      return 'bg-green-100 text-green-800';
     default:
-      return 'bg-gray-200 text-gray-600';
+      return 'bg-gray-100 text-gray-800';
   }
 };
 

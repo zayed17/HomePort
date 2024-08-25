@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGetPropertyQuery } from '../../store/propertyApi';
-import { FaRegFlag, FaHeart, FaFan, FaRegWindowMaximize, FaLightbulb, FaBuilding, FaMapMarkerAlt, FaCompass, FaTv, FaRuler, FaCalendarAlt, FaCouch, FaWater, FaBed, FaShower, FaWindowMaximize, FaChair, FaCar, FaMotorcycle } from 'react-icons/fa';
+import { FaRegFlag, FaFan, FaRegWindowMaximize, FaLightbulb, FaBuilding, FaMapMarkerAlt, FaCompass, FaTv, FaRuler, FaCalendarAlt, FaCouch, FaWater, FaBed, FaShower, FaWindowMaximize, FaChair, FaCar, FaMotorcycle } from 'react-icons/fa';
 import { MdBalcony, MdOutlineMicrowave } from "react-icons/md";
 import { BiFridge, BiCabinet } from "react-icons/bi";
 import { TbAirConditioningDisabled } from "react-icons/tb";
@@ -14,6 +14,7 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import ConnectWithOwnerButton from '../connectButton';
 import ChatInterface from '../chat';
+import { useUserDetails } from '../../hooks/useUserDetails';
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,
@@ -60,6 +61,7 @@ const PropertyDetailsPage: React.FC = () => {
     'Furinsher': furinsherRef,
     'Parking Space and Property Features': featuresRef,
   };
+  const { userDetails } = useUserDetails();
 
   const [activeSection, setActiveSection] = useState<string>('Basic Information');
 
@@ -153,9 +155,9 @@ const PropertyDetailsPage: React.FC = () => {
         <ConnectWithOwnerButton
         ownerId={property.createdBy._id}
         ownerName={property.createdBy.name}
-        ownerPhoto={property.mediaFiles[0]}
+        ownerPhoto={'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fblack-contact-person-icon-on-white-background-vector-31046197&psig=AOvVaw3bz8wHQkL7E2YTdO3Mo4U3&ust=1724239471574000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPDOnNu6g4gDFQAAAAAdAAAAABAE'}
         onChatStart={handleChatStart} />
-{chatId && <ChatInterface chatId={chatId} />}
+          {chatId && <ChatInterface chatId={chatId} />}
         </div>
       </div>
 

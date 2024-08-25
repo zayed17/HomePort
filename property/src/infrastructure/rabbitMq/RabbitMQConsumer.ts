@@ -26,7 +26,6 @@ export class RabbitMQConsumer {
         await this.client.connect(rabbitmqConfig.url);
         const channel = await this.client.getChannel();
 
-        // User updates setup
         await channel.assertExchange(rabbitmqConfig.exchanges.userUpdates, 'topic', { durable: true });
         await channel.assertQueue(rabbitmqConfig.queues.updateUser, { durable: true });
         await channel.bindQueue(rabbitmqConfig.queues.updateUser, rabbitmqConfig.exchanges.userUpdates, rabbitmqConfig.routingKeys.userUpdateKey);
@@ -37,12 +36,15 @@ export class RabbitMQConsumer {
             }
         }, { noAck: true });
 
-        // Booking updates setup
+
+
+
         await channel.assertExchange(rabbitmqConfig.exchanges.bookingUpdates, 'direct', { durable: true });
         await channel.assertQueue(rabbitmqConfig.queues.bookings, { durable: true });
         await channel.bindQueue(rabbitmqConfig.queues.bookings, rabbitmqConfig.exchanges.bookingUpdates, rabbitmqConfig.routingKeys.bookingKey);
 
         channel.consume(rabbitmqConfig.queues.bookings, async (msg) => {
+            console.log(msg,"checking of booking")
             if (msg) {
                 await this.bookingListener.handle(msg);
             }

@@ -100,3 +100,17 @@ export interface ChangePasswordFormInput {
   newPassword:string;
   confirmPassword:string;
 }
+
+
+export const propertyDetailsSchema = Yup.object({
+  propertyType: Yup.string().required('Property type is required'),
+  facing: Yup.string().required('Property facing is required'),
+  propertyAge: Yup.string().required('Property age is required'),
+  bedrooms: Yup.number().min(0, 'Number of bedrooms cannot be negative').required('Number of bedrooms is required'),
+  bathrooms: Yup.number().min(0, 'Number of bathrooms cannot be negative').required('Number of bathrooms is required'),
+  balconies: Yup.number().min(0, 'Number of balconies cannot be negative').required('Number of balconies is required'),
+  totalArea: Yup.number().min(0, 'Total area cannot be negative').required('Total area is required'),
+  hasWell: Yup.string().required('Well status is required'),
+  furnisherType: Yup.string().required('Furnisher type is required'),
+  description: Yup.string().required('Description is required'),
+});

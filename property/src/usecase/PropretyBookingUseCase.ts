@@ -4,7 +4,8 @@ import { PropertyInterface } from '../repositories';
 export class PropertyBookingUseCase {
     constructor(private propertyRepository: PropertyInterface) {}
 
-    async update(propertyId: string, userId: string, bookingDate: Date, name: string): Promise<void> {
+    async update(propertyId: string, userId: string, bookingDate: Date, name: string,amountPaid:number,bookingId:string): Promise<void> {
+        console.log(amountPaid,"checking frpm uscesa ",typeof(amountPaid))
         try {
             const existingProperty = await this.propertyRepository.findOne({ _id: propertyId });
 
@@ -12,7 +13,7 @@ export class PropertyBookingUseCase {
                 throw new Error(`Property with ID ${propertyId} not found`);
             }
 
-            existingProperty?.bookedDetails?.push({ userId, bookingDate, userName: name });
+            existingProperty?.bookedDetails?.push({ userId, bookingDate, userName: name,amountPaid ,_id:bookingId});
 
             const updatedProperty: Partial<Property> = {
                 bookedDetails: existingProperty.bookedDetails,

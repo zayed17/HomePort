@@ -30,6 +30,15 @@ const ProfileSidebar: React.FC = () => {
           </li>
           <li className="my-6">
             <NavLink 
+              to="/profile/dashboard" 
+              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/dashboard' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
+            >
+              <FaCreditCard className="md:mr-2" />
+              <span className="hidden md:block">dashboard</span>
+            </NavLink>
+          </li>
+          <li className="my-6">
+            <NavLink 
               to="/profile/properties" 
               className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/properties' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
             >
@@ -46,15 +55,7 @@ const ProfileSidebar: React.FC = () => {
               <span className="hidden md:block">ADs </span>
             </NavLink>
           </li>
-          {/* <li className="my-6">
-            <NavLink 
-              to="/profile/payment" 
-              className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/payment' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
-            >
-              <FaCreditCard className="md:mr-2" />
-              <span className="hidden md:block">Payment</span>
-            </NavLink>
-          </li> */}
+
           <li className="my-6">
             <NavLink 
               to="/profile/booked" 

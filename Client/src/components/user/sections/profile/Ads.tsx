@@ -4,7 +4,7 @@ const Ads = () => {
   const navigate = useNavigate();
 
   const handleAddAdClick = () => {
-    navigate('/create-ad'); // Adjust the path to your ad creation page
+    navigate('/create-ad');
   };
 
   return (

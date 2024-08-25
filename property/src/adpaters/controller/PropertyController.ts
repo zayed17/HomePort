@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase} from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase} from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
-
+import Stripe from 'stripe'; 
+const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
 
 export class PropertyController {
   constructor(
@@ -21,7 +22,9 @@ export class PropertyController {
     private addReportUseCase: AddReportUseCase,
     private findAllReportsUseCase: FindAllReportsUseCase,
     private paymentUseCase: PaymentUseCase,
-    private updatePropertyUseCase: UpdatePropertyUseCase
+    private updatePropertyUseCase: UpdatePropertyUseCase,
+    private dashboardPropertiesUseCase:DashboardPropertiesUseCase,
+    private repostPropertyUseCase:RepostPropertyUseCase
 
 
 
@@ -126,15 +129,52 @@ export class PropertyController {
     }
   }
 
-  async SuccessPayment(req: any, res: Response, next: NextFunction): Promise<void> {
-    const { sessionId, propertyId } = req.body;
+  async createPaymentIntent(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
-      const result = await this.successPaymentUseCase.successPayment(sessionId, propertyId);
-      res.status(200).json(result);
+      console.log(req.body,"checking body .ocm ")
+      const { amount, propertyId } = req.body;
+      const id = req.user._id;
+      const session = await this.paymentUseCase.execute(amount, propertyId, id);
+      res.json({ id: session.id });
     } catch (error) {
       next(error)
     }
   }
+
+  async handleWebhook(req: Request, res: Response, next: NextFunction): Promise<any> {
+    const sig = req.headers['stripe-signature'] as string;
+    const rawBody = req.body as Buffer;
+    const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0'
+
+    if (!sig) {
+      return res.status(400).send('Missing Stripe signature');
+    }
+
+    let event: Stripe.Event;
+    try {
+      event = Stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+    } catch (err: any) {
+      console.error('Webhook error:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const sessionId = session.id;
+      const propertyId = session?.metadata?.propertyId!
+
+      try {
+        const result = await this.successPaymentUseCase.processPayment(sessionId, propertyId);
+        res.status(200).json(result);
+      } catch (error) {
+        next(error);
+      }
+    } else {
+      console.warn(`Unhandled event type: ${event.type}`);
+      res.status(200).send('Event received');
+    }
+  }
+
 
   async findFavourites(req: any, res: Response, next: NextFunction): Promise<void> {
     const userId = req.user._id
@@ -170,15 +210,26 @@ export class PropertyController {
     }
   }
 
-
-  async createPaymentIntent(req: any, res: Response, next: NextFunction): Promise<void> {
+  async dashboardProperties(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { amount, propertyId } = req.body;
-      const id = req.user._id;
-      const session = await this.paymentUseCase.execute(amount, propertyId, id);
-      res.json({ id: session.id });
+      const id = req.user._id
+      const result = await this.dashboardPropertiesUseCase.FindAllProperties(id);
+      // console.log(result)
+      res.status(201).json(result);
     } catch (error) {
-      next(error)
+      next(error);
+    }
+  }
+
+  async RepostProperty(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const files = req.files as Express.Multer.File[];
+      const formData = req.body;
+      console.log(formData)
+      const result = await this.repostPropertyUseCase.RepostProperty(files, formData);
+      res.status(201).json({ message: 'Property added successfully', result });
+    } catch (error) {
+      next(error);
     }
   }
 }

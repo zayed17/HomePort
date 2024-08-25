@@ -100,7 +100,7 @@ const UserDetails: React.FC = () => {
     );
   }
   return (
-    <div className="max-w-lg mx-auto bg-white shadow-md rounded my-10 px-8 pt-6 pb-4 mb-4 relative">
+    <div className="max-w-lg mx-auto  shadow-md rounded my-10 px-8 pt-6 pb-4 mb-4 relative">
       <div className="absolute top-0 right-0 mt-2 mr-2">
         <FaEdit className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={handleEditClick} />
       </div>

@@ -78,12 +78,10 @@ const userApi = createApi({
           body: credentials,
         }),
       }), 
-      findAllUsers: builder.mutation({
-        query: () => ({
-          url: `${URL}/findAll`,
-          method: 'GET',
-        }),
-      }), 
+      findAllUsers: builder.query({
+        query: () => `${URL}/findAll`,  
+        keepUnusedDataFor: 60, 
+      }),
       blockAndUnblock: builder.mutation({
         query: (credentials) => ({
           url: `${URL}/block-unblock`,
@@ -94,6 +92,6 @@ const userApi = createApi({
   }),
 });
 
-export const { useLoginInMutation  ,useSignUpMutation, useOtpVerifyMutation,useGetUserQuery , useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation,useVerifyEmailMutation,useForgotPasswordMutation,useChangePasswordMutation,useFindAllUsersMutation,useBlockAndUnblockMutation} = userApi;
+export const { useLoginInMutation  ,useSignUpMutation, useOtpVerifyMutation,useGetUserQuery , useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation,useVerifyEmailMutation,useForgotPasswordMutation,useChangePasswordMutation,useFindAllUsersQuery,useBlockAndUnblockMutation} = userApi;
 
 export default userApi;

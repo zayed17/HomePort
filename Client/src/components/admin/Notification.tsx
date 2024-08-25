@@ -11,8 +11,8 @@ const Notification: React.FC = () => {
   const [selectedNotification, setSelectedNotification] = useState<any>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  const { data: properties = [], isLoading: isLoadingProperties, isError: isErrorProperties, refetch: refetchProperties } = useGetPendingPropertiesQuery();
-  const { data: reports = [], isLoading: isLoadingReports, isError: isErrorReports, refetch: refetchReports } = useGetReportsQuery();
+  const { data: properties = [], isLoading: isLoadingProperties, isError: isErrorProperties, refetch: refetchProperties } = useGetPendingPropertiesQuery({});
+  const { data: reports = [], isLoading: isLoadingReports, isError: isErrorReports, refetch: refetchReports } = useGetReportsQuery({});
 
   useEffect(() => {
     if (!isLoadingProperties && !isLoadingReports) {
@@ -26,10 +26,10 @@ const Notification: React.FC = () => {
       setNotifications(prevNotifications => [report, ...prevNotifications]);
     };
 
-    socket.on('newReport', handleNewReport);
+    socket?.on('newReport', handleNewReport);
 
     return () => {
-      socket.off('newReport', handleNewReport);
+      socket?.off('newReport', handleNewReport);
     };
   }, []);
 
@@ -79,7 +79,7 @@ const Notification: React.FC = () => {
         )}
       </button>
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-3 w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform origin-top-right">
+        <div className="absolute right-0 mt-3 w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform origin-top-right z-50">
           <div className="flex justify-between items-center py-4 px-6 bg-gradient-to-r to-DarkBlue from-LightdarkBlue text-white">
             <h3 className="font-bold text-lg">Notifications</h3>
             <button onClick={handleDropdownToggle} className="text-white hover:text-gray-200 transition-colors duration-200">

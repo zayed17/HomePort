@@ -8,9 +8,12 @@ interface BookingDetails {
   userId: string;
   userName: string;
   bookingDate: Date;
+  amountPaid:number;
+  _id:string;
 }
 
 export interface PropertyData {
+  _id?:string;
   status: string;
   isBooked:boolean;
   reason?: string;
@@ -54,10 +57,12 @@ export interface PropertyData {
     details?: Sponsorship; 
   };
   bookedDetails?: BookingDetails[]; 
+  updatedAt:Date;
 }
 
 
 export class Property {
+  _id?:string;
   status: string;
   reason?: string;
   isBooked:boolean;
@@ -96,6 +101,7 @@ export class Property {
   lookingFor: string;
   createdBy: string;
   isBlock: boolean;
+  updatedAt:Date;
   sponsorship?: {
     isSponsored: boolean;
     details?: Sponsorship;
@@ -103,6 +109,7 @@ export class Property {
   bookedDetails?: BookingDetails[]; 
 
   constructor({
+    _id,
     status,
     reason,
     isBooked,
@@ -122,6 +129,7 @@ export class Property {
     totalArea,
     hasWell,
     furnisherType,
+    updatedAt,
     electronics,
     rentAmount,
     isNegotiable,
@@ -144,6 +152,7 @@ export class Property {
     sponsorship,
     bookedDetails
   }: PropertyData) {
+    this._id = _id;
     this.status = status;
     this.reason = reason;
     this.isBooked = isBooked;
@@ -163,6 +172,7 @@ export class Property {
     this.totalArea = totalArea;
     this.noOfReports = noOfReports;
     this.hasWell = hasWell;
+    this.updatedAt = updatedAt;
     this.furnisherType = furnisherType;
     this.electronics = electronics;
     this.rentAmount = rentAmount;

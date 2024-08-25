@@ -25,4 +25,9 @@ export class PropertyRepository implements PropertyInterface {
   async updateProperty(_id: string, property: Partial<Property>): Promise<void> {
     await PropertyModel.updateOne({ _id }, { $set: property })
   }
+
+  async unsetFieldFromProperty(_id: string, fieldName: string): Promise<void> {
+    await PropertyModel.updateOne({ _id },{ $unset: { [fieldName]: "" } })
+  }
+
 }

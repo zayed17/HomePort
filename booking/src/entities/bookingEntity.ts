@@ -1,25 +1,28 @@
 export interface BookingData {
+    _id?:string;
     userId: string;
-    propertyId: string; 
+    propertyId: any; 
     bookingDate: Date; 
     totalAmount: number; 
-    amountPaid:string;
-    status: 'pending' | 'confirmed' | 'canceled'; 
+    amountPaid:number;
+    status: 'pending' | 'booked' | 'canceled'; 
     paymentMethod: 'credit_card' | 'paypal' | 'bank_transfer';
     transactionId?: string; 
 }
 
 export class Booking {
+    _id?:string;
     userId: string;
-    propertyId: string;
+    propertyId: any;
     bookingDate: Date;
     totalAmount: number;
-    amountPaid:string;
-    status: 'pending' | 'confirmed' | 'canceled';
+    amountPaid:number;
+    status: 'pending' | 'booked' | 'canceled';
     paymentMethod: 'credit_card' | 'paypal' | 'bank_transfer';
     transactionId?: string;
 
     constructor({
+        _id;
         userId,
         propertyId,
         bookingDate,
@@ -29,6 +32,7 @@ export class Booking {
         paymentMethod,
         transactionId,
     }: BookingData) {
+        this._id = _id;
         this.userId = userId;
         this.propertyId = propertyId;
         this.bookingDate = bookingDate;

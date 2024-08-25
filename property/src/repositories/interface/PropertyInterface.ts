@@ -6,4 +6,5 @@ export interface PropertyInterface {
   findOne(filter: any): Promise<Property | null>;
   updateProperty(_id: string, property: Partial<Property>): Promise<void>;
   findOneWithPopulation(filter: any,populate:string): Promise<Property | null>;
+  unsetFieldFromProperty(_id: string, fieldName: string): Promise<void>; 
 }

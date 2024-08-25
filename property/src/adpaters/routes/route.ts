@@ -1,7 +1,7 @@
 import { Router } from "express";
 import  { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase} from '../../usecase';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase} from '../../usecase';
 import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import { RabbitMQPublisher } from '../../infrastructure/rabbitMq/RabbitMQPulisher';
@@ -43,13 +43,13 @@ const addReportUseCase = new AddReportUseCase(reportPropertyRepository)
 const findAllReportsUseCase = new FindAllReportsUseCase(reportPropertyRepository)
 const paymentUseCase = new PaymentUseCase(paymentService,rabbitMQPublisher)
 const updatePropertyUseCase = new UpdatePropertyUseCase(propertyRepository)
-
-
+const dashboardPropertiesUseCase = new DashboardPropertiesUseCase(propertyRepository)
+const rabbitMqepostPropertyUseCase = new RepostPropertyUseCase(s3Repository, propertyRepository)
 
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase);
 
 const router = Router();
 
@@ -57,13 +57,22 @@ router.post('/add-property',authenticateToken(['user']),checking, upload ,(req, 
 router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.user._id
-        console.log('this is workding')
         const properties = await PropertyModel.find({status: 'verified',createdBy: { $ne: userId }}).populate('createdBy').sort({ 'sponsorship.isSponsored': -1 });
       res.json(properties); 
     } catch (error) {
       next(error); 
     }
   });
+
+router.get('/list-properties-public',  async (req: any, res: Response, next: NextFunction) => {
+  try {
+      const properties = await PropertyModel.find({status:'verified'}).populate('createdBy').sort({ 'sponsorship.isSponsored': -1 });
+
+      res.json(properties); 
+  } catch (error) {
+      next(error); 
+  }
+});
 router.get('/properties/pending',(req, res, next) => propertyController.getPendingProperties(req, res, next));
 router.post('/properties/verify/:id',(req, res, next) => propertyController.verifyProperty(req, res, next));
 router.post('/properties/reject/:id',(req, res, next) => propertyController.rejectProperty(req, res, next));
@@ -71,12 +80,14 @@ router.get('/property/:id',(req, res, next) => propertyController.getProperty(re
 router.get('/properties',authenticateToken(['user']),(req, res, next) => propertyController.findAllProperties(req, res, next));
 router.get('/adminProperties',(req, res, next) => propertyController.findAdminProperties(req, res, next));
 router.patch('/block-unblock',(req, res, next) => propertyController.blockUblock(req, res, next));
-
+router.get('/dashboard-properties',authenticateToken(['user']),(req, res, next) => propertyController.dashboardProperties(req, res, next));
 router.patch('/favorite-update',authenticateToken(['user']),(req, res, next) => propertyController.toggleFavourite(req, res, next));
 router.post('/payment-intent',authenticateToken(['user']),checking,(req, res, next) => propertyController.createPaymentIntent(req, res, next));
-router.post('/payment-success',(req, res, next) => propertyController.SuccessPayment(req, res, next));
+router.post('/sponsored-success',(req, res, next) => propertyController.handleWebhook(req, res, next));
 router.get('/favourite-property',authenticateToken(['user']),(req, res, next) => propertyController.findFavourites(req, res, next));
 router.post('/report-property',authenticateToken(['user']),(req, res, next) => propertyController.addReport(req, res, next));
 router.get('/reports',(req, res, next) => propertyController.findReports(req, res, next));
+router.post('/update-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.RepostProperty(req, res, next));
 
-export default router;
+
+export default router;    

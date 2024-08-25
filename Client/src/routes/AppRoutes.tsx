@@ -23,7 +23,9 @@ import Favourites from '../pages/user/Favourites';
 import Subscription from '../pages/admin/Subscription';
 import BookingPage from '../pages/user/BookingPage';
 import SubscriptionPage from '../pages/user/SubscriptionPage';
-import ChatInterface from '../components/chat';
+import ChatPage from '../pages/user/ChatPage';
+import BookingDetails from '../pages/user/BookedSinglePage';
+import Dashboard from '../pages/user/Dashboard';
 const AppRoutes = () => {
   return (
     <Router>
@@ -35,17 +37,23 @@ const AppRoutes = () => {
           <Route path="/property/:id" element={<PropertyDetails />} />
           <Route path="/sponsor/:id" element={<SponserPage />} />
           <Route path="/addproperty" element={<PropertyDetailsForm />} />
+          <Route path="/addproperty/:propertyId" element={<PropertyDetailsForm />} />
+
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/create-ad" element={<CreateAdPage />} />
           <Route path="/booking/:id" element={<BookingPage />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/profile/dashboard" element={<Dashboard />} />
           <Route path="/profile/details" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
           <Route path="/profile/properties" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
           <Route path="/profile/payment" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
           <Route path="/profile/booked" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PostedPage} />} />
           <Route path="/profile/ads" element={< ProtectedRoute cookieName='token' redirectTo='/profile/details' element={AdsPage} />} />
-          <Route path="/chat/:chatId" element={<ChatInterface />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat/:chatId" element={<ChatPage />} />
+          <Route path="/booked-property/:id" element={<BookingDetails />} />
+
 
           //admin Side
           <Route path="/admin" element={< VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />

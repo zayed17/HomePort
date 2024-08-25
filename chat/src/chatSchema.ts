@@ -13,7 +13,7 @@ export interface IChat extends Document {
 const ParticipantSchema: Schema = new Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },
-  photo: { type: String, required: true },
+  photo: { type: String, required: false },
 });
 
 const ChatSchema: Schema = new Schema({
