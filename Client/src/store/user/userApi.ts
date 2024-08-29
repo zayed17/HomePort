@@ -89,9 +89,13 @@ const userApi = createApi({
           body: credentials,
         }),
       }), 
+      getUserAdminDashboard: builder.query({
+        query: () => `${URL}/admin-dashboard`,  
+        keepUnusedDataFor: 60, 
+      }),
   }),
 });
 
-export const { useLoginInMutation  ,useSignUpMutation, useOtpVerifyMutation,useGetUserQuery , useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation,useVerifyEmailMutation,useForgotPasswordMutation,useChangePasswordMutation,useFindAllUsersQuery,useBlockAndUnblockMutation} = userApi;
+export const { useLoginInMutation  ,useSignUpMutation, useOtpVerifyMutation,useGetUserQuery , useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation,useVerifyEmailMutation,useForgotPasswordMutation,useChangePasswordMutation,useFindAllUsersQuery,useBlockAndUnblockMutation,useGetUserAdminDashboardQuery} = userApi;
 
 export default userApi;

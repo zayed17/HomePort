@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase} from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase} from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 import Stripe from 'stripe'; 
 const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
-
 export class PropertyController {
   constructor(
     private addPropertyUseCase: AddPropertyUseCase,
@@ -24,7 +23,8 @@ export class PropertyController {
     private paymentUseCase: PaymentUseCase,
     private updatePropertyUseCase: UpdatePropertyUseCase,
     private dashboardPropertiesUseCase:DashboardPropertiesUseCase,
-    private repostPropertyUseCase:RepostPropertyUseCase
+    private repostPropertyUseCase:RepostPropertyUseCase,
+    private adminDashboardUseCase:AdminDashboardUseCase
 
 
 
@@ -100,6 +100,15 @@ export class PropertyController {
   async findAdminProperties(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await this.findAdminPropertiesUseCase.FindAdminProperties();
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAdminDashboard(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await this.adminDashboardUseCase.AdminDashboard();
       res.status(201).json(result);
     } catch (error) {
       next(error);

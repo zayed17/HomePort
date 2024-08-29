@@ -107,9 +107,13 @@ const propertyApi = createApi({
       query: () => `${URL}/dashboard-properties`,  
       keepUnusedDataFor: 60, 
     }),
+    getAdminDashboard: builder.query({
+      query: () => `${URL}/admin-dashboard`,  
+      keepUnusedDataFor: 60, 
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery} = propertyApi;
+export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery,useGetAdminDashboardQuery} = propertyApi;
 
 export default propertyApi;

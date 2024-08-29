@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema<User>({
     roles:{type:[String],default:["user"]},
     favourite:{type:[String],default:[]},
     subscriptionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
-});
+},{ timestamps: true });
 
 const UserModel = mongoose.model<User>('User', UserSchema);
 

@@ -1,8 +1,9 @@
 import { Property } from '../entities/propertyEntity';
-import { PropertyInterface } from '../repositories';
+import { PropertyInterface,NotificationInterface } from '../repositories';
 
 export class VerifyPropertyUseCase {
-  constructor(private propertyRepository: PropertyInterface) { }
+  constructor(private propertyRepository: PropertyInterface,
+              private notificationRepository : NotificationInterface) { }
 
   async verifyProperty(id: string): Promise<void> {
     console.log(id, "id checking")
@@ -16,5 +17,6 @@ export class VerifyPropertyUseCase {
     };
 
     await this.propertyRepository.updateProperty(id, updatedProperty);
+    await this.notificationRepository.sendNotification('propertyVerified', {status: 'verified'});
   }
 }

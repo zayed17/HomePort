@@ -1,8 +1,8 @@
 import { Router } from "express";
 import  { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase} from '../../usecase';
-import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository } from '../../repositories';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase} from '../../usecase';
+import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository,NotificationRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import { RabbitMQPublisher } from '../../infrastructure/rabbitMq/RabbitMQPulisher';
 import upload from '../../infrastructure/middleware/multerMiddleware'
@@ -11,10 +11,8 @@ import { StripeService } from '../../infrastructure/Stripe/StripeService';
 import { PaymentService } from '../../service/PaymentService';
 import { authenticateToken } from 'homepackage'
 
-import Stripe from 'stripe';
 import { checking } from "./Just";
 
-const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB')
 
 const s3Service = new S3Service();
 const stripeService = new StripeService()
@@ -25,11 +23,12 @@ const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
 const rabbitMQPublisher = new RabbitMQPublisher('amqp://localhost')
+const notificationRepository = new NotificationRepository('http://localhost:3000')
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);
 const findPendingPropertyUseCase = new FindPendingPropertyUseCase(propertyRepository)
-const rejectPropertyUseCase = new RejectPropertyUseCase(propertyRepository)
-const verifyPropertyUseCase = new VerifyPropertyUseCase(propertyRepository)
+const rejectPropertyUseCase = new RejectPropertyUseCase(propertyRepository,notificationRepository)
+const verifyPropertyUseCase = new VerifyPropertyUseCase(propertyRepository,notificationRepository)
 const findPropertyUseCase = new FindPropertyUseCase(propertyRepository)
 const findAllPropertiesUseCase = new FindAllPropertiesUseCase(propertyRepository)
 const findAdminPropertiesUseCase = new FindAdminPropertiesUseCase(propertyRepository)
@@ -45,11 +44,12 @@ const paymentUseCase = new PaymentUseCase(paymentService,rabbitMQPublisher)
 const updatePropertyUseCase = new UpdatePropertyUseCase(propertyRepository)
 const dashboardPropertiesUseCase = new DashboardPropertiesUseCase(propertyRepository)
 const rabbitMqepostPropertyUseCase = new RepostPropertyUseCase(s3Repository, propertyRepository)
+const adminDashboardUseCase = new AdminDashboardUseCase(propertyRepository)
 
 
 
 // Initialize controllers with required use cases
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase,adminDashboardUseCase);
 
 const router = Router();
 
@@ -79,6 +79,7 @@ router.post('/properties/reject/:id',(req, res, next) => propertyController.reje
 router.get('/property/:id',(req, res, next) => propertyController.getProperty(req, res, next));
 router.get('/properties',authenticateToken(['user']),(req, res, next) => propertyController.findAllProperties(req, res, next));
 router.get('/adminProperties',(req, res, next) => propertyController.findAdminProperties(req, res, next));
+router.get('/admin-dashboard',(req, res, next) => propertyController.getAdminDashboard(req, res, next));
 router.patch('/block-unblock',(req, res, next) => propertyController.blockUblock(req, res, next));
 router.get('/dashboard-properties',authenticateToken(['user']),(req, res, next) => propertyController.dashboardProperties(req, res, next));
 router.patch('/favorite-update',authenticateToken(['user']),(req, res, next) => propertyController.toggleFavourite(req, res, next));

@@ -30,4 +30,9 @@ export class UserRepository implements UserInterface {
     async findAll(): Promise<User[]> {
         return await UserModel.find()
     }
+
+    async findAllWithPopulation(populate:string): Promise<any> {
+        return UserModel.find().populate(populate).exec()
+      }
+    
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaUser, FaHome, FaCreditCard, FaMapMarkerAlt, FaSignOutAlt , FaAd} from 'react-icons/fa'; // Import necessary icons
+import { FaUser, FaHome, FaMapMarkerAlt, FaSignOutAlt ,FaTachometerAlt, FaAd} from 'react-icons/fa'; 
 import { removeCookie } from '../../helpers/removeCookie';
 
 const ProfileSidebar: React.FC = () => {
@@ -33,7 +33,7 @@ const ProfileSidebar: React.FC = () => {
               to="/profile/dashboard" 
               className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/dashboard' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
             >
-              <FaCreditCard className="md:mr-2" />
+              <FaTachometerAlt className="md:mr-2" />
               <span className="hidden md:block">dashboard</span>
             </NavLink>
           </li>
@@ -46,7 +46,7 @@ const ProfileSidebar: React.FC = () => {
               <span className="hidden md:block">Properties</span>
             </NavLink>
           </li>
-          <li className="my-6">
+          {/* <li className="my-6">
             <NavLink 
               to="/profile/ads" 
               className={`w-full flex items-center py-2 my-4 px-4 rounded-lg ${location.pathname === '/profile/ads' ? 'bg-DarkBlue text-white' : 'text-white hover:bg-DarkBlue hover:text-white'}`}
@@ -54,7 +54,7 @@ const ProfileSidebar: React.FC = () => {
               <FaAd className="md:mr-2" />
               <span className="hidden md:block">ADs </span>
             </NavLink>
-          </li>
+          </li> */}
 
           <li className="my-6">
             <NavLink 

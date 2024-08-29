@@ -50,6 +50,7 @@ router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) 
               durationInDays,
               propertyLimit,
               sponsoredLimit,
+              price:amount/100
           }
       });
 

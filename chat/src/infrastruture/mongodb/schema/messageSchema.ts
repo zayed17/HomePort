@@ -5,6 +5,7 @@ interface Reaction {
 }
 
 interface MessageDocument extends Document {
+  _id?:string;
   chatId: string;
   senderId: string;
   message?: string;

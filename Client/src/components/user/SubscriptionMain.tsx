@@ -681,7 +681,6 @@ const SubscriptionHero: React.FC = () => {
         ))}
       </div>
 
-      {/* Modal for confirming subscription */}
       {showModal && selectedPlan && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
@@ -691,13 +690,13 @@ const SubscriptionHero: React.FC = () => {
               <p className="text-lg font-bold mb-6">Amount to be paid: ₹{priceDifference.toLocaleString('en-IN')}</p>
             )}
             <div className="flex justify-between items-center mb-4">
-              <label className="text-gray-600 font-medium">Auto Renew</label>
-              <input
+              {/* <label className="text-gray-600 font-medium">Auto Renew</label> */}
+              {/* <input
                 type="checkbox"
                 checked={autoRenew}
                 onChange={() => setAutoRenew(!autoRenew)}
                 className="w-6 h-6 text-blue-600 border-gray-300 rounded"
-              />
+              /> */}
             </div>
             <div className="flex justify-end">
               <button

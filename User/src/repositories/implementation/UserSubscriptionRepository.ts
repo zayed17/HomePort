@@ -11,6 +11,8 @@ export class UserSubscriptionRepository implements UserSubscriptionInterface {
   async findOne(filter: any): Promise<SubscriptionData | null> {
     return SubscriptionModel.findOne(filter)
   }
-
+  async findAll(): Promise<SubscriptionData[]> {
+    return SubscriptionModel.find()
+  }
 
 }

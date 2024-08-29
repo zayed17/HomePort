@@ -74,7 +74,7 @@ const ChatPage: React.FC = () => {
           )
         );
       });
-      socket.on('userStatusUpdate', (userId: string, status: 'online' | 'offline') => {
+      socket.on('userStatus', (userId: string, status: 'online' | 'offline') => {
         setUsersOnline((prevUsersOnline) => {
           const updatedUsersOnline = new Set(prevUsersOnline);
           if (status === 'online') {
@@ -89,7 +89,7 @@ const ChatPage: React.FC = () => {
       return () => {
         socket.off('receiveMessage');
         socket.off('receiveReaction');
-        socket.off('userStatusUpdate');
+        socket.off('userStatus');
       };
     }
   }, [socket, chatId]);
@@ -134,7 +134,7 @@ const ChatPage: React.FC = () => {
           console.error('Error uploading media:', error);
         } finally {
           setMedia(null);
-          setMediaUrl(null); // Clear the preview URL
+          setMediaUrl(null); 
           setUploadingMessageId(null);
         }
       }
@@ -287,7 +287,7 @@ const ChatPage: React.FC = () => {
                     <span className="block text-xs text-gray-400">
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </span>
-                    {msg.reactions.length > 0 && (
+                    {msg?.reactions?.length > 0 && (
                       <div className={`flex items-center space-x-1 ${msg.senderId === userDetails?._id ? 'justify-end' : 'justify-start'}`}>
                         {msg.reactions.map((reaction, index) => (
                           <span key={index} className="text-sm bg-gray-300 rounded-full px-2 py-1 shadow-sm">{reaction.type}</span>

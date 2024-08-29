@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { UserController } from '../express/controllers/UserController';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase } from '../../../usecases';
-import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository } from '../../../repositories';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase ,UserAdminDashboardUseCase} from '../../../usecases';
+import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository,UserSubscriptionRepository,NotificationRepository } from '../../../repositories';
 import { authenticateToken } from 'homepackage'
 import upload from '../express/middleware/uploadMiddleware'
 import { MessageBrokerService } from '../../../services/MessageBrokerService';
@@ -23,7 +23,8 @@ const emailService = new EmailRepository();
 const s3Repository = new S3Repository();
 const googleAuthRepository = new GoogleAuthRepository()
 const messageBrokerService = new MessageBrokerService()
-
+const userSubscriptionRepository = new UserSubscriptionRepository()
+const notificationRepository = new NotificationRepository('http://localhost:3000')
 
 const signUpUseCase = new SignUpUseCase(userRepository, otpService, emailService);
 const loginUseCase = new LoginUseCase(userRepository);
@@ -37,16 +38,16 @@ const verifyEmailUseCase = new VerifyEmailUseCase(userRepository)
 const forgotPasswordUseCase = new ForgotPasswordUseCase(userRepository)
 const changePasswordUseCase = new ChangePasswordUseCase(userRepository)
 const findAllUserUseCase = new FindAllUserUseCase(userRepository)
-const blockUnblockUseCase = new BlockUnblockUseCase(userRepository)
+const blockUnblockUseCase = new BlockUnblockUseCase(userRepository,notificationRepository)
 const publishUserUpdateUseCase = new PublishUserUpdateUseCase(messageBrokerService)
 const updateUserSubscriptionUsecase = new UpdateUserSubscriptionUsecase(userRepository)
-
+const userAdminDashboardUseCase = new UserAdminDashboardUseCase(userRepository,userSubscriptionRepository)
 const rabbitMQClient= new RabbitMQClient()
 const rabbitMQConsumer = new RabbitMQConsumer(rabbitMQClient, updateUserSubscriptionUsecase);
 
 rabbitMQConsumer.start().catch(console.error);
 
-const userController = new UserController(signUpUseCase, loginUseCase, otpVerificationUseCase, getUserDetailUseCase, updateUseCase, uploadImageUseCase, resendOTPUseCase, googleAuthUseCase, verifyEmailUseCase, forgotPasswordUseCase, changePasswordUseCase, findAllUserUseCase, blockUnblockUseCase, publishUserUpdateUseCase);
+const userController = new UserController(signUpUseCase, loginUseCase, otpVerificationUseCase, getUserDetailUseCase, updateUseCase, uploadImageUseCase, resendOTPUseCase, googleAuthUseCase, verifyEmailUseCase, forgotPasswordUseCase, changePasswordUseCase, findAllUserUseCase, blockUnblockUseCase, publishUserUpdateUseCase,userAdminDashboardUseCase);
 
 
 const router = Router();
@@ -68,6 +69,8 @@ router.get('/details/:id',(req, res, next) => userController.getDetails(req, res
 // router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
 router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));
 router.get('/findAll', (req, res, next) => userController.findAllUsers(req, res, next));
+router.get('/admin-dashboard', (req, res, next) => userController.userAdminDashboard(req, res, next));
+
 router.patch('/block-unblock', (req, res, next) => userController.blockUblock(req, res, next));
 
 router.post('/subscription', async (req: any, res: express.Response) => {
@@ -93,6 +96,7 @@ router.post('/subscription', async (req: any, res: express.Response) => {
     const subscriptionType = session?.metadata?.subscriptionType;
     const propertyLimit = session?.metadata?.propertyLimit;
     const sponsoredLimit = session?.metadata?.sponsoredLimit;
+    const price =  session?.metadata?.price;
     const startDate = new Date();
     const durationInDays = parseInt(session?.metadata?.durationInDays!, 10);
     const endDate = new Date();
@@ -107,7 +111,8 @@ router.post('/subscription', async (req: any, res: express.Response) => {
             startDate,
             endDate,
             propertyLimit,
-            sponsoredLimit
+            sponsoredLimit,
+            price
           }
         },
         { upsert: true, new: true }

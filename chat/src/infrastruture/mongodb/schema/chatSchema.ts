@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface IParticipant {
+  _id?:string;
   userId: string;
   name: string;
   photo: string;

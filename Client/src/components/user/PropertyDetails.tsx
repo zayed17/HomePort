@@ -127,15 +127,15 @@ const PropertyDetailsForm = ({ formData, setFormData }) => {
           <div className="grid grid-cols-3 gap-6">
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bedrooms">Number of bedrooms:</label>
-              <TextInput type='number' name='bedrooms' value={formData.bedrooms} onChange={(e) => handleInputChange(e, 'bedrooms')} placeholder="Enter number of cars" />
+              <TextInput type='number' name='bedrooms' value={formData.bedrooms} onChange={(e) => handleInputChange(e, 'bedrooms')} placeholder="Enter number of Bedrooms" />
             </div>
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bathrooms">Number of bathrooms:</label>
-              <TextInput type='number' name='bathrooms' value={formData.bathrooms} onChange={(e) => handleInputChange(e, 'bathrooms')} placeholder="Enter number of scooters" />
+              <TextInput type='number' name='bathrooms' value={formData.bathrooms} onChange={(e) => handleInputChange(e, 'bathrooms')} placeholder="Enter number of Bathrooms" />
             </div>
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="balconies">Number of balconies:</label>
-              <TextInput type='number' name='balconies' value={formData.balconies} onChange={(e) => handleInputChange(e, 'balconies')} placeholder="Enter number of bikes" />
+              <TextInput type='number' name='balconies' value={formData.balconies} onChange={(e) => handleInputChange(e, 'balconies')} placeholder="Enter number of Balconies" />
             </div>
           </div>
         </div>

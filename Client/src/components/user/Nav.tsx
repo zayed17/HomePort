@@ -7,12 +7,12 @@ const Nav: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-2xl font-bold">HomeMatch</div>
         <div>
-          <input
+          {/* <input
             type="text"
             placeholder="Search..."
             className="p-2 rounded"
           />
-          <button className="ml-2 p-2 bg-blue-800 rounded">Search</button>
+          <button className="ml-2 p-2 bg-blue-800 rounded">Search</button> */}
         </div>
       </div>
     </nav>

@@ -1,4 +1,5 @@
-import { generateToken } from 'homepackage';
+import {  generateToken ,generateRefreshToken} from 'homepackage';
+
 import { User } from '../entities';
 import {UserInterface} from '../repositories/interface'
 
@@ -11,7 +12,7 @@ interface LoginParams{
 
 export class LoginUseCase{
     constructor(private userRepository : UserInterface){}
-    async execute(params:LoginParams): Promise<{user:User,token:string}> {
+    async execute(params:LoginParams): Promise<{user:User,token:string,refresh:string}> {
         const {email,password,role} = params;
         const user = await this.userRepository.findOne({email})
         if(!user){
@@ -27,7 +28,8 @@ export class LoginUseCase{
             throw new Error('Incorrect password');      
         }
         const token = generateToken({_id:user._id,role:user.roles})
+        const refresh = generateRefreshToken({_id:user._id,role:user.roles})
 
-        return {user,token}
+        return {user,token,refresh}
     }
 }

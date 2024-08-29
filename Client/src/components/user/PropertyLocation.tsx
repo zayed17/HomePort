@@ -201,8 +201,6 @@
 // };
 
 // export default LocationDetailsForm;
-
-
 import { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { GeolocateControl, Marker, NavigationControl, MapRef } from 'react-map-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -229,34 +227,31 @@ interface LocationDetailsFormProps {
 
 const LocationDetailsForm: React.FC<LocationDetailsFormProps> = ({ formData, setFormData }) => {
   const mapRef = useRef<MapRef | null>(null);
-  const [lng, setLng] = useState<number | undefined>(undefined);
-  const [lat, setLat] = useState<number | undefined>(undefined);
+  const [lng, setLng] = useState<number | undefined>(formData.longitude || undefined);
+  const [lat, setLat] = useState<number | undefined>(formData.latitude || undefined);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { longitude, latitude } = position.coords;
-          setLng(longitude);
-          setLat(latitude);
-          setFormData({
-            ...formData,
-            longitude,
-            latitude,
-          });
-          reverseGeocode(longitude, latitude);
-        },
-        (error) => {
-          console.error("Error getting location", error);
-          setLng(76.2673); 
-          setLat(10.0165);
-        }
-      );
-    } else {
-      setLng(76.2673); 
-      setLat(10.0165);
+    if (!lng && !lat) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { longitude, latitude } = position.coords;
+            setLng(longitude);
+            setLat(latitude);
+            reverseGeocode(longitude, latitude);
+          },
+          (error) => {
+            console.error("Error getting location", error);
+            setLng(76.2673);
+            setLat(10.0165);
+          }
+        );
+      } else {
+        setLng(76.2673);
+        setLat(10.0165);
+      }
     }
-  }, [formData, setFormData]);
+  }, []);
 
   const reverseGeocode = async (longitude: number, latitude: number) => {
     const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${MAPBOX_TOKEN}`);
@@ -376,8 +371,8 @@ const LocationDetailsForm: React.FC<LocationDetailsFormProps> = ({ formData, set
             ref={mapRef}
             mapboxAccessToken={MAPBOX_TOKEN}
             initialViewState={{
-              longitude: lng || 76.2673, 
-              latitude: lat || 10.0165,  
+              longitude: lng || 76.2673,
+              latitude: lat || 10.0165,
               zoom: 14,
             }}
             mapStyle="mapbox://styles/mapbox/streets-v11"

@@ -6,4 +6,6 @@ export interface UserInterface {
     update(identifier: { email?: string; _id?: string }, updateData: Partial<User>): Promise<void>;
     findAll(): Promise<User[]>; 
     findOneWithPopulation(filter: any,populate:string): Promise<User | null>;
+    findAllWithPopulation(populate:string): Promise<any>;
+
 }

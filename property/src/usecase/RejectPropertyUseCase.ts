@@ -1,8 +1,9 @@
 import { Property } from '../entities/propertyEntity';
-import { PropertyInterface } from '../repositories';
+import { PropertyInterface ,NotificationInterface} from '../repositories';
 
 export class RejectPropertyUseCase {
-  constructor(private propertyRepository: PropertyInterface) { }
+  constructor(private propertyRepository: PropertyInterface,
+      private notificationRepository: NotificationInterface) { }
 
   async rejectProperty(id: string, reason: string): Promise<void> {
     const property = await this.propertyRepository.findOne({ _id: id });
@@ -15,5 +16,6 @@ export class RejectPropertyUseCase {
     };
 
     await this.propertyRepository.updateProperty(id, updatedProperty);
+    await this.notificationRepository.sendNotification('propertyRejected', { status: 'rejected' });
   }
 }

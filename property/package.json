@@ -44,6 +44,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4",
     "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "stripe": "^16.6.0",
     "ts-protoc-gen": "^0.15.0",
     "uuid": "^10.0.0"

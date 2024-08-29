@@ -6,6 +6,7 @@ export interface SubscriptionData {
   type: 'basic' | 'standard' | 'premium'; 
   propertyLimit: number;
   sponsoredLimit: number;
+  price:number;
 }
 
 export class Subscription {
@@ -16,6 +17,7 @@ export class Subscription {
   type: 'basic' | 'standard' | 'premium';
   propertyLimit: number;
   sponsoredLimit: number;
+  price:number;
 
   constructor({
     _id,
@@ -25,6 +27,7 @@ export class Subscription {
     type,
     propertyLimit,
     sponsoredLimit,
+    price
   }: SubscriptionData) {
     this._id = _id;
     this.userId = userId;
@@ -33,5 +36,6 @@ export class Subscription {
     this.type = type;
     this.propertyLimit = propertyLimit;
     this.sponsoredLimit = sponsoredLimit;
+    this.price = price;
   }
 }

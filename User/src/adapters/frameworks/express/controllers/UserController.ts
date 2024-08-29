@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase,PublishUserUpdateUseCase } from '../../../../usecases';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase,PublishUserUpdateUseCase ,UserAdminDashboardUseCase} from '../../../../usecases';
 
 
 export class UserController {
@@ -17,7 +17,8 @@ export class UserController {
         private changePasswordUseCase: ChangePasswordUseCase,
         private findAllUserUseCase: FindAllUserUseCase,
         private blockUnblockUseCase: BlockUnblockUseCase,
-        private publishUserUpdateUseCase: PublishUserUpdateUseCase
+        private publishUserUpdateUseCase: PublishUserUpdateUseCase,
+        private userAdminDashboardUseCase: UserAdminDashboardUseCase
 
     ) { }
 
@@ -36,11 +37,10 @@ export class UserController {
         console.log(req.body, "req.body in login");
         const { email, password, role } = req.body;
         try {
-            const { user, token } = await this.loginUseCase.execute({ email, password, role });
+            const { user, token ,refresh} = await this.loginUseCase.execute({ email, password, role });
 
-            const ress = res.cookie('token', token, {
-                maxAge: 3600000,
-            });
+            const ress = res.cookie('token', token);
+            const resss = res.cookie('refreshToken', refresh);
 
             res.status(200).json({ message: 'User successfully logged in', user, role });
         } catch (error) {
@@ -181,7 +181,14 @@ export class UserController {
             next(error)
         }
     }
-
+    async userAdminDashboard(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const users = await this.userAdminDashboardUseCase.UserAdminDashboard()
+            res.status(200).json(users);
+        } catch (error) {
+            next(error)
+        }
+    }
     async blockUblock(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const {userId,newStatus} = req.body

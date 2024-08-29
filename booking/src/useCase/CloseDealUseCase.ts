@@ -51,8 +51,6 @@ export class CloseDealUseCase {
 
         } catch (error: any) {
             throw new Error(error.message);
-        }finally {
-            await this.rabbitMQPublisher.close(); 
         }
     }
 }

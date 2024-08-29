@@ -1,6 +1,6 @@
 import { Admin } from '../entities/adminEntity';
 import { adminInterface } from '../repositories/interface/adminInterface';
-import { generateToken } from '../../../HomePackage/src';
+import { generateToken } from 'homepackage';
 
 
 export class AdminUseCase {
