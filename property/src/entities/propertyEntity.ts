@@ -51,6 +51,8 @@ export interface PropertyData {
   propertyCondition?: string;
   lookingFor: string;
   createdBy: string;
+  longitude: number,
+  latitude: number,
   isBlock: boolean
   sponsorship?: {
     isSponsored: boolean;
@@ -101,6 +103,8 @@ export class Property {
   lookingFor: string;
   createdBy: string;
   isBlock: boolean;
+  longitude: number;
+  latitude: number;
   updatedAt:Date;
   sponsorship?: {
     isSponsored: boolean;
@@ -120,6 +124,8 @@ export class Property {
     depositAmount,
     facing,
     propertyAge,
+    longitude,
+    latitude,
     totalFloors,
     openings,
     description,
@@ -173,6 +179,8 @@ export class Property {
     this.noOfReports = noOfReports;
     this.hasWell = hasWell;
     this.updatedAt = updatedAt;
+    this.longitude = longitude;
+    this.latitude = latitude;
     this.furnisherType = furnisherType;
     this.electronics = electronics;
     this.rentAmount = rentAmount;

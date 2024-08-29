@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FaInfoCircle, FaCheckCircle } from 'react-icons/fa';
 import { loadStripe } from '@stripe/stripe-js';
 import toast from 'react-hot-toast';
-import { useCreatePaymentIntentMutation } from '../../store/propertyApi';
+import { useCreatePaymentIntentMutation } from '../../store/property/propertyApi';
 
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!); 

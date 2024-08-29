@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useGetChatMessagesQuery, useGetChatsQuery } from '../store/chattingApi';
+import { useGetChatMessagesQuery, useGetChatsQuery } from '../store/chatting/chattingApi';
 import useSocket from '../hooks/useSocket';
 import { useUserDetails } from '../hooks/useUserDetails';
 import MediaPreviewModal from './MediaPreviewModal';

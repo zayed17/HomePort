@@ -1,10 +1,10 @@
 import React, { useState } from 'react'; import { useParams } from 'react-router-dom';
-import { useGetPropertyQuery } from '../../store/propertyApi';
+import { useGetPropertyQuery } from '../../store/property/propertyApi';
 import { Calendar, utils } from 'react-modern-calendar-datepicker';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { loadStripe } from '@stripe/stripe-js';
 import { FaBed, FaBath, FaRulerCombined, FaCalendarAlt, FaUserCircle, FaEnvelope, FaPhone } from 'react-icons/fa';
-import { useMakePaymentMutation } from '../../store/bookingApi';
+import { useMakePaymentMutation } from '../../store/booking/bookingApi';
 import toast from 'react-hot-toast';
 const stripePromise =  loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!); 
 

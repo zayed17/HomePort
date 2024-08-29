@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { useReportPropertyMutation } from '../../store/propertyApi';
+import { useReportPropertyMutation } from '../../store/property/propertyApi';
 
 interface ReportModalProps {
   propertyId: string;

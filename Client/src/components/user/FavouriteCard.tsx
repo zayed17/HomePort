@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetFavouritesQuery } from '../../store/propertyApi';
+import { useGetFavouritesQuery } from '../../store/property/propertyApi';
 
 const FavoriteCard: React.FC = () => {
 const { data: properties = [], isLoading, isError, error } = useGetFavouritesQuery();

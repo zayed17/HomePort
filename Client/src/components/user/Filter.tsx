@@ -87,7 +87,7 @@ const Filters = ({ onFilterChange }) => {
           className="w-full"
           value={propertyType}
           onChange={(value) => setPropertyType(value)}
-          dropdownClassName="bg-white"
+          popupClassName="bg-white"
         >
           <Option value="Any">Any</Option>
           <Option value="Apartment/Flat">Apartment/Flat</Option>

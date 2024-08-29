@@ -2,7 +2,7 @@ import { Layout, Card, Statistic, Row, Col, Table, Typography, Spin } from 'antd
 import { ArrowUpOutlined } from '@ant-design/icons';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import 'antd/dist/reset.css'; 
-import { useGetDashboardQuery } from '../../store/propertyApi';
+import { useGetDashboardQuery } from '../../store/property/propertyApi';
 import moment from 'moment';
 import loaderGif from '/assets/gifff.gif';
 

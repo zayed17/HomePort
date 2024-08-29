@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useGetPropertyQuery } from '../../store/propertyApi';
+import { useGetPropertyQuery } from '../../store/property/propertyApi';
 import { FaRegFlag, FaFan, FaRegWindowMaximize, FaLightbulb, FaBuilding, FaMapMarkerAlt, FaCompass, FaTv, FaRuler, FaCalendarAlt, FaCouch, FaWater, FaBed, FaShower, FaWindowMaximize, FaChair, FaCar, FaMotorcycle } from 'react-icons/fa';
 import { MdBalcony, MdOutlineMicrowave } from "react-icons/md";
 import { BiFridge, BiCabinet } from "react-icons/bi";

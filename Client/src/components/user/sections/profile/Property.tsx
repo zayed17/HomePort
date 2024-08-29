@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetAllPropertiesQuery } from '../../../../store/propertyApi';
+import { useGetAllPropertiesQuery } from '../../../../store/property/propertyApi';
 import loaderGif from '/assets/gifff.gif';
 import Modal from 'react-modal';
 import { FaRegTimesCircle } from "react-icons/fa";
-import { useCloseDealMutation } from '../../../../store/bookingApi';
+import { useCloseDealMutation } from '../../../../store/booking/bookingApi';
 import toast from 'react-hot-toast';
 
 interface Property {

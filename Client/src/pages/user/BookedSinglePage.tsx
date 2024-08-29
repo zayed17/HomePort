@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { FaMapMarkerAlt, FaRupeeSign, FaCalendarAlt, FaCreditCard, FaUser, FaCheckCircle } from 'react-icons/fa';
-import { useGetBookedPropertyByIdQuery } from '../../store/bookingApi';
+import { useGetBookedPropertyByIdQuery } from '../../store/booking/bookingApi';
 import { useNavigate } from 'react-router-dom';
 
 const BookingDetails = () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Typography, Space, Input, Row, Col, notification } from 'antd';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { IoMdHome, IoMdBed, IoMdPin, IoMdCar, IoMdImages } from 'react-icons/io';
-import { useVerifyPropertyMutation, useRejectPropertyMutation } from '../../store/propertyApi';
+import { useVerifyPropertyMutation, useRejectPropertyMutation } from '../../store/property/propertyApi';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;

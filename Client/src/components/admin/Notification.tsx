@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { FaBell, FaSpinner, FaExclamationCircle, FaHome, FaFileAlt, FaTimes } from 'react-icons/fa';
-import { useGetPendingPropertiesQuery, useGetReportsQuery } from '../../store/propertyApi';
+import { useGetPendingPropertiesQuery, useGetReportsQuery } from '../../store/property/propertyApi';
 import PropertyDetailsModal from './PropertyDetailsModal';
 import ReportDetailsModal from './ReportModal';
 import socket from '../../helpers/socket';

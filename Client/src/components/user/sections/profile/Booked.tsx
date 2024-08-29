@@ -1,5 +1,5 @@
 import { FaMapMarkerAlt, FaRupeeSign, FaCalendarAlt, FaCheckCircle, FaClock } from 'react-icons/fa';
-import { useGetBookedPropertiesQuery } from '../../../../store/bookingApi';
+import { useGetBookedPropertiesQuery } from '../../../../store/booking/bookingApi';
 import { useNavigate } from 'react-router-dom';
 
 const BookedProperties = () => {

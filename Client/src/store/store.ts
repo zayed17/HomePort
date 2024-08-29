@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userApi from './user/userApi';
 import adminApi from './admin/adminApi';
-import bookingApi from './bookingApi'
+import bookingApi from './booking/bookingApi'
 import userReducer from './user/userSlice';
-import propertyApi from './propertyApi';
-import chattingApi from './chattingApi';
+import propertyApi from './property/propertyApi';
+import chattingApi from './chatting/chattingApi';
 
 const store = configureStore({
   reducer: {

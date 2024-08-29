@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Input, Button, Typography, Space, Tag, Spin, Alert } from 'antd';
-import { useGetAdminPropertiesQuery, useBlockAndUnblockMutation } from '../../store/propertyApi';
+import { useGetAdminPropertiesQuery, useBlockAndUnblockMutation } from '../../store/property/propertyApi';
 
 const { Title } = Typography;
 

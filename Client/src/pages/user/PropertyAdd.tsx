@@ -6,7 +6,7 @@ import RentDetailsForm from '../../components/user/PropertyRent';
 import SellDetailsForm from '../../components/user/PropertySell';
 import AdditionalDetailsForm from '../../components/user/PropertyAdditional';
 import { FaHome, FaMapMarkerAlt, FaVideo, FaDollarSign, FaTag, FaInfoCircle } from 'react-icons/fa';
-import { useAddPropertyMutation, useUpdatePropertyMutation, useGetPropertyQuery } from '../../store/propertyApi';
+import { useAddPropertyMutation, useUpdatePropertyMutation, useGetPropertyQuery } from '../../store/property/propertyApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import loaderGif from '/assets/gifff.gif';
@@ -56,7 +56,9 @@ const PropertyAddPage = () => {
     directionTips: '',
     sellPrice: 0,
     propertyCondition: '',
-    lookingFor: ''  
+    lookingFor: '',
+    longitude: 0,
+    latitude: 0 
   });
 
   useEffect(() => {
@@ -140,7 +142,9 @@ const PropertyAddPage = () => {
         directionTips: '',
         sellPrice: 0,
         propertyCondition: '',
-        lookingFor: ''  
+        lookingFor: '',
+        longitude: 0,
+        latitude: 0 
       });
 
       setLookingFor(null); 

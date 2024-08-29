@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Card, Statistic, Row, Col, Divider, List, Avatar } from 'antd';
 import { HomeOutlined, UserOutlined, DollarOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line } from 'recharts';
-import { useGetAdminDashboardQuery } from '../../store/propertyApi';
+import { useGetAdminDashboardQuery } from '../../store/property/propertyApi';
 import { useFindAllUsersQuery, useGetUserAdminDashboardQuery } from '../../store/user/userApi';
 
 const { Content } = Layout;

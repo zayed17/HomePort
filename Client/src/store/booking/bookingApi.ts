@@ -1,5 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
 const URL = '/booking';
+
+const createGetQuery = (url: string) => ({
+  query: () => `${URL}${url}`,
+  keepUnusedDataFor: 60,
+});
+
+const createMutation = (url: string, method = 'POST') => ({
+  query: (body: any) => ({
+    url: `${URL}${url}`,
+    method,
+    body,
+  }),
+});
 
 const bookingApi = createApi({
   reducerPath: 'bookingApi',
@@ -8,29 +22,16 @@ const bookingApi = createApi({
     credentials: 'include',
   }),
   endpoints: (builder) => ({
-    makePayment: builder.mutation({
-      query: (credentials) => ({
-        url: `${URL}/make-payment`,
-        method: 'POST',
-        body: credentials,
-      }),
-    }),
-    getBookedProperties: builder.query({
-      query: () => `${URL}/get-booking`,
-      keepUnusedDataFor: 60,
-    }),
+    makePayment: builder.mutation(createMutation('/make-payment')),
+    getBookedProperties: builder.query(createGetQuery('/get-booking')),
     getBookedPropertyById: builder.query({
       query: (id) => `${URL}/get-booking/${id}`,
     }),
-    closeDeal: builder.mutation({
-      query: (credentials) => ({
-        url: `${URL}/close-deal`,
-        method: 'PATCH',
-        body: credentials,
-      }),
-    }),
+    closeDeal: builder.mutation(createMutation('/close-deal', 'PATCH')),
   }),
 });
+
+
 
 export const { useMakePaymentMutation, useGetBookedPropertiesQuery,useGetBookedPropertyByIdQuery,useCloseDealMutation } = bookingApi;
 

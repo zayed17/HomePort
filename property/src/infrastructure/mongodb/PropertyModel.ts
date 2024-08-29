@@ -65,6 +65,8 @@ interface PropertyDocument extends Document {
   sponsorship?: Sponsorship; 
   createdAt?: Date;
   updatedAt?: Date;
+  longitude: number,
+  latitude: number,
 }
 
 const PropertySchema: Schema = new Schema({
@@ -113,6 +115,8 @@ const PropertySchema: Schema = new Schema({
   reason: { type: String, required: false },
   createdBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   isBlock: { type: Boolean, required: true, default: false },
+  latitude: { type: Number, required: true },
+  longitude: { type: Number, required: true },
   sponsorship: {
     isSponsored: { type: Boolean, default: false },
     details: {
