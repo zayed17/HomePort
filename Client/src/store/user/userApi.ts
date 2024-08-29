@@ -29,6 +29,13 @@ const userApi = createApi({
           body: credentials,
         }),
       }), 
+      googleSign: builder.mutation({
+        query: (credentials) => ({
+          url: `${URL}/google`,
+          method: 'POST',
+          body: credentials,
+        }),
+      }),  
       getUser: builder.query({
         query:()=>`${URL}/getUser`,
         keepUnusedDataFor:60,
@@ -96,6 +103,6 @@ const userApi = createApi({
   }),
 });
 
-export const { useLoginInMutation  ,useSignUpMutation, useOtpVerifyMutation,useGetUserQuery , useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation,useVerifyEmailMutation,useForgotPasswordMutation,useChangePasswordMutation,useFindAllUsersQuery,useBlockAndUnblockMutation,useGetUserAdminDashboardQuery} = userApi;
+export const { useLoginInMutation  ,useSignUpMutation, useOtpVerifyMutation,useGetUserQuery , useGoogleSignMutation,useUpdateUserMutation , useUploadPicMutation,useResendOTPMutation,useVerifyEmailMutation,useForgotPasswordMutation,useChangePasswordMutation,useFindAllUsersQuery,useBlockAndUnblockMutation,useGetUserAdminDashboardQuery} = userApi;
 
 export default userApi;

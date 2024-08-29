@@ -10,7 +10,6 @@ export class RepostPropertyUseCase {
   async RepostProperty(files: Express.Multer.File[], formData: any): Promise<void> {
     console.log(files, "checking from usecase");
 
-    // Upload new images to S3
     const uploadPromises = files.map((file) => this.s3Repository.uploadImage(file));
     const uploadedFiles = await Promise.all(uploadPromises);
     const imageUrls = uploadedFiles.map((file) => file);

@@ -63,6 +63,7 @@ export class UserController {
         console.log(req.user, "req.user kittunundo ?")
         try {
             const user = req.user._id
+            console.log(user,"checking")
             const userDetails = await this.getUserDetailUseCase.getDetail(user)
             console.log(userDetails, "console")
             res.status(200).json({ message: 'success', userDetails });
@@ -130,11 +131,10 @@ export class UserController {
     async googleAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { code } = req.body
-            const { token, userDetails } = await this.googleAuthUseCase.GoogleAuth(code)
-            const ress = res.cookie('token', token, {
-                maxAge: 3600000,
-            });
-
+            const { token, userDetails,refresh } = await this.googleAuthUseCase.GoogleAuth(code)
+            const ress = res.cookie('token', token);
+            const resss = res.cookie('refreshToken', refresh);
+           
             res.json({ token, userDetails, role: 'user' })
         } catch (error) {
             next(error)

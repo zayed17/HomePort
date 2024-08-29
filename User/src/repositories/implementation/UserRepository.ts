@@ -12,9 +12,9 @@ export class UserRepository implements UserInterface {
       }
     
 
-    async save(user: User): Promise<void> {
+    async save(user: User): Promise<User> {
         const newUser = new UserModel(user);
-        await newUser.save();
+       return await newUser.save();
     }
 
     async update(identifier: { email?: string; _id?: string }, updateData: Partial<User>): Promise<void> {
