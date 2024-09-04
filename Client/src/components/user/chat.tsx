@@ -15,14 +15,11 @@ interface ChatMessage {
   reactions: { type: string; userId: string }[];
 }
 
-interface ChatParams {
-  chatId?: string;
-}
 
 const reactions = ['👍', '❤️', '😂', '😮', '😢', '😡'];
 
 const ChatPage: React.FC = () => {
-  const { chatId } = useParams<ChatParams>();
+  const { chatId } = useParams<{ chatId?: string }>();
   const navigate = useNavigate();
   const socket = useSocket();
   const { userDetails } = useUserDetails();
@@ -119,7 +116,7 @@ const ChatPage: React.FC = () => {
 
         try {
           setUploadingMessageId('temp'); 
-          const response = await fetch('http://localhost:3000/chat/upload', {
+          const response = await fetch('http://localhost/api/chat/upload', {
             method: 'POST',
             body: formData,
           });
@@ -168,9 +165,9 @@ const ChatPage: React.FC = () => {
     navigate('/chat');
   };
 
-  const selectedChat = chats.find(chat => chat._id === chatId);
+  const selectedChat = chats.find((chat:any) => chat._id === chatId);
   const otherParticipant = selectedChat?.participants.find(
-    participant => participant.userId !== userDetails?._id
+    (participant:any) => participant.userId !== userDetails?._id
   );
 
   const handleMouseEnter = (messageId: string) => {

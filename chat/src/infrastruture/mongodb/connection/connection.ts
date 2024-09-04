@@ -3,10 +3,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const connectDB = async (): Promise<void> => {
-  const mongoUri = process.env.MONGO_URI!;
+  const mongoUrl = process.env.MONGO_URL!;
+  if (!mongoUrl) {
+    throw new Error('MONGO_URI environment variable is not set');
+  }
 
   try {
-    await mongoose.connect(mongoUri)
+    await mongoose.connect(mongoUrl)
     console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error);

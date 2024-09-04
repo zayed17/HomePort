@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 enum PropertyStatus {
   PENDING = 'pending',
@@ -22,7 +22,7 @@ interface BookingDetails {
   _id: Schema.Types.ObjectId;
 }
 
-interface PropertyDocument extends Document {
+interface PropertyDocument  {
   propertyType: string;
   reason?: string;
   isBooked:boolean;

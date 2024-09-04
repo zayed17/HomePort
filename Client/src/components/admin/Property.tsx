@@ -75,7 +75,7 @@ const PropertyList: React.FC = () => {
       title: viewType === 'rent' ? 'Rent Amount' : 'Sell Price',
       dataIndex: 'amount',
       key: 'amount',
-      render: (text: any, record: Property) => viewType === 'rent' ? record.rentAmount : record.sellPrice,
+      render: (_text: any, record: Property) => viewType === 'rent' ? record.rentAmount : record.sellPrice,
     },
     {
       title: 'Area',

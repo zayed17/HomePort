@@ -37,6 +37,7 @@ export class PropertyController {
       const user = await this.findUserUseCase.FindUser(id)
       if (!user) {
         const userDetails = await fetchUserDetails(id);
+        console.log(userDetails,"scs")
         await this.addUserUseCase.addUser(userDetails)
       }
       const formData = req.body;

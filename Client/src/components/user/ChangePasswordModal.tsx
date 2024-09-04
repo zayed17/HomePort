@@ -20,7 +20,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
 
     const handleFormSubmit: SubmitHandler<ChangePasswordFormInput> = async (data) => {
         try {
-            const res = await changePassword({ email, password: data.password, newPassword: data.newPassword }).unwrap()
+            await changePassword({ email, password: data.password, newPassword: data.newPassword }).unwrap()
             onClose();
             clearError()
             toast.success('Password succesfully changed');

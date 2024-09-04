@@ -14,7 +14,6 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import ConnectWithOwnerButton from '../connectButton';
 import ChatInterface from '../chat';
-import { useUserDetails } from '../../hooks/useUserDetails';
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,
@@ -61,7 +60,6 @@ const PropertyDetailsPage: React.FC = () => {
     'Furinsher': furinsherRef,
     'Parking Space and Property Features': featuresRef,
   };
-  const { userDetails } = useUserDetails();
 
   const [activeSection, setActiveSection] = useState<string>('Basic Information');
 
@@ -157,7 +155,7 @@ const PropertyDetailsPage: React.FC = () => {
         ownerName={property.createdBy.name}
         ownerPhoto={'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fblack-contact-person-icon-on-white-background-vector-31046197&psig=AOvVaw3bz8wHQkL7E2YTdO3Mo4U3&ust=1724239471574000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPDOnNu6g4gDFQAAAAAdAAAAABAE'}
         onChatStart={handleChatStart} />
-          {chatId && <ChatInterface chatId={chatId} />}
+          {chatId && <ChatInterface />}
         </div>
       </div>
 
@@ -286,7 +284,7 @@ const PropertyDetailsPage: React.FC = () => {
             <div className="grid grid-cols-3 gap-4 mt-4">
               {Object.entries(property.electronics || {}).map(([item, count]) => (
                 <div key={item} className="flex items-center text-gray-600">
-                  {electronicsIcons[item] || <FaTv />}
+                    {(electronicsIcons as any)[item] || <FaTv />}
                   <strong className="text-gray-800 px-1">{item}:</strong> {count}
                 </div>
               ))}

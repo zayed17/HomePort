@@ -8,20 +8,20 @@ import connectDB from './infrastructure/mongoDB/connection/connection';
 
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'OPTIONS'], 
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: 'http://localhost:5173',
+//   methods: ['GET', 'POST', 'OPTIONS'], 
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true,
+// };
+// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.use('/admin', adminRoutes);
-app.use('/subscriptions', subscriptionRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 const PORT = 5002; 
 const startServer = async()=>{

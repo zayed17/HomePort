@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; import { useParams } from 'react-router-dom';
 import { useGetPropertyQuery } from '../../store/property/propertyApi';
-import { Calendar, utils } from 'react-modern-calendar-datepicker';
+import { Calendar } from 'react-modern-calendar-datepicker';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { loadStripe } from '@stripe/stripe-js';
 import { FaBed, FaBath, FaRulerCombined, FaCalendarAlt, FaUserCircle, FaEnvelope, FaPhone } from 'react-icons/fa';
@@ -64,7 +64,7 @@ const BookingMain: React.FC = () => {
     try {
       const { id: sessionId } = await payment({ amount: totalAmount * 100, propertyId: property._id, bookingDate: selectedDay }).unwrap();
       const stripe = await stripePromise;
-      const { error } = await stripe?.redirectToCheckout({ sessionId });
+      const { error }:any = await stripe?.redirectToCheckout({ sessionId });
   
       if (error) {
         toast.error(error.message);
@@ -160,7 +160,7 @@ const BookingMain: React.FC = () => {
 
                   <Calendar
                     value={selectedDay}
-                    onChange={setSelectedDay}
+                    onChange={(date:any) => setSelectedDay(date)}
                     shouldHighlightWeekends
                     minimumDate={minDate}
                     calendarClassName="custom-calendar"

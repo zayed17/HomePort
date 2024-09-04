@@ -1,5 +1,5 @@
 // export const rabbitmqConfig = {
-//     url: process.env.RABBITMQ_URL || "amqp://localhost",
+//     url: process.env.RABBITMQ_URL || "amqp://rabbitmq:5672",
 //     exchange: 'user_updates', 
 //     queues: {
 //         updateUser: 'user_updates_queue', 
@@ -7,7 +7,7 @@
 // };
 
 export const rabbitmqConfig = {
-    url: "amqp://localhost",
+    url: "amqp://rabbitmq:5672",
 
     // Exchange and queue configuration for user updates
     exchanges: {

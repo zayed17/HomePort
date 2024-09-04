@@ -11,7 +11,13 @@ const eligibilityOptions = [
   'Bachelors (Males)'
 ];
 
-const PropertyRent: React.FC = ({ formData, setFormData }) => {
+interface PropertyRentProps {
+  formData: any;
+  setFormData: any
+}
+
+
+const PropertyRent: React.FC<PropertyRentProps> = ({ formData, setFormData }:any) => {
   const handleRentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,

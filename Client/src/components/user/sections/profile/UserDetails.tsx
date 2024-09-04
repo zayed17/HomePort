@@ -46,7 +46,7 @@ const UserDetails: React.FC = () => {
     try {
       const formData = new FormData();
       formData.append('photo', photo);
-      const response = await axios.post('http://localhost:5001/user/uploadImage', formData, { withCredentials: true });
+      const response = await axios.post('http:/localhost/api/user/uploadImage', formData, { withCredentials: true });
       console.log('Image uploaded:', response);
     } catch (error) {
       console.error('Error uploading image:', error);

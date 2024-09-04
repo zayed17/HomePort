@@ -9,7 +9,14 @@ const eligibilityOptions = [
     'Bachelors (Males)'
 ];
 
-const PropertySell: React.FC = ({ formData, setFormData }) => {
+interface PropertySellrops {
+    formData: any;
+    setFormData: any
+  }
+  
+  
+
+const PropertySell: React.FC<PropertySellrops> = ({ formData, setFormData }) => {
     const handleSellPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,

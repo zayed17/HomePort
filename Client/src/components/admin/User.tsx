@@ -46,7 +46,7 @@ const User: React.FC = () => {
       title: 'No',
       dataIndex: 'key',
       key: 'key',
-      render: (text: string, record: User, index: number) => index + 1,
+      render: (_text: string, _record: User, index: number) => index + 1,
     },
     {
       title: 'Name',

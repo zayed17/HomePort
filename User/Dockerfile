@@ -1,9 +1,9 @@
 FROM node:alpine
 
-WORKDIR /app
+WORKDIR /user
 COPY package.json .
 RUN npm install
-RUN npm install -g ts-node
 COPY . .
+EXPOSE 5001
 
 CMD [ "npm", "start" ]

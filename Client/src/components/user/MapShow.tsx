@@ -37,7 +37,7 @@ const MapWithProperties: React.FC = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch('http://localhost:5003/property/list-properties-public');
+        const response = await fetch('http://localhost/api/property/list-properties-public');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -85,12 +85,14 @@ const MapWithProperties: React.FC = () => {
     <div className="relative w-full h-screen bg-gray-100 p-4">
       <ReactMapGL
         {...viewport}
-        width="100%"
-        height="100%"
+        style={{
+          width: '100%',
+          height: '100%'
+        }}
         mapboxAccessToken={MAPBOX_TOKEN}
         onMove={(evt) => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/outdoors-v11"
-        className="rounded-lg shadow-lg"
+        // className="rounded-lg shadow-lg"
       >
         {properties.map((property) => (
           !isNaN(property.latitude) && !isNaN(property.longitude) && (

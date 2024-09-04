@@ -11,7 +11,7 @@ export class UserPropertyRepository implements UserPropertyInterface {
   }
 
   async findUser(filter: any): Promise<UserData | null> {
-    return UserModel.findOne(filter).lean();
+    return UserModel.findOne(filter).lean() as any
   }
 
 

@@ -24,9 +24,9 @@ const ChatSidebar: React.FC = () => {
 
   useEffect(() => {
     setFilteredChats(
-      chats.filter(chat => {
+      chats.filter((chat:any) => {
         const otherParticipant = chat.participants.find(
-          (participant) => participant.userId !== userDetails?._id
+          (participant:any) => participant.userId !== userDetails?._id
         );
         return otherParticipant?.name.toLowerCase().includes(searchQuery.toLowerCase());
       })
@@ -67,7 +67,7 @@ const ChatSidebar: React.FC = () => {
         {filteredChats.length > 0 ? (
           filteredChats.map((chat) => {
             const otherParticipant = chat.participants.find(
-              (participant) => participant.userId !== userDetails?._id
+              (participant:any) => participant.userId !== userDetails?._id
             );
 
             return (

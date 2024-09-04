@@ -7,22 +7,13 @@ import { TextInput } from '../admin/ReuseableForm';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiemF5ZWQxNyIsImEiOiJjbHpqbnl5d3YwdHJsMmpzaXRkcHc1NW55In0.C91Rt8F6i6zkC2mHGqubcg';
 
-interface FormData {
-  address: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  district: string;
-  longitude?: number;
-  latitude?: number;
-}
 
 interface LocationDetailsFormProps {
-  formData: FormData;
-  setFormData: (data: FormData) => void;
+  formData: any;
+  setFormData: any
 }
 
-const LocationDetailsForm: React.FC<LocationDetailsFormProps> = ({ formData, setFormData }) => {
+const LocationDetailsForm: React.FC <LocationDetailsFormProps>= ({ formData, setFormData }:any) => {
   const mapRef = useRef<MapRef | null>(null);
   const [lng, setLng] = useState<number | undefined>(formData.longitude);
   const [lat, setLat] = useState<number | undefined>(formData.latitude);

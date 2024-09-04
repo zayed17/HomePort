@@ -2,7 +2,7 @@ import React from 'react';
 import { useGetFavouritesQuery } from '../../store/property/propertyApi';
 
 const FavoriteCard: React.FC = () => {
-const { data: properties = [], isLoading, isError, error } = useGetFavouritesQuery();
+const { data: properties = [], isLoading, isError } = useGetFavouritesQuery({});
 console.log(properties,"for chienc")
   if (isLoading) {
     return <div className="text-center py-4">Loading...</div>;

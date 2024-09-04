@@ -14,7 +14,7 @@ interface Subscription {
 }
 
 const SubscriptionMain = () => {
-  const { data: subscriptionsData, error, isLoading } = useGetSubscriptionsQuery();
+  const { data: subscriptionsData, error, isLoading } = useGetSubscriptionsQuery({});
   const [filteredSubscriptions, setFilteredSubscriptions] = useState<Subscription[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);  

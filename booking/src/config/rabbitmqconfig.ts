@@ -1,5 +1,5 @@
 export const RABBITMQ_CONFIG = {
-    url: 'amqp://localhost',
+  url: 'amqp://rabbitmq:5672',
     exchanges: {
       bookingExchange: 'booking_exchange',
     },

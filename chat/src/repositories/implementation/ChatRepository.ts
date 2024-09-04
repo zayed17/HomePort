@@ -2,22 +2,27 @@ import { ChatInterface } from '../interface';
 import Chat from '../../infrastruture/mongodb/schema/chatSchema'; 
 import { ChatData } from '../../entities/chatEntity';
 
+const toChatData = (doc: any): ChatData => ({
+  ...doc.toObject(),
+  _id: doc._id.toString(), 
+});
+
 export class ChatRepository implements ChatInterface {
-  async findChatsByUserId(userId: string): Promise<any[]> {
+  async findChatsByUserId(userId: string): Promise<ChatData[]> {
     const chats = await Chat.find({ 'participants.userId': userId }).populate('participants.userId').exec();
-    return chats
+    return chats.map(toChatData); 
   }
 
   async findChatByParticipants(participants: string[]): Promise<ChatData | null> {
     const chat = await Chat.findOne({
       'participants.userId': { $all: participants },
     }).exec();
-    return chat ? chat.toObject() : null;
+    return chat ? toChatData(chat) : null; 
   }
 
   async createChat(chatData: ChatData): Promise<ChatData> {
     const newChat = new Chat(chatData);
     await newChat.save();
-    return newChat.toObject();
+    return toChatData(newChat);
   }
 }

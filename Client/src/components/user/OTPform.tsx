@@ -64,7 +64,7 @@ const OTPform: React.FC<OTPformProps> = ({ setIsLogin, onClose, email, onOtpVeri
         toast.success('SignUp successfully');
       } else {
         console.log('second')
-        const res = await otpVerify({ otp: data.otp, email }).unwrap();
+        await otpVerify({ otp: data.otp, email }).unwrap();
         onOtpVerified();
       }
     } catch (error: any) {

@@ -1,11 +1,10 @@
-import mongoose, { Schema, Document } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 interface Reaction {
   type: string;
   userId: string;
 }
-
-interface MessageDocument extends Document {
-  _id?:string;
+           
+interface MessageDocument {
   chatId: string;
   senderId: string;
   message?: string;

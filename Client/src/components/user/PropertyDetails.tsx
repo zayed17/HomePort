@@ -9,7 +9,7 @@ const selectableElectronicsList = [
   'Fridge', 'Microwave', 'Washing Machine', 'Stove', 'Vacuum Cleaner', 'TV', 'BathTub', 'Chimney', 'Exhaust Fan', 
 ];
 
-const PropertyDetailsForm = ({ formData, setFormData }) => {
+const PropertyDetailsForm = ({ formData, setFormData }:any) => {
 
 
   const handlePropertyTypeChange = (propertyType: string) => {

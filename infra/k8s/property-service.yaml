@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: property-service-deployment
+spec:
+  replicas: 1   
+  selector:
+    matchLabels:
+      app: property-service
+  template:
+    metadata:
+      labels:
+        app: property-service
+    spec:
+      initContainers:
+        - name: wait-for-rabbitmq
+          image: busybox
+          command: ['sh', '-c', 'until nc -z -v -w30 rabbitmq 5672; do echo "Waiting for RabbitMQ..."; sleep 5; done; echo "RabbitMQ is up and running!"']
+      containers:
+        - name: property-service
+          image: zayed17/realestate-property:latest
+          ports:
+            - containerPort: 5003
+          
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: property-service
+spec:
+  selector:
+    app: property-service
+  ports:
+    - protocol: TCP
+      port: 5003
+      targetPort: 5003
+  type: ClusterIP

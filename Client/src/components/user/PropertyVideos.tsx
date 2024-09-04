@@ -101,7 +101,7 @@ interface FormData {
 
 interface VideosPhotosFormProps {
   formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  setFormData: any
 }
 
 const VideosPhotosForm: React.FC<VideosPhotosFormProps> = ({ formData, setFormData }) => {
@@ -127,7 +127,7 @@ const VideosPhotosForm: React.FC<VideosPhotosFormProps> = ({ formData, setFormDa
     }
 
     setNewFiles(prev => [...prev, ...files]);
-    setFormData(prevFormData => ({
+    setFormData((prevFormData:any) => ({
       ...prevFormData,
       mediaFiles: [...prevFormData.mediaFiles, ...files],
     }));
@@ -140,14 +140,14 @@ const VideosPhotosForm: React.FC<VideosPhotosFormProps> = ({ formData, setFormDa
 
     if (isExistingImage) {
       updatedMediaFiles.splice(index, 1);
-      setFormData(prevFormData => ({
+      setFormData((prevFormData:any) => ({
         ...prevFormData,
         mediaFiles: updatedMediaFiles,
       }));
     } else {
       const newIndex = index - formData.mediaFiles.length;
       updatedNewFiles.splice(newIndex, 1);
-      setFormData(prevFormData => ({
+      setFormData((prevFormData:any) => ({
         ...prevFormData,
         mediaFiles: updatedMediaFiles.filter((_, i) => i !== index),
       }));

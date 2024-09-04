@@ -28,7 +28,7 @@ const SponsoredMain = () => {
       const { id: sessionId } = await makePayment({ amount: cost * 100, propertyId: id }).unwrap();
 
       const stripe = await stripePromise;
-      const { error  } = await stripe?.redirectToCheckout({ sessionId });
+      const { error  } :any= await stripe?.redirectToCheckout({ sessionId });
 
       if (error) {
         console.error('Payment failed', error);

@@ -1,4 +1,4 @@
-import { Layout, Card, Statistic, Row, Col, Table, Typography, Spin } from 'antd';
+import { Layout, Card, Statistic, Row, Col, Table, Typography } from 'antd';
 import { ArrowUpOutlined } from '@ant-design/icons';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import 'antd/dist/reset.css'; 
@@ -9,16 +9,16 @@ import loaderGif from '/assets/gifff.gif';
 const { Content } = Layout;
 const { Title } = Typography;
 
-const sortByMonth = (data: { month: string; bookings: number }[]) => {
-  return data.sort((a, b) => {
+const sortByMonth = (data: any) => {
+  return data.sort((a:any, b:any) => {
     const dateA = moment(a.month, 'MMM YYYY');
     const dateB = moment(b.month, 'MMM YYYY');
     return dateA.isBefore(dateB) ? -1 : 1;
   });
 };
 
-const sortRevenueByMonth = (data: { month: string; revenue: number }[]) => {
-  return data.sort((a, b) => {
+const sortRevenueByMonth = (data: any) => {
+  return data.sort((a:any, b:any) => {
     const dateA = moment(a.month, 'MMM YYYY');
     const dateB = moment(b.month, 'MMM YYYY');
     return dateA.isBefore(dateB) ? -1 : 1;
@@ -48,13 +48,14 @@ const DashboardMain = () => {
 
   const sortedBookingData = sortByMonth(bookingData);
   const sortedRevenueByMonth = sortRevenueByMonth(revenueByMonth);
-
-  const totalRevenue = Object.values(data?.revenueByMonth || {}).reduce((acc, revenue) => acc + revenue, 0);
-
+  const totalRevenue: any = Object.values(data?.revenueByMonth || {}).reduce(
+    (acc, revenue) => (acc as number) + (revenue as number),
+    0
+  );
   const properties = data?.properties || [];
-  const bookedProperties = properties.filter(property => property.status === 'booked');
-  const noOfSellBooked = bookedProperties.filter(property => property.lookingFor === 'sell');
-  const noOfRentBooked = bookedProperties.filter(property => property.lookingFor === 'rent');
+  const bookedProperties = properties.filter((property:any) => property.status === 'booked');
+  const noOfSellBooked = bookedProperties.filter((property:any) => property.lookingFor === 'sell');
+  const noOfRentBooked = bookedProperties.filter((property:any) => property.lookingFor === 'rent');
 
   const columns = [
     { 
@@ -78,7 +79,7 @@ const DashboardMain = () => {
     },
   ];
 
-  const propertyTypeCount = properties.reduce((acc, property) => {
+  const propertyTypeCount = properties.reduce((acc:any, property:any) => {
     if (!acc[property.propertyType]) {
       acc[property.propertyType] = 0;
     }
@@ -185,7 +186,7 @@ const DashboardMain = () => {
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 >
-                  {propertyTypeData.map((entry, index) => (
+                  {propertyTypeData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

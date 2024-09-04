@@ -22,7 +22,7 @@ const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
-const rabbitMQPublisher = new RabbitMQPublisher('amqp://localhost')
+const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
 const notificationRepository = new NotificationRepository('http://localhost:3000')
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);
@@ -53,7 +53,7 @@ const propertyController = new PropertyController(addPropertyUseCase,findPending
 
 const router = Router();
 
-router.post('/add-property',authenticateToken(['user']),checking, upload ,(req, res, next) => propertyController.addProperty(req, res, next));
+router.post('/add-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.addProperty(req, res, next));
 router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.user._id

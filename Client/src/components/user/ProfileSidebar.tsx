@@ -1,7 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaUser, FaHome, FaMapMarkerAlt, FaSignOutAlt ,FaTachometerAlt, FaAd} from 'react-icons/fa'; 
+import { FaUser, FaHome, FaMapMarkerAlt, FaSignOutAlt ,FaTachometerAlt} from 'react-icons/fa'; 
 import { removeCookie } from '../../helpers/removeCookie';
 
 const ProfileSidebar: React.FC = () => {

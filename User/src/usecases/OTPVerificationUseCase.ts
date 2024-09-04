@@ -1,5 +1,5 @@
 import { UserInterface ,RedisOtpInterface } from '../repositories/interface'
-import {generateToken} from '../../../HomePackage/src'
+import {generateToken} from 'homepackage'
 
 export class OTPVerificationUseCase{
     constructor(
