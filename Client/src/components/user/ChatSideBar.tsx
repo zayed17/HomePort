@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useGetChatsQuery } from '../store/chatting/chattingApi';
-import { useUserDetails } from '../hooks/useUserDetails';
+import { useGetChatsQuery } from '../../store/chatting/chattingApi';
+import { useUserDetails } from '../../hooks/useUserDetails';
 import { FiSearch, FiMessageCircle } from 'react-icons/fi';
 
 const ChatSidebar: React.FC = () => {

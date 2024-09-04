@@ -12,8 +12,8 @@ import ReportModal from './ReportModal';
 import loaderGif from '/assets/gifff.gif';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
-import ConnectWithOwnerButton from '../connectButton';
-import ChatInterface from '../chat';
+import ConnectWithOwnerButton from '../user/connectButton';
+import ChatInterface from '../user/chat';
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,

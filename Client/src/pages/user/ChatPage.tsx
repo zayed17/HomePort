@@ -1,6 +1,6 @@
 import React from 'react';
-import ChatSidebar from '../../components/ChatSideBar';
-import ChatInterface from '../../components/chat';
+import ChatSidebar from '../../components/user/ChatSideBar';
+import ChatInterface from '../../components/user/chat';
 const ChatPage: React.FC = () => {
   return (
     <div className="flex h-screen">

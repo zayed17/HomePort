@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserDetails } from '../hooks/useUserDetails';
+import { useUserDetails } from '../../hooks/useUserDetails';
 
 interface ConnectWithOwnerButtonProps {
   ownerId: string;
