@@ -8,7 +8,7 @@ import { Pagination, Skeleton, Badge, Button, Input, Select, Modal, Tooltip } fr
 import { FaHeart, FaRegHeart, FaMap } from 'react-icons/fa';
 import { getCookie } from '../../helpers/getCookie';
 import MapWithProperties from '../../components/user/MapShow';
-import SearchInput from './SearchInput';
+// import SearchInput from './SearchInput';
 
 const { Option } = Select;
 
@@ -118,7 +118,7 @@ const PropertyListing: React.FC = () => {
   const indexOfFirstProperty = indexOfLastProperty - itemsPerPage;
   const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
 
-  const handleFavoriteClick = async (propertyId: string, isFavorited: boolean): Promise<void> => {
+  const handleFavoriteClick = async (propertyId: string, isFavorited: any): Promise<void> => {
     if (!isAuthenticated()) {
       toast.error('Please Login to favorite');
       return;

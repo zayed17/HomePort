@@ -58,7 +58,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ property, o
         <Button key="verify" type="primary" onClick={handleVerify} icon={<FaCheckCircle />} className="bg-green-500 hover:bg-green-600">
           Verify
         </Button>,
-        <Button key="reject" type="danger" onClick={() => setShowRejectReason(!showRejectReason)} icon={<FaTimesCircle />} className="bg-red-500 hover:bg-red-600">
+        <Button key="reject" type="primary" onClick={() => setShowRejectReason(!showRejectReason)} icon={<FaTimesCircle />} className="bg-red-500 hover:bg-red-600">
           Reject
         </Button>,
       ]}

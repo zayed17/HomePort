@@ -20,7 +20,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({  setOtpSent, se
 
   const onSubmit = async (data: ForgotPasswordFormInputs) => {
     try {
-      const res = await verifyEmail({ email: data.email }).unwrap();
+      await verifyEmail({ email: data.email }).unwrap();
       clearError();
       setEmail(data.email);
       setOtpSent(true);

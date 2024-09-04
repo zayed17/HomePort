@@ -1,0 +1,65 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/cors-allow-origin: "http://localhost:5173, http://client-service:5173"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS, DELETE, PUT, PATCH"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+
+spec:
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: client-service
+            port: 
+              number: 5173
+      - path: /api/user
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port: 
+              number: 5001
+      - path: /api/admin
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-service
+            port: 
+              number: 5002
+      - path: /api/subscriptions
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-service
+            port: 
+              number: 5002        
+      - path: /api/property
+        pathType: Prefix
+        backend:
+          service:
+            name: property-service
+            port: 
+              number: 5003
+      - path: /api/booking
+        pathType: Prefix
+        backend:
+          service:
+            name: booking-service
+            port: 
+              number: 5004
+      - path: /api/chat
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-service
+            port: 
+              number: 3000

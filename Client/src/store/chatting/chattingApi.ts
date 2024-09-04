@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const URL = '/chat';
+const URL = '/api/chat';
 
 const chattingApi = createApi({
   reducerPath: 'chattingApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'http://localhost:3000', 
+    baseUrl: 'http://localhost', 
     credentials: 'include',
   }),
   endpoints: (builder) => ({

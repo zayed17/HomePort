@@ -9,6 +9,6 @@ export class SubscriptionRepository implements SubscriptionInterface {
     }  
 
     async find(filter: Partial<SubscriptionData> = {}): Promise<SubscriptionData[]> {
-        return SubscriptionModel.find(filter).lean();
+        return SubscriptionModel.find(filter) as any
       }
 }

@@ -8,7 +8,7 @@ import { useFindAllUsersQuery, useGetUserAdminDashboardQuery } from '../../store
 const { Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
-  const { data = {}, isLoading } = useGetAdminDashboardQuery({});
+  const { data = {} } = useGetAdminDashboardQuery({});
   const { data: userData = {} } = useGetUserAdminDashboardQuery({});
   const { data: users = [] } = useFindAllUsersQuery({});
 
@@ -21,7 +21,7 @@ const AdminDashboard: React.FC = () => {
     return { monthYear, month, year: parseInt(year), revenue };
   }).sort((a, b) => a.year !== b.year ? a.year - b.year : monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month));
 
-  const totalRevenue = monthlyRevenue.reduce((sum, entry) => sum + entry.revenue, 0) + (userData.subscriptions?.reduce((total, sub) => total + sub.price, 0) || 0);
+  const totalRevenue = monthlyRevenue.reduce((sum, entry:any) => sum + entry.revenue, 0) + (userData.subscriptions?.reduce((total:any, sub:any) => total + sub.price, 0) || 0);
 
   const subscriptions = ['Basic', 'Standard', 'Premium'].map(type => ({
     name: type,
@@ -80,7 +80,7 @@ const AdminDashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie data={subscriptions} dataKey="value" nameKey="name" outerRadius={100}>
-                  {subscriptions.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
+                  {subscriptions.map((_, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <RechartsTooltip />
                 <Legend />
@@ -93,7 +93,7 @@ const AdminDashboard: React.FC = () => {
             <List
               itemLayout="horizontal"
               dataSource={data.topProperties || []}
-              renderItem={item => (
+              renderItem={(item:any) => (
                 <List.Item>
                   <List.Item.Meta title={item.name} description={`Bookings: ${item.bookings}`} avatar={<Avatar icon={<HomeOutlined />} />} />
                 </List.Item>
@@ -111,7 +111,7 @@ const AdminDashboard: React.FC = () => {
             <List
               itemLayout="vertical"
               dataSource={data.recentActivities || []}
-              renderItem={item => (
+              renderItem={(item:any) => (
                 <List.Item>
                   <List.Item.Meta avatar={<Avatar icon={<InfoCircleOutlined />} />} title={item.description} description={item.date} />
                 </List.Item>

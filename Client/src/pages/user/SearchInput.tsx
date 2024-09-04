@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchBoxCore, SearchBoxSuggestion } from '@mapbox/search-js-react';
-import { checkDomainOfScale } from 'recharts/types/util/ChartUtils';
+import { useSearchBoxCore } from '@mapbox/search-js-react';
 
 const MapboxToken = 'pk.eyJ1IjoiemF5ZWQxNyIsImEiOiJjbHpqbnl5d3YwdHJsMmpzaXRkcHc1NW55In0.C91Rt8F6i6zkC2mHGqubcg';
 
@@ -49,8 +48,8 @@ const PlaceSearch: React.FC = () => {
         if (response.suggestions) {
           setSuggestions(
             response.suggestions
-              .filter((suggestion: SearchBoxSuggestion) => suggestion.geometry) // Ensure geometry is defined
-              .map((suggestion: SearchBoxSuggestion) => ({
+              .filter((suggestion: any) => suggestion.geometry) 
+              .map((suggestion: any) => ({
                 placeName: suggestion.text,
                 coordinates: suggestion.geometry?.coordinates || [0, 0], 
               }))

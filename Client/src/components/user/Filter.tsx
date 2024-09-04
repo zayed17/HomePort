@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Button, Input, Select, Space, Typography } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const { Option } = Select;
+interface FiltersProps {
+  onFilterChange: (newFilters: any) => void;
+}
 
-const Filters = ({ onFilterChange }) => {
+const Filters: React.FC<FiltersProps> = ({ onFilterChange }) => {
   const [lookingFor, setLookingFor] = useState('any');
   const [priceRange, setPriceRange] = useState([0, 100000000]);
   const [propertyType, setPropertyType] = useState('Any');
@@ -99,7 +102,7 @@ const Filters = ({ onFilterChange }) => {
       <div className="mb-6">
         <label className="block mb-2 font-semibold text-gray-700">Bedrooms</label>
         <Space wrap>
-          {['Any', 1, 2, 3, 4, '5+'].map((num) => (
+          {['Any', 1, 2, 3, 4, '5+'].map((num:any) => (
             <Button 
               key={num}
               type={bedrooms === num ? 'primary' : 'default'}

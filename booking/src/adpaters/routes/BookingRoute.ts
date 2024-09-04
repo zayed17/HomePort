@@ -97,7 +97,7 @@ router.post('/booking', async (req: any, res: Response) => {
 
     try {
       console.log(propertyId, "id consoling")
-      const propertyResponse = await axios.get(`http://localhost:5003/property/property/${propertyId}`);
+      const propertyResponse = await axios.get(`http://localhost:5003/api/property/property/${propertyId}`);
       const propertyData = propertyResponse.data;
       console.log(propertyData)
       if (!propertyData) {
@@ -122,7 +122,7 @@ router.post('/booking', async (req: any, res: Response) => {
         }
       };
 
-      const userResponse = await axios.get(`http://localhost:5001/user/details/${userId}`);
+      const userResponse = await axios.get(`http://localhost:5001/api/user/details/${userId}`);
       const userData = userResponse.data;
       console.log(userData)
       if (!userData) {

@@ -4,14 +4,7 @@ import { useAddSubscriptionMutation } from '../../store/admin/adminApi';
 interface AddSubscriptionModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (newSubscription: {
-        type: string;
-        price: number;
-        durationInDays: number;
-        features: string[];
-        propertiesLimit: number;
-        sponsoredPropertiesLimit: number;
-    }) => void;
+    onAdd: any
 }
 
 const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOpen, onClose, onAdd }) => {

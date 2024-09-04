@@ -2,17 +2,14 @@ import React from 'react';
 import { MdMeetingRoom, MdNature, MdThumbUp, MdDirectionsCar, MdDirections } from 'react-icons/md';
 import { MultipleSelectWithCustomOption, otherRoomsOptions, propertyAdvantages, propertyFeatures,TextInput } from '../admin/ReuseableForm';
 
-interface FormData {
-  otherRooms: string[];
-  propertyFeatures: string[];
-  propertyAdvantages: string[];
-  noOfCars: number;
-  noOfScooters: number;
-  noOfBikes: number;
-  directionTips: string;
+
+interface AdditionalDetailsFormProps {
+  formData: any;
+  setFormData: any
 }
 
-const AdditionalDetailsForm: React.FC = ({ formData, setFormData }) => {
+
+const AdditionalDetailsForm: React.FC<AdditionalDetailsFormProps> = ({ formData, setFormData }) => {
 
   const handleRoomChange = (selectedRooms: string[]) => {
     setFormData({

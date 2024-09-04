@@ -1,0 +1,35 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: realestate-app
+build:
+  artifacts:
+    - image: zayed17/realestate-client
+      context: ./client
+      tagPolicy:
+        latest: {}
+    - image: zayed17/realestate-admin
+      context: ./admin
+      tagPolicy:
+        latest: {}
+    - image: zayed17/realestate-user
+      context: ./user
+      tagPolicy:
+        latest: {}
+    - image: zayed17/realestate-property
+      context: ./property
+      tagPolicy:
+        latest: {}
+    - image: zayed17/realestate-booking
+      context: ./booking
+      tagPolicy:
+        latest: {}
+    - image: zayed17/realestate-chat
+      context: ./chat
+      tagPolicy:
+        latest: {}
+deploy:
+  kubectl:
+    manifests:
+      - infra/k8s/*.yaml
+      - infra/k8s-development/ingress.yaml

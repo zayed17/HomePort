@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaUser, FaHome, FaCreditCard, FaList, FaTachometerAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaHome, FaCreditCard, FaTachometerAlt, FaSignOutAlt } from 'react-icons/fa';
 import { removeCookie } from '../../helpers/removeCookie';
 import toast from 'react-hot-toast';
 

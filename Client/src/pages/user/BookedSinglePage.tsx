@@ -14,7 +14,7 @@ const BookingDetails = () => {
 
   if (isError) {
     console.error('Error fetching booking details:', error);
-    return <p className="text-center text-red-500">Error fetching booking details: {error.message}</p>;
+    return <p className="text-center text-red-500">Error fetching booking details</p>;
   }
 
   if (!booking) {

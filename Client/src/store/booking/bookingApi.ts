@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const URL = '/booking';
+const URL = '/api/booking';
 
 const createGetQuery = (url: string) => ({
   query: () => `${URL}${url}`,
@@ -18,7 +18,7 @@ const createMutation = (url: string, method = 'POST') => ({
 const bookingApi = createApi({
   reducerPath: 'bookingApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5004',
+    baseUrl: 'http://localhost',
     credentials: 'include',
   }),
   endpoints: (builder) => ({

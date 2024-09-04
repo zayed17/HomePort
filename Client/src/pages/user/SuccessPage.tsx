@@ -5,8 +5,8 @@ import axios from 'axios';
 const PaymentSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [paymentDetails, setPaymentDetails] = useState(null);
-  const [hasProcessed, setHasProcessed] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState<any>(null);
+  const [_hasProcessed, setHasProcessed] = useState(false);
   const hasFetchedRef = useRef(false);
 
   // Helper function to parse URL parameters
@@ -20,7 +20,7 @@ const PaymentSuccess = () => {
   };
 
   useEffect(() => {
-    const { sessionId, propertyId, bookingDate } = getQueryParams();
+    const { sessionId, propertyId, bookingDate } :any= getQueryParams();
 
     if (sessionId && !hasFetchedRef.current) {
       // To prevent duplicate API calls

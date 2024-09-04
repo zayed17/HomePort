@@ -12,7 +12,7 @@ const BookedProperties = () => {
 
   if (isError) {
     console.error('Error fetching booked properties:', error);
-    return <p className="text-center text-red-500">Error fetching booked properties: {error.message}</p>;
+    return <p className="text-center text-red-500">Error fetching booked properties: </p>;
   }
 
   if (bookedProperties.length === 0) {
@@ -28,7 +28,7 @@ const BookedProperties = () => {
     <div className="p-6 min-h-screen bg-gradient-to-b from-gray-200 to-white">
       <h2 className="text-4xl font-bold mb-10 text-center text-gray-800">Booked Properties</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {bookedProperties.map((booking) => (
+        {bookedProperties.map((booking:any) => (
           <div
             key={booking.transactionId}
             className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden cursor-pointer "

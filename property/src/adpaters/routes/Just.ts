@@ -8,8 +8,9 @@ export const checking = async (
 ) => {
   try {
     const id = req.user._id;
-    const response = await axios.get(`http://localhost:5001/user/details/${id}`);
-
+    console.log(id,"id checking from front end")
+    const response = await axios.get(`http://localhost/user/details/${id}`);
+console.log(response,"response checking form backend")
     if (!response.data) {
       return res.status(400).json({ message: 'Invalid user data received.' });
     }

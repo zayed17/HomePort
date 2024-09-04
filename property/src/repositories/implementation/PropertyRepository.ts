@@ -11,23 +11,20 @@ export class PropertyRepository implements PropertyInterface {
   }
 
   async find(filter: Partial<Property> = {}): Promise<Property[]> {
-    return PropertyModel.find(filter).lean();
+    return PropertyModel.find(filter) as any
   }
 
   async findOne(filter: any): Promise<Property | null> {
-    return PropertyModel.findOne(filter)
+    return PropertyModel.findOne(filter) as any
   }
 
   async findOneWithPopulation(filter: any,populate:string): Promise<any | null> {
-    return PropertyModel.findOne(filter).populate(populate)
+    return PropertyModel.findOne(filter).populate(populate) as any
   }
 
   async updateProperty(_id: string, property: Partial<Property>): Promise<void> {
     await PropertyModel.updateOne({ _id }, { $set: property })
   }
 
-  async unsetFieldFromProperty(_id: string, fieldName: string): Promise<void> {
-    await PropertyModel.updateOne({ _id },{ $unset: { [fieldName]: "" } })
-  }
 
 }

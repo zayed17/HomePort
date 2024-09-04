@@ -17,7 +17,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onForgotPassword }) => {
     const [login] = useLoginInMutation();
     const form = useFormValidation<LoginFormInputs>(loginSchema);
     const { handleError, clearError, ErrorMessage } = useErrorHandling();
-    const dispatch = useDispatch()
+    useDispatch()
 
     const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
         try {
