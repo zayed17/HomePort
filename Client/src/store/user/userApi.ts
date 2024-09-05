@@ -4,7 +4,7 @@ const URL = '/api/user'
 const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'http://localhost',
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
     credentials:'include',
     }), 
   endpoints: (builder) => ({  

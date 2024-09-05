@@ -18,7 +18,7 @@ const createMutation = (url: string, method = 'POST') => ({
 const bookingApi = createApi({
   reducerPath: 'bookingApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost',
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
     credentials: 'include',
   }),
   endpoints: (builder) => ({

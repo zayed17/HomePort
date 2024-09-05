@@ -13,13 +13,6 @@ spec:
   - host: www.homeport.online
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: client-service
-            port:
-              number: 5173
       - path: /api/user
         pathType: Prefix
         backend:

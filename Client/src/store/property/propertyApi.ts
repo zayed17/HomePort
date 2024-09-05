@@ -75,7 +75,7 @@ const URL = '/api/property';
 const propertyApi = createApi({
   reducerPath: 'propertyApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost',
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
     credentials: 'include',
   }),
   endpoints: (builder) => ({
