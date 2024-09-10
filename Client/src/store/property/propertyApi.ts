@@ -71,11 +71,11 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const URL = '/api/property';
-
+console.log(import.meta.env.VITE_API_URL)
 const propertyApi = createApi({
   reducerPath: 'propertyApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}`,
+    baseUrl: `https://cartfurnish.shop/api/property`,
     credentials: 'include',
   }),
   endpoints: (builder) => ({
