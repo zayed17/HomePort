@@ -75,7 +75,7 @@ console.log(import.meta.env.VITE_API_URL)
 const propertyApi = createApi({
   reducerPath: 'propertyApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `https://cartfurnish.shop/api/property`,
+    baseUrl: `https://cartfurnish.shop`,
     credentials: 'include',
   }),
   endpoints: (builder) => ({
