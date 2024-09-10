@@ -1,39 +1,36 @@
 import React from 'react';
-import Map from './MapShow'
 
 const CardSection: React.FC = () => {
   return (
-    <div className="py-8 bg-gray-100">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-semibold">Our Services</h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/service1.jpg" alt="Service 1" className="w-full h-48 object-cover"/>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">Service 1</h3>
-              <p className="text-gray-700">Description of service 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-          </div>
-          <Map />
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/service2.jpg" alt="Service 2" className="w-full h-48 object-cover"/>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">Service 2</h3>
-              <p className="text-gray-700">Description of service 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/service3.jpg" alt="Service 3" className="w-full h-48 object-cover"/>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">Service 3</h3>
-              <p className="text-gray-700">Description of service 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <>
+     <div className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-12 text-gray-800">What Our Clients Say</h2>
+          <div className="bg-blue-50 p-8 rounded-xl shadow-lg">
+            <p className="text-xl text-gray-700 mb-6 italic">
+              "LuxeRealty made our dream of owning a beachfront property a reality. Their expertise and dedication are unmatched!"
+            </p>
+            <div className="flex items-center justify-center">
+              <img src="/client-avatar.jpg" alt="Client" className="w-16 h-16 rounded-full mr-4" />
+              <div className="text-left">
+                <p className="font-bold text-gray-800">Emily Johnson</p>
+                <p className="text-gray-600">Satisfied Homeowner</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <div className="bg-BlueGray text-white py-16">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-4xl font-bold mb-4">Ready to Find Your Dream Home?</h2>
+          <p className="text-xl mb-8">Let our expert agents guide you through our exclusive listings.</p>
+          <button className="bg-white text-BlueGray px-8 py-3 rounded-full text-lg font-semibold hover:bg-GrayishBlue hover:text-white transition duration-300">
+            Contact Us Today
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 

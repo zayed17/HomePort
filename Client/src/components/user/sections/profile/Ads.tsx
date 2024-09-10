@@ -13,7 +13,7 @@ const Ads = () => {
     
       <button
         onClick={handleAddAdClick}
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-DarkBlue to-LightdarkBlue text-white p-6 rounded-full shadow-lg transition-transform transform hover:scale-95"
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-DarkBlue to-BlueGray text-white p-6 rounded-full shadow-lg transition-transform transform hover:scale-95"
         aria-label="Add New Ad"
       >
         <span className="text-4xl font-extrabold">+</span>

@@ -179,8 +179,8 @@ const PropertyAddPage = () => {
       <div className="flex flex-col items-center justify-center h-screen">
         <h2 className="text-xl mb-4">What are you looking for?</h2>
         <div className="space-x-4">
-          <button onClick={() => handleLookingForSelection('rent')} className="px-4 py-2 bg-LightdarkBlue text-white rounded">Rent</button>
-          <button onClick={() => handleLookingForSelection('sell')} className="px-4 py-2 bg-lightViolet text-white rounded">Sell</button>
+          <button onClick={() => handleLookingForSelection('rent')} className="px-4 py-2 bg-BlueGray text-white rounded">Rent</button>
+          <button onClick={() => handleLookingForSelection('sell')} className="px-4 py-2 bg-GrayishBlue text-white rounded">Sell</button>
         </div>
       </div>
     );
@@ -193,14 +193,14 @@ const PropertyAddPage = () => {
           {sectionTitles.map((section, index) => (
             <div key={index} className="flex flex-col items-center">
               <div
-                className={`w-8 h-8 flex items-center justify-center rounded-full ${currentSection === index + 1 ? 'bg-LightdarkBlue' : 'bg-gray-300'}`}
+                className={`w-8 h-8 flex items-center justify-center rounded-full ${currentSection === index + 1 ? 'bg-BlueGray' : 'bg-gray-300'}`}
                 onClick={() => handleSectionClick(index + 1)}
                 title={section.title}
               >
                 {section.icon}
               </div>
               <span
-                className={`mt-2 text-xs ${currentSection === index + 1 ? 'text-LightdarkBlue' : 'text-gray-600'}`}
+                className={`mt-2 text-xs ${currentSection === index + 1 ? 'text-BlueGray' : 'text-gray-600'}`}
               >
                 {section.title}
               </span>
@@ -230,7 +230,7 @@ const PropertyAddPage = () => {
           {currentSection > 1 && (
             <button
               onClick={() => handleSectionClick(currentSection - 1)}
-              className="px-4 py-2 bg-LightdarkBlue text-white rounded shadow"
+              className="px-4 py-2 bg-BlueGray text-white rounded shadow"
             >
               Back
             </button>
@@ -238,7 +238,7 @@ const PropertyAddPage = () => {
           {currentSection < sectionTitles.length && (
             <button
               onClick={() => handleSectionClick(currentSection + 1)}
-              className="px-4 py-2 bg-LightdarkBlue text-white rounded shadow"
+              className="px-4 py-2 bg-BlueGray text-white rounded shadow"
             >
               Next
             </button>
@@ -246,7 +246,7 @@ const PropertyAddPage = () => {
           {currentSection === sectionTitles.length && (
             <button
               onClick={handleFormSubmit}
-              className="px-4 py-2 bg-lightViolet text-white rounded shadow"
+              className="px-4 py-2 bg-GrayishBlue text-white rounded shadow"
             >
               {isEditing ? 'Update Property' : 'Add Property'}
             </button>

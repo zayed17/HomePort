@@ -145,9 +145,9 @@ const PropertyDetailsPage: React.FC = () => {
         <div className="flex items-center space-x-6">
           <button
             onClick={openModal}
-            className="border-LightdarkBlue border text-LightdarkBlue font-bold py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+            className="border-BlueGray border text-BlueGray font-bold py-2 px-4 rounded-full flex items-center justify-center space-x-2"
           >
-            <FaRegFlag className="text-LightdarkBlue" />
+            <FaRegFlag className="text-BlueGray" />
             <span>Report</span>
           </button>
         <ConnectWithOwnerButton
@@ -366,7 +366,7 @@ const PropertyDetailsPage: React.FC = () => {
                 </span>
               </div>
             )}
-            <button onClick={handleBooking} className='rounded-full p-3 bg-LightdarkBlue text-white w-full font-semibold hover:bg-darkBlue transition-all'>
+            <button onClick={handleBooking} className='rounded-full p-3 bg-BlueGray text-white w-full font-semibold hover:bg-darkBlue transition-all'>
               Book now
             </button>
           </div>

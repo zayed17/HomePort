@@ -116,7 +116,8 @@ const ChatPage: React.FC = () => {
 
         try {
           setUploadingMessageId('temp'); 
-          const response = await fetch('http://localhost/api/chat/upload', {
+          // const response = await fetch('http://localhost/api/chat/upload', {
+          const response = await fetch('https://cartfurnish.shop/api/chat/upload', {
             method: 'POST',
             body: formData,
           });

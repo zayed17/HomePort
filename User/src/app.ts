@@ -11,11 +11,9 @@ const app = express();
 //   allowedHeaders: ['Content-Type', 'Authorization'],
 //   credentials: true,
 // };
-// // main()
 // app.use(cors(corsOptions));
 app.use('/api/user/subscription', express.raw({ type: 'application/json' }));
 app.use(express.json());
-// app.use(cors(corsOptions));
 app.use('/api/user', userRoutes);
 app.use(errorHandler)
 

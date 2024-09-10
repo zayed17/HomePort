@@ -6,7 +6,7 @@ import { GoogleAuthInterface } from '../interface';
 export class GoogleAuthRepository implements GoogleAuthInterface {
   private clientId: string = process.env.GOOGLE_CLIENT_ID!;
   private clientSecret: string = process.env.GOOGLE_CLIENT_SECRET!;
-  private redirectUri: string = 'http://localhost:5173'; 
+  private redirectUri: string = 'https://cartfurnish.shop'; 
 
   public async exchangeCodeForTokens(code: string): Promise<any> {
     try {

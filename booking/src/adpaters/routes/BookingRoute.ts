@@ -16,7 +16,7 @@ import { Types } from "mongoose";
 
 const router = Router();
 
-const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0';
+const endpointSecret = 'whsec_QHcpQyNgYpG7ofY17pOwjRPuRGO03wOU';
 const convertToISODate = (bookingDate: { day: number; month: number; year: number }): string => {
   const { day, month, year } = bookingDate;
   const date = new Date(year, month - 1, day);
@@ -52,8 +52,8 @@ router.post('/make-payment', authenticateToken(['user']), async (req: any, res) 
         },
       ],
       mode: 'payment',
-      success_url: `http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
-      cancel_url: 'http://localhost:5173/payment-error',
+      success_url: `https://cartfurnish.shop/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
+      cancel_url: 'https://cartfurnish.shop/payment-error',
       metadata: {
         propertyId,
         userId,
@@ -97,7 +97,7 @@ router.post('/booking', async (req: any, res: Response) => {
 
     try {
       console.log(propertyId, "id consoling")
-      const propertyResponse = await axios.get(`http://localhost:5003/api/property/property/${propertyId}`);
+      const propertyResponse = await axios.get(`https://cartfurnish.shop/api/property/property/${propertyId}`);
       const propertyData = propertyResponse.data;
       console.log(propertyData)
       if (!propertyData) {
@@ -122,7 +122,7 @@ router.post('/booking', async (req: any, res: Response) => {
         }
       };
 
-      const userResponse = await axios.get(`http://localhost:5001/api/user/details/${userId}`);
+      const userResponse = await axios.get(`https://cartfurnish.shop/api/user/details/${userId}`);
       const userData = userResponse.data;
       console.log(userData)
       if (!userData) {

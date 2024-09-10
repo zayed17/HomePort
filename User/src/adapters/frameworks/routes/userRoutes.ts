@@ -3,6 +3,8 @@ import { UserController } from '../express/controllers/UserController';
 import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase ,UserAdminDashboardUseCase} from '../../../usecases';
 import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository,UserSubscriptionRepository,NotificationRepository } from '../../../repositories';
 import { authenticateToken } from 'homepackage'
+// import { authenticateToken } from '../../../../../HomePackage'
+
 import upload from '../express/middleware/uploadMiddleware'
 import { MessageBrokerService } from '../../../services/MessageBrokerService';
 
@@ -13,7 +15,7 @@ import { RabbitMQConsumer } from '../../../infrastructure/rabbitMq/RabbitMQConsu
 import { RabbitMQClient } from '../../../infrastructure/rabbitMq/RabbitMQClient';
 const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
 
-const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0';
+const endpointSecret = 'whsec_ROxldQwb16SNlaBqMd7RtxVqNnmz1vVu';
 
 
 
@@ -24,7 +26,7 @@ const s3Repository = new S3Repository();
 const googleAuthRepository = new GoogleAuthRepository()
 const messageBrokerService = new MessageBrokerService()
 const userSubscriptionRepository = new UserSubscriptionRepository()
-const notificationRepository = new NotificationRepository('http://localhost:3000')
+const notificationRepository = new NotificationRepository('https://cartfurnish.shop/api/property')
 
 const signUpUseCase = new SignUpUseCase(userRepository, otpService, emailService);
 const loginUseCase = new LoginUseCase(userRepository);
