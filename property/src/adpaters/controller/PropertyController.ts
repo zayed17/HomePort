@@ -154,7 +154,7 @@ export class PropertyController {
   async handleWebhook(req: Request, res: Response, next: NextFunction): Promise<any> {
     const sig = req.headers['stripe-signature'] as string;
     const rawBody = req.body as Buffer;
-    const endpointSecret = 'whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0'
+    const endpointSecret = 'whsec_NXib2dT77jJqBgq3UC9bPiQtuPpmofhx'
 
     if (!sig) {
       return res.status(400).send('Missing Stripe signature');

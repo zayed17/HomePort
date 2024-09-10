@@ -1,119 +1,122 @@
-import React from 'react';
-import { FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
-import { FaArrowRight } from 'react-icons/fa6';
+import  { useState } from 'react';
+import { FaMapMarkerAlt, FaSearch, FaArrowRight, FaBed, FaBath, FaRuler, FaHeart } from 'react-icons/fa';
 
-const Banner: React.FC = () => {
+const LuxeRealEstatePage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const featuredProperties = [
+    {
+      id: 1,
+      title: "Oceanfront Villa",
+      beds: 5,
+      baths: 4,
+      sqft: 4500,
+      price: 3500000,
+      image: "/property-1.jpg",
+      description: "Stunning oceanfront villa with panoramic views and private beach access."
+    },
+    {
+      id: 2,
+      title: "Mountain Retreat",
+      beds: 4,
+      baths: 3,
+      sqft: 3800,
+      price: 2800000,
+      image: "/property-2.jpg",
+      description: "Luxurious mountain home with breathtaking views and ski-in/ski-out access."
+    },
+    {
+      id: 3,
+      title: "Urban Penthouse",
+      beds: 3,
+      baths: 3,
+      sqft: 3200,
+      price: 4200000,
+      image: "/property-3.jpg",
+      description: "Exclusive penthouse in the heart of the city with a private rooftop terrace."
+    },
+  ];
+
   return (
-    <div>
-      <div
-        className="relative bg-cover bg-center bg-fixed h-screen"
-        style={{
-          backgroundImage: `url(/assets/images/image.jpg)`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+    <div className="font-sans bg-gray-100">
+      {/* Hero Section */}
+      <div className="relative bg-cover bg-center bg-fixed h-screen" style={{ backgroundImage: `url(/assets/images/image.jpg)` }}>
+        <div className="absolute inset-0 bg-black opacity-60"></div>
         <div className="relative flex flex-col items-center justify-center h-full px-4 text-white">
-          <h1 className="text-4xl  font-bold mb-4 text-center">
-            Find Your Dream <span className='text-darkBlue'>Home</span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-center animate-fade-in-down">
+            Discover Your <span className="text-GrayishBlue">Dream Home</span>
           </h1>
-          <p className="text-xl mb-8 text-center">
-            We offer the best deals in town.
+          <p className="text-xl md:text-2xl mb-8 text-center max-w-2xl animate-fade-in-up">
+            Unparalleled luxury and comfort await in our exclusive properties.
           </p>
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md animate-fade-in">
             <div className="relative">
-              <span className="absolute left-4 top-3 text-gray-400">
+              <span className="absolute left-4 top-4 text-gray-400">
                 <FaMapMarkerAlt />
               </span>
               <input
                 type="text"
-                className="pl-10 pr-12 py-3 w-full bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Search properties..."
+                className="pl-12 pr-20 py-4 w-full bg-white text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-GrayishBlue focus:border-transparent transition duration-300 text-lg"
+                placeholder="Search luxury properties..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button className="absolute right-4 top-3 text-gray-400 hover:text-blue-500">
-                <FaSearch />
+              <button className="absolute right-2 top-2 bg-GrayishBlue text-white px-4 py-2 rounded-full hover:bg-BlueGray transition duration-300 flex items-center">
+                <FaSearch className="mr-2" /> Search
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white py-12 md:py-16">
-  <div className="max-w-5xl mx-auto px-4 md:px-6">
-    <div className="flex flex-col md:flex-row items-center justify-between">
-      <div className="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-          Find Your Dream Home
-        </h2>
-        <blockquote className="text-xl font-semibold italic text-gray-600">
-          "We offer the best deals in town."
-        </blockquote>
-      </div>
-      <div className="md:w-1/2">
-        <div className="relative">
-          <img
-            src="/assets/images/ohio.png"
-            alt="Home"
-            className="w-full h-auto rounded-lg shadow-md"
-          />
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-500 to-blue-700 opacity-20 rounded-lg"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-      <div className="bg-gray-100 py-12">
+      {/* Featured Properties Section */}
+      <div className="bg-gray-100 py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Featured Properties</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {/* Featured Property Card */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <img
-                src="/assets/images/ohio.png"
-                alt="Property 1"
-                className="w-full h-64 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold mb-2">Luxury Apartment</h3>
-                <p className="text-gray-600 mb-4">3 Bedrooms, 2 Bathrooms</p>
-                <div className="flex justify-between items-center">
-                  <p className="text-blue-500 font-bold">$450,000</p>
-                  <a href="#" className="text-blue-500 hover:text-blue-700 flex items-center">
-                    View Details <FaArrowRight className="ml-2" />
-                  </a>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center text-gray-800">Featured Luxury Properties</h2>
+          <p className="text-xl text-center text-gray-600 mb-12">Explore our handpicked selection of premium real estate</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {featuredProperties.map((property) => (
+              <div key={property.id} className="bg-white rounded-xl shadow-2xl overflow-hidden transform hover:scale-105 transition duration-300">
+                <div className="relative">
+                  <img
+                    src={property.image}
+                    alt={property.title}
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="absolute top-4 right-4 bg-GrayishBlue text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Featured
+                  </div>
+                  <button className="absolute top-4 left-4 bg-white text-GrayishBlue p-2 rounded-full hover:bg-GrayishBlue hover:text-white transition duration-300">
+                    <FaHeart />
+                  </button>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-2 text-gray-800">{property.title}</h3>
+                  <div className="flex items-center mb-4 text-gray-600">
+                    <FaBed className="mr-2" /> <span className="mr-4">{property.beds} Beds</span>
+                    <FaBath className="mr-2" /> <span className="mr-4">{property.baths} Baths</span>
+                    <FaRuler className="mr-2" /> <span>{property.sqft} sqft</span>
+                  </div>
+                  <p className="text-gray-600 mb-4">
+                    {property.description}
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-GrayishBlue font-bold text-2xl">${property.price.toLocaleString()}</p>
+                    <button className="bg-GrayishBlue text-white px-6 py-2 rounded-full hover:bg-BlueGray transition duration-300 flex items-center">
+                      View Details <FaArrowRight className="ml-2" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* About Section */}
-      <div className="bg-white py-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2">
-              <img
-                src="/assets/images/image.jpg"
-                alt="About"
-                className="w-full h-auto rounded-lg shadow-md"
-              />
-            </div>
-            <div className="md:w-1/2 md:ml-8 mt-8 md:mt-0">
-              <h2 className="text-3xl font-bold mb-4">About Our Real Estate Agency</h2>
-              <p className="text-gray-600 mb-4">
-                We are a leading real estate agency dedicated to helping our clients find their dream homes. With years of experience and a team of knowledgeable agents, we are committed to providing exceptional service and finding the perfect property for your needs.
-              </p>
-              <a href="#" className="text-blue-500 hover:text-blue-700 flex items-center">
-                Learn More <FaArrowRight className="ml-2" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      {/* Call to Action Section */}
+     
     </div>
   );
 };
 
-export default Banner;
+export default LuxeRealEstatePage;

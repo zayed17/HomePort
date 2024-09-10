@@ -9,7 +9,7 @@ const AdminNavbar: React.FC = () => {
       <div className="text-xl font-bold">Brand Name</div>
       <div className="flex items-center">
         <Notification />
-        <Link to="/" className="flex items-center bg-LightdarkBlue text-white py-2 px-4 rounded hover:bg-[#373759] ml-4">
+        <Link to="/" className="flex items-center bg-BlueGray text-white py-2 px-4 rounded hover:bg-[#373759] ml-4">
           <FaArrowLeft className="mr-2" />
           Go Back
         </Link>

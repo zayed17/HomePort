@@ -9,7 +9,6 @@ export class GetUserDetailUsecase{
     constructor(private userRepository : UserInterface){}
     async getDetail(params:getDetailParams): Promise<User> {
         const id = params;
-        console.log(id,"id checking",params)
         const user = await this.userRepository.findOneWithPopulation({_id:id},'subscriptionId')
         console.log(user,"gets")
         if(!user){

@@ -3,10 +3,11 @@ import { io, Socket } from 'socket.io-client';
 let socket: Socket | null = null;
 
 try {
-    socket = io('http://localhost:5003', {
+    // socket = io('http://localhost:5003', {
+    socket = io('https://cartfurnish.shop/api/property', {
         withCredentials: true,
-        reconnectionAttempts: 1,  
-        reconnectionDelay: 5000,  
+        reconnectionAttempts: 5,  
+        reconnectionDelay: 3000,  
     });
 
     socket.on('connect', () => {

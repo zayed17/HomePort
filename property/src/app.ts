@@ -63,7 +63,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO server with CORS options
 export const io = new SocketIOServer(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://cartfurnish.shop",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true

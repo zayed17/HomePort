@@ -25,7 +25,7 @@ const BookingMain: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-Lightext-LightdarkBlue"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-Lightext-BlueGray"></div>
       </div>
     );
   }
@@ -102,19 +102,19 @@ const BookingMain: React.FC = () => {
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">Property Details</h2>
                 <div className="grid grid-cols-2 text-lg md:grid-cols-4 gap-4">
                   <div className="flex items-center">
-                    <FaBed className="text-LightdarkBlue mr-2" />
+                    <FaBed className="text-BlueGray mr-2" />
                     <span>{property.bedrooms} Bedrooms</span>
                   </div>
                   <div className="flex items-center">
-                    <FaBath className="text-LightdarkBlue mr-2" />
+                    <FaBath className="text-BlueGray mr-2" />
                     <span>{property.bathrooms} Bathrooms</span>
                   </div>
                   <div className="flex items-center">
-                    <FaRulerCombined className="text-LightdarkBlue mr-2" />
+                    <FaRulerCombined className="text-BlueGray mr-2" />
                     <span>{property.totalArea} sq ft</span>
                   </div>
                   <div className="flex items-center">
-                    <FaCalendarAlt className="text-LightdarkBlue mr-2" />
+                    <FaCalendarAlt className="text-BlueGray mr-2" />
                     <span>Available Now</span>
                   </div>
                 </div>
@@ -124,18 +124,18 @@ const BookingMain: React.FC = () => {
                 <h2 className="text-3xl font-bold text-gray-800 mb-4">Property Owner</h2>
                 <div className="bg-gray-50 p-6 rounded-xl">
                   <div className="flex items-center mb-4">
-                    <FaUserCircle className="text-4xl text-LightdarkBlue mr-4" />
+                    <FaUserCircle className="text-4xl text-BlueGray mr-4" />
                     <div>
                       <p className="font-semibold text-lg">{property.createdBy.name}</p>
                       <p className="text-gray-600">Property Owner</p>
                     </div>
                   </div>
                   <div className="flex items-center mb-2">
-                    <FaEnvelope className="text-LightdarkBlue mr-2" />
+                    <FaEnvelope className="text-BlueGray mr-2" />
                     <span>{property.createdBy.email}</span>
                   </div>
                   <div className="flex items-center">
-                    <FaPhone className="text-LightdarkBlue mr-2" />
+                    <FaPhone className="text-BlueGray mr-2" />
                     <span>{property.createdBy.phone}</span>
                   </div>
                 </div>
@@ -171,7 +171,7 @@ const BookingMain: React.FC = () => {
                 <div className="bg-white p-6 rounded-xl shadow-lg">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">Booking Summary</h2>
                   <div className="text-center mb-6">
-                    <h3 className="text-4xl font-bold text-Lighbg-LightdarkBlue mb-2">
+                    <h3 className="text-4xl font-bold text-Lighbg-BlueGray mb-2">
                       {property.lookingFor === 'rent' ? `₹${property.rentAmount}` : `₹${property.sellPrice}`}
                     </h3>
                     <p className="text-gray-600">
@@ -189,7 +189,7 @@ const BookingMain: React.FC = () => {
                   </div>
                   <button
                     onClick={handleBooking}
-                    className="mt-8 w-full p-4 bg-LightdarkBlue text-white font-bold rounded-full"
+                    className="mt-8 w-full p-4 bg-BlueGray text-white font-bold rounded-full"
                   >
   {loading ? 'Booking...' : 'Confirm Booking'}
                   </button>

@@ -75,7 +75,7 @@ const ReportModal: React.FC<ReportModalProps> = ({propertyId, isOpen, onClose })
         ></textarea>
 
         <button
-          className="bg-LightdarkBlue text-white py-2 px-4 rounded-md w-full hover:bg-darkBlue transition-colors"
+          className="bg-BlueGray text-white py-2 px-4 rounded-md w-full hover:bg-darkBlue transition-colors"
           onClick={handleSubmit}
         >
           Submit Report

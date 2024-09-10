@@ -80,7 +80,7 @@ const Notification: React.FC = () => {
       </button>
       {isDropdownOpen && (
         <div className="absolute right-0 mt-3 w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 ease-in-out transform origin-top-right z-50">
-          <div className="flex justify-between items-center py-4 px-6 bg-gradient-to-r to-DarkBlue from-LightdarkBlue text-white">
+          <div className="flex justify-between items-center py-4 px-6 bg-gradient-to-r to-DarkBlue from-BlueGray text-white">
             <h3 className="font-bold text-lg">Notifications</h3>
             <button onClick={handleDropdownToggle} className="text-white hover:text-gray-200 transition-colors duration-200">
               <FaTimes />

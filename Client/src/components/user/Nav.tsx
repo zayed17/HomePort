@@ -3,7 +3,7 @@ import React from 'react';
 
 const Nav: React.FC = () => {
   return (
-    <nav className="bg-LightdarkBlue p-4 text-white">
+    <nav className="bg-BlueGray p-4 text-white">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-2xl font-bold">HomeMatch</div>
         <div>

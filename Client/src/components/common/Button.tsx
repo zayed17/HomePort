@@ -11,7 +11,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ type = 'button', onClick, children, className }) => {
     return (
         <button
-            className={`bg-LightdarkBlue text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline ${className}`}
+            className={`bg-BlueGray text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline ${className}`}
             type={type}
             onClick={onClick}
         >

@@ -13,7 +13,7 @@ export const SelectButton:React.FC<SelectButtonProps> = ({ options, selectedValu
         key={option}
         type="button"
         onClick={() => onChange(option)}
-        className={`px-4 py-2 rounded-full ${selectedValue === option ? 'bg-LightdarkBlue text-white' : 'bg-gray-200 text-gray-700'}`}
+        className={`px-4 py-2 rounded-full ${selectedValue === option ? 'bg-BlueGray text-white' : 'bg-gray-200 text-gray-700'}`}
       >
         {option}
       </button>
@@ -99,7 +99,7 @@ export const TextInput: React.FC<TextInputProps> = ({ label, type,name, value, o
               type="button"
               onClick={() => toggleOption(option)}
               className={`px-4 py-2 rounded-full ${
-                selectedValues.includes(option) ? 'bg-LightdarkBlue text-white' : 'bg-gray-200 text-gray-700'
+                selectedValues.includes(option) ? 'bg-BlueGray text-white' : 'bg-gray-200 text-gray-700'
               }`}
             >
               {option}
@@ -116,7 +116,7 @@ export const TextInput: React.FC<TextInputProps> = ({ label, type,name, value, o
           <button
             type="button"
             onClick={addCustomOption}
-            className="px-4 py-2  bg-LightdarkBlue text-white rounded"
+            className="px-4 py-2  bg-BlueGray text-white rounded"
           >
             Add
           </button>

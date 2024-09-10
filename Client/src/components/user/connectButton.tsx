@@ -26,7 +26,8 @@ const ConnectWithOwnerButton: React.FC<ConnectWithOwnerButtonProps> = ({
 
     if (userDetails) {
       try {
-        const response = await fetch('http://localhost/api/chat/chats', {
+        // const response = await fetch('http://localhost/api/chat/chats', {
+        const response = await fetch('https://cartfurnish.shop/api/chat/chats', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -54,7 +55,7 @@ const ConnectWithOwnerButton: React.FC<ConnectWithOwnerButtonProps> = ({
     <button
       onClick={handleConnect}
       disabled={isLoading || isError}
-      className="border-LightdarkBlue border text-LightdarkBlue font-bold py-2 px-4 rounded-full flex items-center justify-center space-x-2"
+      className="border-BlueGray border text-BlueGray font-bold py-2 px-4 rounded-full flex items-center justify-center space-x-2"
     >
       <span>Connect With Owner</span>
     </button>
