@@ -1,6 +1,9 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/api/(.*)",
+      "destination": "https://api.cartfurnish.shop/api/$1"
+    }
   ],
   "headers": [
     {
