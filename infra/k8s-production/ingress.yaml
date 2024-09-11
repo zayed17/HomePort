@@ -88,10 +88,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - cartfurnish.shop  
+    - api.cartfurnish.shop  
     secretName: cartfurnish-tls 
   rules:
-  - host: cartfurnish.shop  
+  - host: api.cartfurnish.shop  
     http:
       paths:
       # - path: /
@@ -136,7 +136,7 @@ spec:
             name: booking-service
             port:
               number: 5004
-      - path: /api/chat/
+      - path: /api/chat
         pathType: Prefix
         backend:
           service:
