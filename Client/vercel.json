@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://api.cartfurnish.shop/api/$1"
+      "destination": "https://cartfurnish.shop/api/$1"
     }
   ],
   "headers": [

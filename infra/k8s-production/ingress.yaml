@@ -79,7 +79,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"  
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true" 
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://api.cartfurnish.shop"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://cartfurnish.shop"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS, DELETE, PUT, PATCH"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
     nginx.ingress.kubernetes.io/cors-allow-headers: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -88,10 +88,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.cartfurnish.shop  
+    - cartfurnish.shop  
     secretName: cartfurnish-tls 
   rules:
-  - host: api.cartfurnish.shop  
+  - host: cartfurnish.shop  
     http:
       paths:
       # - path: /
