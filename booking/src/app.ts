@@ -7,13 +7,13 @@ import connectDB from './infrastrucuture/mongoDb/connection/connection';
 
 const app = express();
 
-// const corsOptions = {
-//   origin: 'http://localhost:5173',
-//   methods: ['GET', 'POST', 'OPTIONS','PATCH','PUT'], 
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-//   credentials: true,
-// };
-// app.use(cors(corsOptions));
+const corsOptions = {
+  origin: 'https://cartfurnish.shop',
+  methods: ['GET', 'POST', 'OPTIONS','PATCH','PUT'], 
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use('/api/booking/booking', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

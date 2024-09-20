@@ -78,14 +78,14 @@ io.on('connection', (socket) => {
   });
 });
 
-// const corsOptions = {
-//   origin: "http://localhost:5173",
-//   methods: ["GET", "POST", "OPTIONS", "PATCH"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   credentials: true,
-// };
+const corsOptions = {
+  origin: "https://cartfurnish.shop",
+  methods: ["GET", "POST", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use('/api/property/sponsored-success', express.raw({ type: 'application/json' }));
 
 app.use(express.json());
