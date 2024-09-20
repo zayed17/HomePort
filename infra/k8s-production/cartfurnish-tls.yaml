@@ -1,0 +1,40 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  creationTimestamp: "2024-09-13T02:04:00Z"
+  generation: 1
+  name: cartfurnish-tls
+  namespace: default
+  ownerReferences:
+  - apiVersion: networking.k8s.io/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Ingress
+    name: my-ingress
+    uid: 4f1acf65-f455-48bc-a63e-ac870f0d3c67
+  resourceVersion: "1803309"
+  uid: c04871fe-215c-4e64-b39d-7c69b64f55ad
+spec:
+  dnsNames:
+  - cartfurnish.shop
+  - www.cartfurnish.shop
+  - api.cartfurnish.shop
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: cartfurnish-tls
+  usages:
+  - digital signature
+  - key encipherment
+status:
+  conditions:
+  - lastTransitionTime: "2024-09-13T02:04:00Z"
+    message: Certificate is up to date and has not expired
+    observedGeneration: 1
+    reason: Ready
+    status: "True"
+    type: Ready
+  notAfter: "2024-12-10T07:37:33Z"
+  notBefore: "2024-09-11T07:37:34Z"
+  renewalTime: "2024-11-10T07:37:33Z"

@@ -5,13 +5,13 @@ import errorHandler from './infrastructure/middleware/ErrorMiddleware';
 
 const app = express();
 
-// const corsOptions = {
-//   origin: "http://localhost:5173",
-//   methods: ['GET', 'POST', 'OPTIONS','PUT','PATCH'], 
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-//   credentials: true,
-// };
-// app.use(cors(corsOptions));
+const corsOptions = {
+  origin: "https://cartfurnish.shop",
+  methods: ['GET', 'POST', 'OPTIONS','PUT','PATCH'], 
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use('/api/user/subscription', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use('/api/user', userRoutes);
