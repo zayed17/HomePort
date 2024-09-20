@@ -15,7 +15,7 @@ const Navbar = () => {
   const [notificationCount, setNotificationCount] = useState(0);
   const socket = useSocket();
   const navigate = useNavigate();
-  const { isAuthenticated, user, logout } = useAuth(); 
+  const { isAuthenticated, logout } = useAuth(); 
 
   useEffect(() => {
     const handleResize = () => window.innerWidth >= 768 && setIsMenuOpen(false);

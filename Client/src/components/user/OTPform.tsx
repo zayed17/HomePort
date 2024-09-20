@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Input from '../common/Input';
@@ -31,7 +30,6 @@ const OTPform: React.FC<OTPformProps> = ({ setIsLogin, onClose, email, onOtpVeri
   const [resendOTP] = useResendOTPMutation()
   const form = useFormValidation<OtpFormInputs>(otpSchema);
   const { ErrorMessage, clearError, handleError } = useErrorHandling();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +50,7 @@ const OTPform: React.FC<OTPformProps> = ({ setIsLogin, onClose, email, onOtpVeri
   const handleOTPSubmit = async (data: any) => {
     try {
       if (isSignupOtp) {
-        const res = await otpVerify({ otp: data.otp, email }).unwrap();
+        await otpVerify({ otp: data.otp, email }).unwrap();
         console.log("first")
         clearError();
         setIsLogin(true);

@@ -7,7 +7,7 @@ import { AppDispatch } from '../store/store';
 export const useAuth = () => {
     const dispatch: AppDispatch = useDispatch();
     
-    const { data: userData, error, isLoading, isError } = useCheckAuthQuery({});
+    const { data: userData,  isLoading, isError } = useCheckAuthQuery({});
     
     const [logout] = useLogoutMutation();
 
