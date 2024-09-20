@@ -10,6 +10,7 @@ try {
         reconnectionDelay: 3000,  
     });
 
+    
     socket.on('connect', () => {
         console.log('Connected to the server:', socket?.id);
     });
