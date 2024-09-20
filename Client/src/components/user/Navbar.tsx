@@ -4,19 +4,18 @@ import { FaHome, FaHeart, FaCrown, FaComments, FaUser, FaPlus } from 'react-icon
 import { BellOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { Badge, notification, Dropdown } from 'antd';
 import useSocket from '../../hooks/useSocket';
-import LoginModal from '../common/LoginModal';
-import { getCookie } from '../../helpers/getCookie';
-import { removeCookie } from '../../helpers/removeCookie';  
+import LoginModal from '../common/LoginModal';  
 import NotificationDrawer from './NotificationDrawer';
+import { useAuth } from '../../hooks/useAuth';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
-  const token = getCookie('token');
   const socket = useSocket();
   const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth(); 
 
   useEffect(() => {
     const handleResize = () => window.innerWidth >= 768 && setIsMenuOpen(false);
@@ -39,7 +38,7 @@ const Navbar = () => {
   }, [socket, navigate]);
 
   const handleAdminBlocked = () => {
-    removeCookie('token');
+    logout();
     notification.error({
       message: 'Access Denied',
       description: 'Your account has been blocked by the admin.',
@@ -51,7 +50,7 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const handleNotificationClick = () => setIsNotificationOpen(true);
-  const handleProfileOrLoginClick = () => token ? navigate('/profile/details') : setIsModalOpen(true);
+  const handleProfileOrLoginClick = () => isAuthenticated ? navigate('/profile/details') : setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const closeNotificationDrawer = () => setIsNotificationOpen(false);
 
@@ -80,7 +79,7 @@ const Navbar = () => {
         <FaUser className="w-5 h-5 text-BlueGray" />
         <span className="text-BlueGray">Profile</span>
       </button>
-      <button onClick={() => { removeCookie('token'); navigate('/'); }} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2">
+      <button onClick={logout} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2">
         <CloseOutlined className="w-5 h-5 text-BlueGray" />
         <span className="text-BlueGray">Logout</span>
       </button>
@@ -97,7 +96,7 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item, index) => (
-              (!item.requiresAuth || token) && (
+              (!item.requiresAuth || isAuthenticated) && (
                 <Link key={index} to={item.to} className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200">
                   {item.icon}
                   <span>{item.text}</span>
@@ -107,7 +106,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            {token ? (
+            {isAuthenticated ? (
               <>
                 <Dropdown overlay={userMenu} placement="bottomRight" trigger={['click']}>
                   <button className="bg-white text-BlueGray rounded-full px-4 py-2 font-semibold hover:bg-gray-200 transition-colors duration-200 flex items-center space-x-2">
@@ -144,14 +143,14 @@ const Navbar = () => {
         <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden mt-4 bg-white rounded-lg shadow-lg p-4 absolute left-4 right-4 top-16`}>
           <div className="flex flex-col space-y-3">
             {navItems.map((item, index) => (
-              (!item.requiresAuth || token) && (
+              (!item.requiresAuth || isAuthenticated) && (
                 <Link key={index} to={item.to} className="flex items-center space-x-2 text-BlueGray hover:text-gray-600 transition-colors duration-200 py-2">
                   {item.icon}
                   <span>{item.text}</span>
                 </Link>
               )
             ))}
-            {token ? (
+            {isAuthenticated ? (
               <>
                 <Link to="/profile/details" className="flex items-center space-x-2 text-BlueGray hover:text-gray-600 transition-colors duration-200 py-2">
                   <FaUser className="w-5 h-5" />

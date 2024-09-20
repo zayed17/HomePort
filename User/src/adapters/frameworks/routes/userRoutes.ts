@@ -3,7 +3,6 @@ import { UserController } from '../express/controllers/UserController';
 import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase ,UserAdminDashboardUseCase} from '../../../usecases';
 import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository,UserSubscriptionRepository,NotificationRepository } from '../../../repositories';
 import { authenticateToken } from 'homepackage'
-// import { authenticateToken } from '../../../../../HomePackage'
 
 import upload from '../express/middleware/uploadMiddleware'
 import { MessageBrokerService } from '../../../services/MessageBrokerService';
@@ -65,8 +64,9 @@ router.put('/forgetPassword', (req, res, next) => userController.forgotPassword(
 router.put('/changePassword', authenticateToken(['user']), (req, res, next) => userController.changePassword(req, res, next));
 router.get('/getUser', authenticateToken(['user']), (req, res, next) => userController.getUser(req, res, next));
 
+router.get('/check-auth', authenticateToken(['user']), (req, res, next) => userController.checkAuth(req, res, next));
 router.get('/details/:id',(req, res, next) => userController.getDetails(req, res, next));
-
+router.post('/logout',(req, res, next) => userController.logout(req, res, next));
 
 // router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
 router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));

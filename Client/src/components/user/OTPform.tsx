@@ -8,7 +8,6 @@ import { useOtpVerifyMutation, useResendOTPMutation } from '../../store/user/use
 import { useFormValidation } from '../../hooks/useFormValidation';
 import { otpSchema, OtpFormInputs } from '../../validation/validationSchema';
 import useErrorHandling from '../../hooks/useErrorHandling';
-import { setToken, setUser } from '../../store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -57,8 +56,6 @@ const OTPform: React.FC<OTPformProps> = ({ setIsLogin, onClose, email, onOtpVeri
         console.log("first")
         clearError();
         setIsLogin(true);
-        dispatch(setUser(res.user));
-        dispatch(setToken(res.token));
         onClose();
         navigate('/');
         toast.success('SignUp successfully');

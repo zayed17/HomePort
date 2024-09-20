@@ -57,7 +57,7 @@ const AppRoutes = () => {
             <Route path="/booking/:id" element={<BookingPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile/dashboard" element={<Dashboard />} />
-            <Route path="/profile/details" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={Profile} />} />
+            <Route path="/profile/details" element={<Profile/>} />
             <Route path="/profile/properties" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
             <Route path="/profile/payment" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
             <Route path="/profile/booked" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PostedPage} />} />

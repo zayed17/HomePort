@@ -1,36 +1,48 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface User {
+    name: string;
+    email: string;
+    role: string;
+}
 
-const initialState  = {
-  user: null,
-  isLoggedIn: false,
-  userToken: localStorage.getItem('userToken') ?? null,
-  role:[]
+export interface AuthState {
+    user: User | any;
+    isAuthenticated: boolean;
+    loading: boolean;
+    error: string | null;
+}
+
+const initialState: AuthState = {
+    user: null,
+    isAuthenticated: false,
+    loading: false,
+    error: null,
 };
 
 const authSlice = createSlice({
-  name: 'userAuth',
-  initialState,
-  reducers: {
-    setUser(state, action) {
-      state.user = action.payload;
-      state.role = action.payload;
-      state.isLoggedIn = true;
-    },
-    logout(state) {
-      state.user = null;
-      state.isLoggedIn = false;
-      state.userToken = null;
-      state.role = []
-      localStorage.removeItem('userToken');
-    },
-    setToken(state, action) {
-      state.userToken = action.payload;
-      localStorage.setItem('userToken', action.payload);
-    },
-  },
+    name: 'auth',
+    initialState,
+    reducers: {
+        loginSuccess: (state, action: PayloadAction<User>) => {
+            state.user = action.payload;
+            state.isAuthenticated = true;
+            state.loading = false;
+            state.error = null;
+        },
+        loginFail: (state, action: PayloadAction<string>) => {
+            state.user = null;
+            state.isAuthenticated = false;
+            state.loading = false;
+            state.error = action.payload;
+        },
+        logoutSuccess: (state) => {
+            state.user = null;
+            state.isAuthenticated = false;
+        }
+    }
 });
 
-export const { setUser, logout, setToken } = authSlice.actions;
+export const { loginSuccess, loginFail, logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;

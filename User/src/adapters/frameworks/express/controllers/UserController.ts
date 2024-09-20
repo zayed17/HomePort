@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase,PublishUserUpdateUseCase ,UserAdminDashboardUseCase} from '../../../../usecases';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UserAdminDashboardUseCase } from '../../../../usecases';
 
 
 export class UserController {
@@ -37,10 +37,18 @@ export class UserController {
         console.log(req.body, "req.body in login");
         const { email, password, role } = req.body;
         try {
-            const { user, token ,refresh} = await this.loginUseCase.execute({ email, password, role });
+            const { user, token, refresh } = await this.loginUseCase.execute({ email, password, role });
 
-            const ress = res.cookie('token', token);
-            const resss = res.cookie('refreshToken', refresh);
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
+            res.cookie('refreshToken', refresh, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
 
             res.status(200).json({ message: 'User successfully logged in', user, role });
         } catch (error) {
@@ -63,7 +71,7 @@ export class UserController {
         console.log(req.user, "req.user kittunundo ?")
         try {
             const user = req.user._id
-            console.log(user,"checking")
+            console.log(user, "checking")
             const userDetails = await this.getUserDetailUseCase.getDetail(user)
             console.log(userDetails, "console")
             res.status(200).json({ message: 'success', userDetails });
@@ -73,9 +81,38 @@ export class UserController {
         }
     }
 
+    async checkAuth(req: any, res: Response, next: NextFunction): Promise<void> {
+        try {
+            if (!req.user) {
+                res.status(401).json({ message: 'Not authenticated' });
+                return
+            }
+            res.json({ email: req.user._id, role: req.user.role });
+        } catch (error) {
+            next(error)
+        }
+    }
+    async logout(req: any, res: Response, next: NextFunction): Promise<void> {
+        try {
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
+            res.status(200).json({ message: 'Logged out successfully' });
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async getDetails(req: any, res: Response, next: NextFunction): Promise<void> {
         try {
-            const id= req.params.id
+            const id = req.params.id
             const userDetails = await this.getUserDetailUseCase.getDetail(id)
             console.log(userDetails, "console")
             res.status(200).json(userDetails);
@@ -91,7 +128,7 @@ export class UserController {
         try {
             const { firstName, lastName, email, phone } = req.body;
             const updatedUser = await this.updateUseCase.update({ firstName, lastName, phone, email });
-           await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
+            await this.publishUserUpdateUseCase.publish(updatedUser._id!, { firstName, lastName, email, phone });
             res.status(200).json({ message: 'User updated successfully', updatedUser });
         } catch (error) {
             next(error);
@@ -131,10 +168,17 @@ export class UserController {
     async googleAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { code } = req.body
-            const { token, userDetails,refresh } = await this.googleAuthUseCase.GoogleAuth(code)
-            const ress = res.cookie('token', token);
-            const resss = res.cookie('refreshToken', refresh);
-           
+            const { token, userDetails, refresh } = await this.googleAuthUseCase.GoogleAuth(code)
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
+            res.cookie('refreshToken', refresh, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
             res.json({ token, userDetails, role: 'user' })
         } catch (error) {
             next(error)
@@ -176,7 +220,7 @@ export class UserController {
     async findAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const users = await this.findAllUserUseCase.FindAllUsers()
-            res.status(200).json( users );
+            res.status(200).json(users);
         } catch (error) {
             next(error)
         }
@@ -191,8 +235,8 @@ export class UserController {
     }
     async blockUblock(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const {userId,newStatus} = req.body
-            await this.blockUnblockUseCase.BlockUnblock(userId,newStatus)
+            const { userId, newStatus } = req.body
+            await this.blockUnblockUseCase.BlockUnblock(userId, newStatus)
             res.status(200).json({ success: true });
         } catch (error) {
             next(error)
