@@ -2,13 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import userApi from './user/userApi';
 import adminApi from './admin/adminApi';
 import bookingApi from './booking/bookingApi'
-import userReducer from './user/userSlice';
+import authReducer from './user/userSlice';
 import propertyApi from './property/propertyApi';
 import chattingApi from './chatting/chattingApi';
 
 const store = configureStore({
   reducer: {
-    user: userReducer,  
+    auth: authReducer, 
     [userApi.reducerPath]: userApi.reducer, 
     [propertyApi.reducerPath]: propertyApi.reducer, 
     [adminApi.reducerPath]: adminApi.reducer,  
