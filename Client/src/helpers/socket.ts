@@ -4,7 +4,7 @@ let socket: Socket | null = null;
 
 try {
     // socket = io('http://localhost:5003', {
-    socket = io('https://cartfurnish.shop/api/property', {
+    socket = io('https://api.cartfurnish.shop/api/property', {
         withCredentials: true,
         reconnectionAttempts: 5,  
         reconnectionDelay: 3000,  

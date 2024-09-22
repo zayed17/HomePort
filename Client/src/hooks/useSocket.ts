@@ -1,7 +1,7 @@
 // import { useEffect, useState } from 'react';
 // import { io, Socket } from 'socket.io-client';
 
-// const SOCKET_SERVER_URL = 'https://cartfurnish.shop/api/chat';
+// const SOCKET_SERVER_URL = 'https://api.cartfurnish.shop/api/chat';
 
 // const useSocket = () => {
 //   const [socket, setSocket] = useState<Socket | null>(null);

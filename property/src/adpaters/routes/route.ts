@@ -23,7 +23,7 @@ const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
 const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
-const notificationRepository = new NotificationRepository('https://cartfurnish.shop/api/chat')
+const notificationRepository = new NotificationRepository('https://api.cartfurnish.shop/api/chat')
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);
 const findPendingPropertyUseCase = new FindPendingPropertyUseCase(propertyRepository)
