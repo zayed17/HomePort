@@ -2,14 +2,15 @@ import React from 'react';
 import toast from 'react-hot-toast';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FaUser, FaHome, FaMapMarkerAlt, FaSignOutAlt ,FaTachometerAlt} from 'react-icons/fa'; 
-import { removeCookie } from '../../helpers/removeCookie';
+import { useAuth } from '../../hooks/useAuth';
 
 const ProfileSidebar: React.FC = () => {
+  const {  logout } = useAuth(); 
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    removeCookie('token'); 
+    logout()
     toast.success('Logout successfully'); 
     navigate('/');
   };

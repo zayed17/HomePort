@@ -5,6 +5,7 @@ import bookingApi from './booking/bookingApi'
 import authReducer from './user/userSlice';
 import propertyApi from './property/propertyApi';
 import chattingApi from './chatting/chattingApi';
+// import logger from 'redux-logger';
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
       .concat(adminApi.middleware)
       .concat(bookingApi.middleware)
       .concat(chattingApi.middleware),
+      // .concat(logger), 
 });
 
 export type RootState = ReturnType<typeof store.getState>;

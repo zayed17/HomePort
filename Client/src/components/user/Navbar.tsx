@@ -7,27 +7,41 @@ import useSocket from '../../hooks/useSocket';
 import LoginModal from '../common/LoginModal';  
 import NotificationDrawer from './NotificationDrawer';
 import { useAuth } from '../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store'; 
+import toast from 'react-hot-toast';
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+  
   const socket = useSocket();
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth(); 
-
+  const {  logout } = useAuth(); 
+  const {  isAuthenticated } = useSelector((state: RootState) => state.auth);
+console.log(isAuthenticated,"checking first")
   useEffect(() => {
     const handleResize = () => window.innerWidth >= 768 && setIsMenuOpen(false);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
   useEffect(() => {
     loadNotificationCount();
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logout successfully'); 
+  };
 
   useEffect(() => {
     if (!socket) return;
@@ -37,7 +51,7 @@ const Navbar = () => {
     };
   }, [socket, navigate]);
 
-  const handleAdminBlocked = () => {
+  const handleAdminBlocked = () => {  
     logout();
     notification.error({
       message: 'Access Denied',
@@ -79,7 +93,7 @@ const Navbar = () => {
         <FaUser className="w-5 h-5 text-BlueGray" />
         <span className="text-BlueGray">Profile</span>
       </button>
-      <button onClick={logout} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2">
+      <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2">
         <CloseOutlined className="w-5 h-5 text-BlueGray" />
         <span className="text-BlueGray">Logout</span>
       </button>
