@@ -47,7 +47,7 @@ const UserDetails: React.FC = () => {
       const formData = new FormData();
       formData.append('photo', photo);
       // const response = await axios.post('http:/localhost/api/user/uploadImage', formData, { withCredentials: true });
-      const response = await axios.post('https://api.cartfurnish.shop/api/user/uploadImage', formData, { withCredentials: true });
+      const response = await axios.post('https://cartfurnish.shop/api/user/uploadImage', formData, { withCredentials: true });
       console.log('Image uploaded:', response);
     } catch (error) {
       console.error('Error uploading image:', error);

@@ -38,7 +38,7 @@ const chatController = new ChatController(
   );
 const router = Router();
 router.get('/:chatId/messages',  (req, res, next) => chatController.getMessages(req, res, next));
-router.get('/chats', authenticateToken(['user']), (req, res, next) => chatController.getChats(req, res, next));
+router.get('/chats',authenticateToken(['user']),  (req, res, next) => chatController.getChats(req, res, next));
 router.post('/chats', (req, res, next) => chatController.createOrJoinChat(req, res, next));
 router.post('/upload', upload.single('file'), (req, res, next) => chatController.uploadFile(req, res, next));
 
