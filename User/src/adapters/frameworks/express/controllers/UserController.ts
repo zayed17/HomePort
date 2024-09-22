@@ -50,7 +50,7 @@ export class UserController {
                 sameSite: 'none',
             });
 
-            res.status(200).json({ message: 'User successfully logged in', user, role });
+            res.status(200).json({ message: 'User successfully logged in', user:user._id, role });
         } catch (error) {
             next(error);
         }
@@ -83,15 +83,17 @@ export class UserController {
 
     async checkAuth(req: any, res: Response, next: NextFunction): Promise<void> {
         try {
+            console.log("checking is it")
             if (!req.user) {
                 res.status(401).json({ message: 'Not authenticated' });
                 return
             }
-            res.json({ email: req.user._id, role: req.user.role });
+            res.json({ _id: req.user._id, role: req.user.role });
         } catch (error) {
             next(error)
         }
     }
+
     async logout(req: any, res: Response, next: NextFunction): Promise<void> {
         try {
             res.clearCookie('token', {

@@ -6,33 +6,34 @@ import { AppDispatch } from '../store/store';
 
 export const useAuth = () => {
     const dispatch: AppDispatch = useDispatch();
-    
-    const { data: userData,  isLoading, isError } = useCheckAuthQuery({});
-    
+
+    const { data: userData, isLoading, isError } = useCheckAuthQuery({});
     const [logout] = useLogoutMutation();
 
     useEffect(() => {
-        if (userData && !isError) {
-            dispatch(loginSuccess(userData)); 
-        } else if (isError && !userData) {
-            dispatch(loginFail('Not authenticated'));
+        if (!isLoading) {
+            if (userData) {
+                dispatch(loginSuccess(userData)); 
+            } else {
+                dispatch(loginFail('Not authenticated')); 
+            }
         }
-    }, [userData, isError, dispatch]);
+    }, [userData, isLoading, dispatch]);
 
     const handleLogout = async () => {
         try {
-            await logout({}).unwrap(); 
-            dispatch(logoutSuccess()); 
+            await logout({}).unwrap();
+            dispatch(logoutSuccess());
         } catch (err) {
-            console.error('Logout failed', err); 
+            console.error('Logout failed', err);
         }
     };
 
     return {
-        isAuthenticated: !!userData, 
+        isAuthenticated: !!userData,
         user: userData,
         loading: isLoading,
-        error: isError, 
+        error: isError,
         logout: handleLogout,
     };
 };

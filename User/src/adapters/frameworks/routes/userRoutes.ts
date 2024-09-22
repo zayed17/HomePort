@@ -16,8 +16,6 @@ const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7
 
 const endpointSecret = 'whsec_ROxldQwb16SNlaBqMd7RtxVqNnmz1vVu';
 
-
-
 const userRepository = new UserRepository();
 const otpService = new RedisOTPRepository();
 const emailService = new EmailRepository();
@@ -63,7 +61,6 @@ router.post('/verifyEmail', (req, res, next) => userController.verifyEmail(req, 
 router.put('/forgetPassword', (req, res, next) => userController.forgotPassword(req, res, next));
 router.put('/changePassword', authenticateToken(['user']), (req, res, next) => userController.changePassword(req, res, next));
 router.get('/getUser', authenticateToken(['user']), (req, res, next) => userController.getUser(req, res, next));
-
 router.get('/check-auth', authenticateToken(['user']), (req, res, next) => userController.checkAuth(req, res, next));
 router.get('/details/:id',(req, res, next) => userController.getDetails(req, res, next));
 router.post('/logout',(req, res, next) => userController.logout(req, res, next));
