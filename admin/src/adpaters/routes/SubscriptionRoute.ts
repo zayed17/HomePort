@@ -41,7 +41,7 @@ router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) 
           }],
           mode: 'payment',
           success_url: 'https://cartfurnish.shop/subscription?session_id={CHECKOUT_SESSION_ID}', 
-          cancel_url: 'https://cartfurnish.shop/api/chat/cancel', 
+          cancel_url: 'https://api.cartfurnish.shop/api/chat/cancel', 
           metadata: {
             userId, 
               planId,
