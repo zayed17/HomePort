@@ -16,7 +16,7 @@ export class SendMessageUseCase {
       photoUrl: messageData.photoUrl,
       reactions: [] 
     };
-    console.log(newMessage,"chekcing")
+    console.log("message sended orc","chekcing")
    const num =  await this.messageRepository.saveMessage(newMessage);
     return num
   }

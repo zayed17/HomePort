@@ -6,7 +6,7 @@ import errorHandler from './infrastructure/middleware/ErrorMiddleware';
 const app = express();
 
 const corsOptions = {
-  origin: "https://cartfurnish.shop",
+  origin: "https://homeport.online",
   // origin:"http://localhost:5173",
   methods: ['GET', 'POST', 'OPTIONS','PUT','PATCH'], 
   allowedHeaders: ['Content-Type', 'Authorization'],

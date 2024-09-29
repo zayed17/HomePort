@@ -37,7 +37,7 @@ const MapWithProperties: React.FC = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch('https://api.cartfurnish.shop/api/property/list-properties-public');
+        const response = await fetch('https://api.homeport.online/api/property/list-properties-public');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

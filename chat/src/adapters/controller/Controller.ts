@@ -20,7 +20,6 @@ export class ChatController {
     }
 
     async getChats(req: any, res: Response, next: NextFunction): Promise<void> {
-        console.log("reaching checking ofndsof")
         try {
             const userId = req.user._id;
             const chats = await this.chatUseCase.getChats(userId);
