@@ -22,8 +22,8 @@ export class PaymentService {
                 mode: 'payment',
                 // success_url: `http://localhost:5173/profile/properties`,
                 // cancel_url: 'http://localhost:5173/payment-error',
-                success_url: `https://cartfurnish.shop/profile/properties`,
-                cancel_url: 'https://cartfurnish.shop/payment-error',
+                success_url: `https://homeport.online/profile/properties`,
+                cancel_url: 'https://homeport.online/payment-error',
                 metadata: {
                     propertyId: propertyId, 
                 },

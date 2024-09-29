@@ -80,7 +80,7 @@ const SubscriptionHero: React.FC = () => {
 
     try {
       // const { data: { id: sessionId } } = await axios.post('http://localhost/api/subscriptions/payment-intent', {
-      const { data: { id: sessionId } } = await axios.post('https://cartfurnish.shop/api/subscriptions/payment-intent', {
+      const { data: { id: sessionId } } = await axios.post('https://homeport.online/api/subscriptions/payment-intent', {
         amount: priceDifference! * 100,
         planId: selectedPlan._id,
         subscriptionType: selectedPlan.type,

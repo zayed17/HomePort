@@ -9,7 +9,7 @@ export const checking = async (
   try {
     const id = req.user._id;
     console.log(id,"id checking from front end")
-    const response = await axios.get(`https://cartfurnish.shop/api/user/details/${id}`);
+    const response = await axios.get(`https://homeport.online/api/user/details/${id}`);
 console.log(response,"response checking form backend")
     if (!response.data) {
       return res.status(400).json({ message: 'Invalid user data received.' });

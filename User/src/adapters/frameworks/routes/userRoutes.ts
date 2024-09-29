@@ -23,7 +23,7 @@ const s3Repository = new S3Repository();
 const googleAuthRepository = new GoogleAuthRepository()
 const messageBrokerService = new MessageBrokerService()
 const userSubscriptionRepository = new UserSubscriptionRepository()
-const notificationRepository = new NotificationRepository('https://cartfurnish.shop/api/property')
+const notificationRepository = new NotificationRepository('https://homeport.online/api/property')
 
 const signUpUseCase = new SignUpUseCase(userRepository, otpService, emailService);
 const loginUseCase = new LoginUseCase(userRepository);

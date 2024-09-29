@@ -14,10 +14,20 @@ export class MessageRepository implements MessageInterface {
   }
 
   async saveMessage(message: MessageData): Promise<MessageData> {
-    const newMessage = new Message(message);
-    await newMessage.save();
-    return toMessageData(newMessage)
+    const updatedMessage = await Message.findByIdAndUpdate(
+      message._id,            // Find by the message ID
+      { reactions: message.reactions },  // Update the reactions field
+      { new: true }           // Return the updated document
+    ).exec();
+  
+    if (!updatedMessage) {
+      throw new Error('Message not found for update');
+    }
+  
+    return toMessageData(updatedMessage);
   }
+  
+  
 
   async findMessageById(messageId: string): Promise<MessageData | null> {
     const doc = await Message.findById(messageId).exec();

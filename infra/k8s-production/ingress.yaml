@@ -86,10 +86,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.cartfurnish.shop  
+    - api.homeport.online  
     secretName: cartfurnish-tls
   rules:
-  - host: api.cartfurnish.shop  
+  - host: api.homeport.online  
     http:
       paths:
       - path: /api/user

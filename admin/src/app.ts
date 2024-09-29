@@ -9,7 +9,7 @@ import connectDB from './infrastructure/mongoDB/connection/connection';
 const app = express();
 
 const corsOptions = {
-  origin: 'https://cartfurnish.shop',
+  origin: 'https://homeport.online',
   methods: ['GET', 'POST', 'OPTIONS'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

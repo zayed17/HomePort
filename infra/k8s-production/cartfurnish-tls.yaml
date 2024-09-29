@@ -18,7 +18,7 @@ spec:
   dnsNames:
   - cartfurnish.shop
   - www.cartfurnish.shop
-  - api.cartfurnish.shop
+  - api.homeport.online
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
