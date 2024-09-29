@@ -21,8 +21,8 @@ const LoginForm: React.FC = () => {
       navigate('/admin/dashboard')      
       clearError();
     } catch (error: any) {
-      console.log(error,"error is consoleing")
-      handleError(error.data.message || 'Invalid email or password');
+      console.log(error.data,"error is consoleing")
+      handleError(error.data || 'Invalid email or password');
     }
   };
 
