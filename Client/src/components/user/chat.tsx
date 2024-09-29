@@ -149,7 +149,7 @@ const ChatPage: React.FC = () => {
         message: newMessage.trim(),
         photoUrl,
       };
-
+console.log(messageData,"message for sending")
       socket.emit('sendMessage', messageData);
       setNewMessage('');
     }
