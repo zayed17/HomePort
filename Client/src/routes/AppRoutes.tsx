@@ -66,11 +66,16 @@ const AppRoutes = () => {
             <Route path="/chat/:chatId" element={<ChatPage />} />
             <Route path="/booked-property/:id" element={<BookingDetails />} />
 
-            <Route path="/admin" element={<VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
+            {/* <Route path="/admin" element={<VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
             <Route path="/admin/dashboard" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminDashboard} />} />
             <Route path="/admin/property" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminProperty} />} />
             <Route path="/admin/user" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminUser} />} />
-            <Route path="/admin/subscription" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={Subscription} />} />
+            <Route path="/admin/subscription" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={Subscription} />} /> */}
+             <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/property"  element={<AdminProperty />} />
+            <Route path="/admin/user"  element={<AdminUser />} />
+            <Route path="/admin/subscription"  element={<Subscription />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
