@@ -58,10 +58,10 @@ const AppRoutes = () => {
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile/dashboard" element={<Dashboard />} />
             <Route path="/profile/details" element={<Profile/>} />
-            <Route path="/profile/properties" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PropertiesPage} />} />
-            <Route path="/profile/payment" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PaymentPage} />} />
-            <Route path="/profile/booked" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={PostedPage} />} />
-            <Route path="/profile/ads" element={<ProtectedRoute cookieName='token' redirectTo='/profile/details' element={AdsPage} />} />
+            <Route path="/profile/properties"  element={<PropertiesPage/>}  />
+            <Route path="/profile/payment" element={<PaymentPage/>}  />
+            <Route path="/profile/booked" element={<PostedPage/>}  />
+            <Route path="/profile/ads"  element={<AdsPage/>} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/chat/:chatId" element={<ChatPage />} />
             <Route path="/booked-property/:id" element={<BookingDetails />} />
