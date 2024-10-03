@@ -20,16 +20,6 @@ const CardSection: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div className="bg-BlueGray text-white py-16">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-4">Ready to Find Your Dream Home?</h2>
-          <p className="text-xl mb-8">Let our expert agents guide you through our exclusive listings.</p>
-          <button className="bg-white text-BlueGray px-8 py-3 rounded-full text-lg font-semibold hover:bg-GrayishBlue hover:text-white transition duration-300">
-            Contact Us Today
-          </button>
-        </div>
-      </div>
     </>
   );
 };
