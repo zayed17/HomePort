@@ -2,7 +2,7 @@ import  { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import ProtectedRoute from './Protected';
+// import ProtectedRoute from './Protected';
 // import VerifyRoute from './Verify';
 import loaderGif from '/assets/gifff.gif';
 import NotFoundPage from '../pages/NotFound';
