@@ -4,7 +4,7 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as
 import 'antd/dist/reset.css'; 
 import { useGetDashboardQuery } from '../../store/property/propertyApi';
 import moment from 'moment';
-import loaderGif from '/assets/gifff.gif';
+import Loader from '../common/Loader';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -28,13 +28,10 @@ const sortRevenueByMonth = (data: any) => {
 const DashboardMain = () => {
   const { data, error, isLoading } = useGetDashboardQuery({});
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
-      </div>
-    );
-  }  if (error) return <div>Error loading dashboard data</div>;
+  if (isLoading || error) {
+    return <Loader />;
+  }
+  
 
   const bookingData = Object.entries(data?.bookingsByMonth || {}).map(([month, bookings]) => ({
     month,

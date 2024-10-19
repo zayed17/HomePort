@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllPropertiesQuery } from '../../../../store/property/propertyApi';
-import loaderGif from '/assets/gifff.gif';
 import Modal from 'react-modal';
 import { FaRegTimesCircle } from "react-icons/fa";
 import { useCloseDealMutation } from '../../../../store/booking/bookingApi';
 import toast from 'react-hot-toast';
+import Loader from '../../../common/Loader';
+
 
 interface Property {
   _id: string;
@@ -206,14 +207,10 @@ const Properties: React.FC = () => {
     );
   };
 
-  if (isLoading) return (
-    <div className="flex justify-center items-center h-screen">
-      <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
-    </div>
-  );
-
-  if (error) return <div className="text-center text-red-600 mt-8">Error loading properties. Please try again later.</div>;
-
+  if (isLoading || error) {
+    return <Loader />;
+  }
+  
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b">
       <h1 className="text-4xl font-bold text-center mb-10 text-gray-800 shadow-text">My Listed Properties</h1>

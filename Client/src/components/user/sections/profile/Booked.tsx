@@ -1,27 +1,16 @@
 import { FaMapMarkerAlt, FaRupeeSign, FaCalendarAlt, FaCheckCircle, FaClock } from 'react-icons/fa';
 import { useGetBookedPropertiesQuery } from '../../../../store/booking/bookingApi';
 import { useNavigate } from 'react-router-dom';
-
+import Loader from '../../../common/Loader';
 const BookedProperties = () => {
-  const { data: bookedProperties = [], isLoading, isError, error } = useGetBookedPropertiesQuery({});
+  const { data: bookedProperties = [], isLoading, error } = useGetBookedPropertiesQuery({});
   const navigate = useNavigate();
 
-  if (isLoading) {
-    return <p className="text-center text-gray-500">Loading booked properties...</p>;
-  }
 
-  if (isError) {
-    console.error('Error fetching booked properties:', error);
-    return <p className="text-center text-red-500">Error fetching booked properties: </p>;
-  }
 
-  if (bookedProperties.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h2 className="text-4xl font-bold text-gray-800 mb-4">No Booked Properties</h2>
-        <p className="text-gray-600 text-center">You haven't booked any properties yet. Start exploring and book your dream property today!</p>
-      </div>
-    );
+
+  if (isLoading || error) {
+    return <Loader  />;
   }
 
   return (

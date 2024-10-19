@@ -4,8 +4,8 @@ import EditUserModal from '../../EditModal';
 import axios from 'axios';
 import ChangePasswordModal from '../../ChangePasswordModal';
 import { useGetUserQuery } from '../../../../store/user/userApi';
-import loaderGif from '/assets/gifff.gif';
 import { differenceInDays } from 'date-fns';
+import Loader from '../../../common/Loader';
 
 const UserDetails: React.FC = () => {
   const [photo, setPhoto] = useState<File | null>(null);
@@ -70,12 +70,8 @@ const UserDetails: React.FC = () => {
     }
   };
 
-  if (!userDetails) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <img src={loaderGif} alt="Loading..." className="w-16 h-16" />
-      </div>
-    );
+  if (isLoading || error || isError) {
+    return <Loader />;
   }
 
   const getRemainingDays = () => {
@@ -92,14 +88,8 @@ const UserDetails: React.FC = () => {
     }
     return null;
   };
-  if (isError) {
-    console.error('Error fetching user details:', error);
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500 font-bold">Failed to load user details. Please try again later.</p>
-      </div>
-    );
-  }
+
+  
   return (
     <div className="max-w-lg mx-auto  shadow-md rounded my-10 px-8 pt-6 pb-4 mb-4 relative">
       <div className="absolute top-0 right-0 mt-2 mr-2">
