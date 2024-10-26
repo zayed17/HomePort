@@ -1,9 +1,9 @@
-import  { Suspense, lazy } from 'react';
+import  {  lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 // import VerifyRoute from './Verify';
-import loaderGif from '/assets/gifff.gif';
+// import loaderGif from '/assets/gifff.gif';
 import NotFoundPage from '../pages/NotFound';
 
 const Home = lazy(() => import('../pages/user/Home'));
@@ -30,11 +30,11 @@ const ChatPage = lazy(() => import('../pages/user/ChatPage'));
 const BookingDetails = lazy(() => import('../pages/user/BookedSinglePage'));
 const Dashboard = lazy(() => import('../pages/user/Dashboard'));
 
-const LoadingSpinner = () => (
-   <div className="flex items-center justify-center w-full h-screen bg-white">
-      <img src={loaderGif} alt="Loading..." className="w-20 h-20" />
-   </div>
-);
+// const LoadingSpinner = () => (
+//    <div className="flex items-center justify-center w-full h-screen bg-white">
+//       <img src={loaderGif} alt="Loading..." className="w-20 h-20" />
+//    </div>
+// );
 
 
 const AppRoutes = () => {
@@ -42,7 +42,7 @@ const AppRoutes = () => {
     <Router>
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <Toaster position="top-right" reverseOrder={true} />
-        <Suspense fallback={<LoadingSpinner />}>
+        {/* <Suspense fallback={<LoadingSpinner />}> */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/properties" element={<PropertyListing />} />
@@ -77,7 +77,7 @@ const AppRoutes = () => {
             <Route path="/admin/subscription"  element={<Subscription />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-        </Suspense>
+        {/* </Suspense> */}
       </GoogleOAuthProvider>
     </Router>
   );
