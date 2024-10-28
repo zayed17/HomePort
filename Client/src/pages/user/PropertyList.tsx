@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import PropertyCard from '../../components/user/PropertyCard';
 import Nav from '../../components/user/Nav';
@@ -58,7 +58,7 @@ const PropertyListing: React.FC = () => {
   const totalProperties = data?.total || 0;
   const [updateFavorites] = useToggleFavoriteMutation();
   const [animatedId, setAnimatedId] = useState<string | null>(null);
-  const [filteredProperties, setFilteredProperties] = useState<Property[]>(properties);
+  // const [filteredProperties, setFilteredProperties] = useState<Property[]>(properties);
   const [sortOption, setSortOption] = useState<string>('default');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filters, setFilters] = useState<FilterState>({});
@@ -73,47 +73,88 @@ const PropertyListing: React.FC = () => {
   };
 
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   let result = [...properties];
+
+  //   if (filters.lookingFor && filters.lookingFor !== 'any') {
+  //     result = result.filter((property: Property) => property.lookingFor === filters.lookingFor);
+  //   }
+  //   if (filters.priceRange) {
+  //     result = result.filter((property: Property) =>
+  //       (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) >= filters.priceRange![0] &&
+  //       (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) <= filters.priceRange![1]
+  //     );
+  //   }
+  //   if (filters.propertyType && filters.propertyType !== 'Any') {
+  //     result = result.filter((property: Property) => property.propertyType === filters.propertyType);
+  //   }
+  //   if (filters.bedrooms && filters.bedrooms !== 'Any') {
+  //     result = result.filter((property: Property) => property.bedrooms === filters.bedrooms);
+  //   }
+  //   if (filters.furnisherType && filters.furnisherType !== 'Any') {
+  //     result = result.filter((property: Property) => property.furnisherType === filters.furnisherType);
+  //   }
+  //   if (searchTerm) {
+  //     result = result.filter((property: Property) =>
+  //       property.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       property.city.toLowerCase().includes(searchTerm.toLowerCase())
+  //     );
+  //   }
+
+  //   if (sortOption === 'priceAsc') {
+  //     result = result.sort((a: Property, b: Property) =>
+  //       (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice) - (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice)
+  //     );
+  //   } else if (sortOption === 'priceDesc') {
+  //     result = result.sort((a: Property, b: Property) =>
+  //       (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice) - (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice)
+  //     );
+  //   }
+
+  //   setFilteredProperties(result);
+  // }, [properties, filters, searchTerm, sortOption]);
+
+
+  const filteredProperties = useMemo(() => {
     let result = [...properties];
 
     if (filters.lookingFor && filters.lookingFor !== 'any') {
-      result = result.filter((property: Property) => property.lookingFor === filters.lookingFor);
+      result = result.filter((property) => property.lookingFor === filters.lookingFor);
     }
     if (filters.priceRange) {
-      result = result.filter((property: Property) =>
+      result = result.filter((property) =>
         (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) >= filters.priceRange![0] &&
         (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) <= filters.priceRange![1]
       );
     }
     if (filters.propertyType && filters.propertyType !== 'Any') {
-      result = result.filter((property: Property) => property.propertyType === filters.propertyType);
+      result = result.filter((property) => property.propertyType === filters.propertyType);
     }
     if (filters.bedrooms && filters.bedrooms !== 'Any') {
-      result = result.filter((property: Property) => property.bedrooms === filters.bedrooms);
+      result = result.filter((property) => property.bedrooms === filters.bedrooms);
     }
     if (filters.furnisherType && filters.furnisherType !== 'Any') {
-      result = result.filter((property: Property) => property.furnisherType === filters.furnisherType);
+      result = result.filter((property) => property.furnisherType === filters.furnisherType);
     }
     if (searchTerm) {
-      result = result.filter((property: Property) =>
+      result = result.filter((property) =>
         property.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
         property.city.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (sortOption === 'priceAsc') {
-      result = result.sort((a: Property, b: Property) =>
+      result.sort((a, b) =>
         (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice) - (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice)
       );
     } else if (sortOption === 'priceDesc') {
-      result = result.sort((a: Property, b: Property) =>
+      result.sort((a, b) =>
         (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice) - (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice)
       );
     }
 
-    setFilteredProperties(result);
+    return result;
   }, [properties, filters, searchTerm, sortOption]);
-
 
 
   const handleFavoriteClick = async (propertyId: string, isFavorited: any): Promise<void> => {
