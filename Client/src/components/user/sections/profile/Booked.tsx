@@ -1,9 +1,15 @@
+import { useState } from 'react';
 import { FaMapMarkerAlt, FaRupeeSign, FaCalendarAlt, FaCheckCircle, FaClock } from 'react-icons/fa';
 import { useGetBookedPropertiesQuery } from '../../../../store/booking/bookingApi';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../../common/Loader';
+import { Pagination } from 'antd';
+
+
 const BookedProperties = () => {
-  const { data: bookedProperties = [], isLoading, error } = useGetBookedPropertiesQuery({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 3;
+  const { data, isLoading, error } = useGetBookedPropertiesQuery({ page: currentPage, limit: pageSize});
   const navigate = useNavigate();
 
 
@@ -14,15 +20,12 @@ const BookedProperties = () => {
   }
 
   return (
-    <div className="p-6 min-h-screen bg-gradient-to-b from-gray-200 to-white">
-      <h2 className="text-4xl font-bold mb-10 text-center text-gray-800">Booked Properties</h2>
+    <div className="p-6 min-h-screen">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {bookedProperties.map((booking:any) => (
-          <div
-            key={booking.transactionId}
+        {data.properties.map((booking:any) => (
+          <div key={booking.transactionId}
             className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden cursor-pointer "
-            onClick={() => navigate(`/booked-property/${booking._id}`)}
-          >
+            onClick={() => navigate(`/booked-property/${booking._id}`)}>
             <div className="relative">
               <img
                 src={booking.propertyId.image || 'https://via.placeholder.com/400x200'}
@@ -85,6 +88,15 @@ const BookedProperties = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={data.totalItems}
+          onChange={(page) => setCurrentPage(page)}
+          hideOnSinglePage
+        />
       </div>
     </div>
   );

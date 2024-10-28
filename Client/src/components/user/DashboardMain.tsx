@@ -93,7 +93,6 @@ const DashboardMain = () => {
 
   return (
     <Content style={{ padding: '24px', minHeight: '100vh' }}>
-      <Title level={2}>Dashboard Overview</Title>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable>

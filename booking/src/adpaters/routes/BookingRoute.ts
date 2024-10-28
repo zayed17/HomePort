@@ -169,12 +169,28 @@ router.post('/booking', async (req: any, res: Response) => {
 });
 
 
-router.get('/get-booking',authenticateToken(['user']), async (req: any, res: Response) => {
-  const userId = req.user._id
-  const properties = await BookingModel.find({userId}).populate('userId').populate('propertyId')
-  res.json(properties)
-})
+router.get('/get-booking', authenticateToken(['user']), async (req: any, res: Response) => {
+  const userId = req.user._id;
+  const page = parseInt(req.query.page) 
+  const limit = parseInt(req.query.limit)
 
+  try {
+    const totalItems = await BookingModel.countDocuments({ userId });
+    const properties = await BookingModel.find({ userId }).populate('userId').populate('propertyId').skip((page - 1) * limit) .limit(limit); 
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.json({
+      properties,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 router.patch('/close-deal',(req, res, next) => bookingController.closeDeal(req, res, next));
 
