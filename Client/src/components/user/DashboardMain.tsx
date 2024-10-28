@@ -92,7 +92,7 @@ const DashboardMain = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   return (
-    <Content style={{ padding: '24px', minHeight: '100vh', background: '#f0f2f5' }}>
+    <Content style={{ padding: '24px', minHeight: '100vh' }}>
       <Title level={2}>Dashboard Overview</Title>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>

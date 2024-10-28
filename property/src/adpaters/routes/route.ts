@@ -22,7 +22,9 @@ const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
-const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
+// const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
+const rabbitMQPublisher = new RabbitMQPublisher('amqp://localhost:5672')
+
 const notificationRepository = new NotificationRepository('https://homeport.online/api/chat')
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);

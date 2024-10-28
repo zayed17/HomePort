@@ -26,5 +26,10 @@ export class PropertyRepository implements PropertyInterface {
     await PropertyModel.updateOne({ _id }, { $set: property })
   }
 
-
+  async findWithPagination(filter:any,page:number,limit:number):Promise<any>{
+    const skip = (page - 1) * limit; 
+    const properties = await PropertyModel.find(filter).skip(skip).limit(limit).exec(); 
+    const total = await PropertyModel.countDocuments(filter).exec();
+    return {properties,total} as any
+  }
 }
