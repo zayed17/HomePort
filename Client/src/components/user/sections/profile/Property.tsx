@@ -37,14 +37,8 @@ const Properties: React.FC = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
-  const { data, error, isLoading, refetch } = useGetAllPropertiesQuery({
-    page: currentPage,
-    limit: pageSize,
-  });
-
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
-    null
-  );
+  const { data, error, isLoading, refetch } = useGetAllPropertiesQuery({ page: currentPage, limit: pageSize});
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [closeDeal] = useCloseDealMutation();
 
   const handleNavigate = (id: string) => {
@@ -246,9 +240,6 @@ const Properties: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 ">
-      <h1 className="text-4xl font-bold text-center mb-10 text-gray-800 shadow-text">
-        My Listed Properties
-      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.properties.length > 0 ? (
           data.properties.map(renderPropertyCard)
@@ -265,6 +256,7 @@ const Properties: React.FC = () => {
           total={totalProperties}
           pageSize={pageSize}
           onChange={handlePageChange}
+          hideOnSinglePage
         />
       </div>
 
