@@ -8,7 +8,7 @@ import { Pagination, Skeleton, Badge, Button, Input, Select, Modal, Tooltip } fr
 import { FaHeart, FaRegHeart, FaMap } from 'react-icons/fa';
 import { getCookie } from '../../helpers/getCookie';
 import MapWithProperties from '../../components/user/MapShow';
-// import SearchInput from './SearchInput';
+
 
 const { Option } = Select;
 
@@ -48,16 +48,17 @@ interface FilterState {
 
 const PropertyListing: React.FC = () => {
   const token = getCookie('token');
+  const [currentPage, setCurrentPage] = useState(1);
   const isAuthenticated = (): boolean => !!token;
-  const { data: allProperties = [], isLoading, isError } = isAuthenticated()
-    ? useGetPropertiesQuery({})
-    : useGetPublicPropertiesQuery({});
+  const [pageSize] = useState<number>(3);
+  const { data, isLoading, isError } = isAuthenticated() ? useGetPropertiesQuery({ page: currentPage, limit: pageSize}) : useGetPublicPropertiesQuery({ page: currentPage, limit: pageSize});
+
+  console.log(data,"chdleof")
+  const properties = data?.properties || [];
+  const totalProperties = data?.total || 0;
   const [updateFavorites] = useToggleFavoriteMutation();
   const [animatedId, setAnimatedId] = useState<string | null>(null);
-
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(4);
-  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>(properties);
   const [sortOption, setSortOption] = useState<string>('default');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filters, setFilters] = useState<FilterState>({});
@@ -73,7 +74,7 @@ const PropertyListing: React.FC = () => {
 
 
   useEffect(() => {
-    let result = [...allProperties];
+    let result = [...properties];
 
     if (filters.lookingFor && filters.lookingFor !== 'any') {
       result = result.filter((property: Property) => property.lookingFor === filters.lookingFor);
@@ -111,12 +112,9 @@ const PropertyListing: React.FC = () => {
     }
 
     setFilteredProperties(result);
-    setCurrentPage(1);
-  }, [allProperties, filters, searchTerm, sortOption]);
+  }, [properties, filters, searchTerm, sortOption]);
 
-  const indexOfLastProperty = currentPage * itemsPerPage;
-  const indexOfFirstProperty = indexOfLastProperty - itemsPerPage;
-  const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
+
 
   const handleFavoriteClick = async (propertyId: string, isFavorited: any): Promise<void> => {
     if (!isAuthenticated()) {
@@ -157,7 +155,6 @@ const PropertyListing: React.FC = () => {
             <Option value="priceAsc">Price: Low to High</Option>
             <Option value="priceDesc">Price: High to Low</Option>
           </Select>
-          {/* <SearchInput  /> */}
           <Input.Search
             placeholder="Search properties..."
             value={searchTerm}
@@ -171,34 +168,22 @@ const PropertyListing: React.FC = () => {
             <Filters onFilterChange={handleFilterChange} />
           </div>
           <div className="w-full lg:w-3/4 lg:ml-4">
-            {isLoading && (
+            {(isLoading || isError) ? (
               <div className="space-y-4">
-                {Array.from({ length: 6 }).map((_, index) => (
+                {Array.from({ length: 5 }).map((_, index) => (
                   <div key={index} className="p-4 border rounded shadow">
                     <Skeleton active />
                   </div>
                 ))}
               </div>
-            )}
-            {isError && (
-              <div className="flex justify-center items-center h-full">
-                <p className="text-red-500 text-lg">Error fetching properties.</p>
-              </div>
-            )}
-            {!isLoading && !isError && currentProperties.length > 0 ? (
+            ) : filteredProperties.length > 0 ? (
               <>
                 <div className="space-y-4">
-                  {currentProperties.map((property: Property) => {
+                  {filteredProperties.map((property) => {
                     const isFavorited = isAuthenticated() && property.createdBy?.favourites.includes(property._id);
                     const animationClass = animatedId === property._id ? (isFavorited ? 'broken' : 'animated') : '';
-
                     return (
-                      <Badge.Ribbon
-                        key={property._id}
-                        text="Sponsored"
-                        color="purple"
-                        className={property.sponsorship?.isSponsored ? 'visible' : 'invisible'}
-                      >
+                      <Badge.Ribbon key={property._id} text="Sponsored" color="darkBlue" className={property.sponsorship?.isSponsored ? 'visible' : 'invisible'} >
                         <div className="relative">
                           <PropertyCard
                             _id={property._id}
@@ -231,8 +216,8 @@ const PropertyListing: React.FC = () => {
                 <div className="flex justify-center mt-4">
                   <Pagination
                     current={currentPage}
-                    total={filteredProperties.length}
-                    pageSize={itemsPerPage}
+                    pageSize={pageSize}
+                    total={totalProperties}
                     onChange={handlePageChange}
                     showSizeChanger={false}
                   />
@@ -259,10 +244,7 @@ const PropertyListing: React.FC = () => {
 
       <div className="fixed bottom-4 right-4 flex items-center space-x-3 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-gray-200 hover:shadow-3xl transition-shadow">
         <Tooltip title="Show properties on map">
-          <Button
-            icon={
-              <FaMap className="text-blue-700 text-4xl" />
-            }
+          <Button icon={<FaMap className="text-blue-700 text-4xl" />}
             className="bg-blue-200 text-blue-700 rounded-full p-4 shadow-lg hover:bg-blue-300 transition-colors"
             onClick={handleMapClick}
           />
@@ -271,6 +253,8 @@ const PropertyListing: React.FC = () => {
 
 
     </>
+
+
   );
 };
 

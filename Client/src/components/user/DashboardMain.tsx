@@ -1,4 +1,4 @@
-import { Layout, Card, Statistic, Row, Col, Table, Typography } from 'antd';
+import { Layout, Card, Statistic, Row, Col, Table } from 'antd';
 import { ArrowUpOutlined } from '@ant-design/icons';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import 'antd/dist/reset.css'; 
@@ -7,7 +7,6 @@ import moment from 'moment';
 import Loader from '../common/Loader';
 
 const { Content } = Layout;
-const { Title } = Typography;
 
 const sortByMonth = (data: any) => {
   return data.sort((a:any, b:any) => {
