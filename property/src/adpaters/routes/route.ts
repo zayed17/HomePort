@@ -59,8 +59,18 @@ router.post('/add-property',authenticateToken(['user']), upload ,(req, res, next
 router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
     try {
       const userId = req.user._id
-        const properties = await PropertyModel.find({status: 'verified',createdBy: { $ne: userId }}).populate('createdBy').sort({ 'sponsorship.isSponsored': -1 });
-      res.json(properties); 
+      const page = parseInt(req.query.page) 
+      const limit = parseInt(req.query.limit) 
+
+      const properties = await PropertyModel.find({ status: 'verified', createdBy: { $ne: userId } })
+      .populate('createdBy')
+      .sort({ 'sponsorship.isSponsored': -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await PropertyModel.countDocuments({ status: 'verified', createdBy: { $ne: userId } });
+    const totalPages =  Math.ceil(total / limit) 
+    res.json({ properties, total, page, totalPages});
     } catch (error) {
       next(error); 
     }
@@ -68,10 +78,19 @@ router.get('/list-properties',authenticateToken(['user']), async (req: any, res:
 
 router.get('/list-properties-public',  async (req: any, res: Response, next: NextFunction) => {
   try {
-      const properties = await PropertyModel.find({status:'verified'}).populate('createdBy').sort({ 'sponsorship.isSponsored': -1 });
+      const page = parseInt(req.query.page) 
+      const limit = parseInt(req.query.limit) 
+      const properties = await PropertyModel.find({ status: 'verified' })
+      .populate('createdBy')
+      .sort({ 'sponsorship.isSponsored': -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-      res.json(properties); 
-  } catch (error) {
+      const total = await PropertyModel.countDocuments({ status: 'verified' });
+      const totalPages =  Math.ceil(total / limit)
+
+      res.json({ properties, total, page, totalPages});
+    } catch (error) {
       next(error); 
   }
 });

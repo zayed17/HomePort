@@ -96,7 +96,6 @@ const Home = lazy(() => import('../pages/user/Home'));
 const PaymentPage = lazy(() => import('../pages/user/PaymentPage'));
 const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'));
 const PropertyDetailsForm = lazy(() => import('../pages/user/PropertyAdd'));
-const PropertyListing = lazy(() => import('../pages/user/PropertyList'));
 const PropertyDetails = lazy(() => import('../pages/user/PropertyDetails'));
 const ChatPage = lazy(() => import('../pages/user/ChatPage'));
 
@@ -107,6 +106,7 @@ import Dashboard from '../pages/user/Dashboard';
 import Profile from '../pages/user/Profile'
 import PostedPage from '../pages/user/PostProperties'
 import PropertiesPage from '../pages/user/Properties'
+import PropertyListing from '../pages/user/PropertyList'
 
  
 // Loading Spinner Component
@@ -125,9 +125,9 @@ const AppRoutes = () => {
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/profile/dashboard" element={<Dashboard />} />
+          <Route path="/properties" element={<PropertyListing />} />
 
           <Route path="/" element={<Suspense fallback={<LoadingSpinner />}><Home /></Suspense>} />
-          <Route path="/properties" element={<Suspense fallback={<LoadingSpinner />}><PropertyListing /></Suspense>} />
           <Route path="/property/:id" element={<Suspense fallback={<LoadingSpinner />}><PropertyDetails /></Suspense>} />
           <Route path="/profile/details" element={<Profile />} />
           <Route path="/profile/properties" element={<PropertiesPage />} />

@@ -71,12 +71,12 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const URL = '/api/property';
-console.log(import.meta.env.VITE_API_URL)
+// console.log(import.meta.env.VITE_API_URL)
 const propertyApi = createApi({
   reducerPath: 'propertyApi',
   baseQuery: fetchBaseQuery({
-    // baseUrl: `${import.meta.env.VITE_API_URL}`,
-    baseUrl:"http://localhost:5003",
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
+    // baseUrl:"http://localhost:5003",
     credentials: 'include',
   }),
   endpoints: (builder) => ({
@@ -88,11 +88,11 @@ const propertyApi = createApi({
       }),
     }),
     getProperties: builder.query({
-      query: () => `${URL}/list-properties`,  
+      query: ({ page, limit }) => `${URL}/list-properties?page=${page}&limit=${limit}`,
       keepUnusedDataFor: 60, 
     }),
     getPublicProperties: builder.query({
-      query: () => `${URL}/list-properties-public`,  
+      query: ({ page, limit }) => `${URL}/list-properties-public?page=${page}&limit=${limit}`,
       keepUnusedDataFor: 60, 
     }),
     getPendingProperties: builder.query({
@@ -125,7 +125,7 @@ const propertyApi = createApi({
       keepUnusedDataFor: 60, 
     }),
     blockAndUnblock: builder.mutation({
-      query: (credentials) => ({
+      query: (credentials) => ({    
         url: `${URL}/block-unblock`,
         method: 'PATCH',
         body: credentials,
