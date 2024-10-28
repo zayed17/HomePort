@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import PropertyCard from '../../components/user/PropertyCard';
 import Nav from '../../components/user/Nav';
@@ -119,36 +119,36 @@ const PropertyListing: React.FC = () => {
     let result = [...properties];
 
     if (filters.lookingFor && filters.lookingFor !== 'any') {
-      result = result.filter((property) => property.lookingFor === filters.lookingFor);
+      result = result.filter((property : Property) => property.lookingFor === filters.lookingFor);
     }
     if (filters.priceRange) {
-      result = result.filter((property) =>
+      result = result.filter((property : Property) =>
         (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) >= filters.priceRange![0] &&
         (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) <= filters.priceRange![1]
       );
     }
     if (filters.propertyType && filters.propertyType !== 'Any') {
-      result = result.filter((property) => property.propertyType === filters.propertyType);
+      result = result.filter((property : Property) => property.propertyType === filters.propertyType);
     }
     if (filters.bedrooms && filters.bedrooms !== 'Any') {
-      result = result.filter((property) => property.bedrooms === filters.bedrooms);
+      result = result.filter((property : Property) => property.bedrooms === filters.bedrooms);
     }
     if (filters.furnisherType && filters.furnisherType !== 'Any') {
-      result = result.filter((property) => property.furnisherType === filters.furnisherType);
+      result = result.filter((property : Property) => property.furnisherType === filters.furnisherType);
     }
     if (searchTerm) {
-      result = result.filter((property) =>
+      result = result.filter((property : Property) =>
         property.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
         property.city.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (sortOption === 'priceAsc') {
-      result.sort((a, b) =>
+      result.sort((a : Property, b:Property) =>
         (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice) - (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice)
       );
     } else if (sortOption === 'priceDesc') {
-      result.sort((a, b) =>
+      result.sort((a : Property, b:Property) =>
         (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice) - (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice)
       );
     }
