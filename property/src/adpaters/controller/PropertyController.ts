@@ -89,15 +89,27 @@ export class PropertyController {
     }
   }
 
+
+
   async findAllProperties(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
-      const id = req.user._id
-      const result = await this.findAllPropertiesUseCase.FindAllProperties(id);
-      res.status(201).json(result);
+      const id = req.user._id;
+      const page = parseInt(req.query.page) || 1; 
+      const limit = parseInt(req.query.limit) || 10; 
+      const { properties, total } = await this.findAllPropertiesUseCase.FindAllProperties(id, page, limit);
+      const totalPages = Math.ceil(total / limit);
+  
+      res.status(200).json({
+        totalCount: total,
+        totalPages,
+        currentPage: page,
+        properties
+      });
     } catch (error) {
       next(error);
     }
   }
+  
   async findAdminProperties(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
       const result = await this.findAdminPropertiesUseCase.FindAdminProperties();

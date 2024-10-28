@@ -75,7 +75,8 @@ console.log(import.meta.env.VITE_API_URL)
 const propertyApi = createApi({
   reducerPath: 'propertyApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}`,
+    // baseUrl: `${import.meta.env.VITE_API_URL}`,
+    baseUrl:"http://localhost:5003",
     credentials: 'include',
   }),
   endpoints: (builder) => ({
@@ -116,7 +117,7 @@ const propertyApi = createApi({
       keepUnusedDataFor: 60, 
     }),
     getAllProperties: builder.query({
-      query: () => `${URL}/properties`,  
+      query: ({ page, limit }) => `${URL}/properties?page=${page}&limit=${limit}`,
       keepUnusedDataFor: 60, 
     }),
     getAdminProperties: builder.query({

@@ -12,7 +12,8 @@ const server = http.createServer(app);
 
 export const io = new SocketIOServer(server, {
   cors: {
-    origin: "https://homeport.online",
+    // origin: "https://homeport.online",
+    origin:"http://localhost:5173",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -28,7 +29,8 @@ io.on('connection', (socket) => {
 });
 
 const corsOptions = {
-  origin: "https://homeport.online",
+  // origin: "https://homeport.online",
+  origin:"http://localhost:5173",
   methods: ["GET", "POST", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
