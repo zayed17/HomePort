@@ -3,8 +3,8 @@ import { io, Socket } from 'socket.io-client';
 let socket: Socket | null = null;
 
 try {
-    socket = io('http://localhost:5003', {
-    // socket = io('https://api.homeport.online/api/property', {
+    // socket = io('http://localhost:5003', {
+    socket = io('https://api.homeport.online/api/property', {
         withCredentials: true,
         reconnectionAttempts: 5,  
         reconnectionDelay: 3000,  

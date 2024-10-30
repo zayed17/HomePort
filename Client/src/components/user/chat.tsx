@@ -122,8 +122,8 @@ const ChatPage: React.FC = () => {
 
         try {
           setUploadingMessageId('temp'); 
-          const response = await fetch('http://localhost:3000/api/chat/upload', {
-          // const response = await fetch('https://api.homeport.online/api/chat/upload', {
+          // const response = await fetch('http://localhost:3000/api/chat/upload', {
+          const response = await fetch('https://api.homeport.online/api/chat/upload', {
             method: 'POST',
             body: formData,
           });
