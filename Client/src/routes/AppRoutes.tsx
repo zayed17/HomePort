@@ -27,7 +27,6 @@
 // const BookingPage = lazy(() => import('../pages/user/BookingPage'));
 // const SubscriptionPage = lazy(() => import('../pages/user/SubscriptionPage'));
 // const ChatPage = lazy(() => import('../pages/user/ChatPage'));
-// const BookingDetails = lazy(() => import('../pages/user/BookedSinglePage'));
 // const Dashboard = lazy(() => import('../pages/user/Dashboard'));
 
 // // const LoadingSpinner = () => (
@@ -70,7 +69,7 @@
 //             <Route path="/admin/property" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminProperty} />} />
 //             <Route path="/admin/user" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminUser} />} />
 //             <Route path="/admin/subscription" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={Subscription} />} /> */}
-//              <Route path="/admin" element={<AdminLogin />} />
+//             <Route path="/admin" element={<AdminLogin />} />
 //             <Route path="/admin/dashboard" element={<AdminDashboard />} />
 //             <Route path="/admin/property"  element={<AdminProperty />} />
 //             <Route path="/admin/user"  element={<AdminUser />} />
@@ -84,60 +83,72 @@
 // };
 
 // export default AppRoutes;
-
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Loader from '../components/common/Loader';
 import NotFoundPage from '../pages/NotFound';
+import VerifyRoute from './Verify';
 
 // Lazy load components
 const Home = lazy(() => import('../pages/user/Home'));
-const PaymentPage = lazy(() => import('../pages/user/PaymentPage'));
 const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'));
 const PropertyDetailsForm = lazy(() => import('../pages/user/PropertyAdd'));
-const PropertyDetails = lazy(() => import('../pages/user/PropertyDetails'));
 const ChatPage = lazy(() => import('../pages/user/ChatPage'));
+const BookingDetails = lazy(() => import('../pages/user/BookedSinglePage'));
 
 // Non-lazy loaded components
 import AdminLogin from '../pages/admin/AdminLogin';
 import Favourites from '../pages/user/Favourites';
 import Dashboard from '../pages/user/Dashboard';
-import Profile from '../pages/user/Profile'
-import PostedPage from '../pages/user/PostProperties'
-import PropertiesPage from '../pages/user/Properties'
-import PropertyListing from '../pages/user/PropertyList'
-
- 
-// Loading Spinner Component
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center w-full h-screen bg-white">
-    <img src="/assets/gifff.gif" alt="Loading..." className="w-20 h-20" />
-  </div>
-);
+import Profile from '../pages/user/Profile';
+import PostedPage from '../pages/user/PostProperties';
+import PropertiesPage from '../pages/user/Properties';
+import PropertyListing from '../pages/user/PropertyList';
+import PropertyDetails from '../pages/user/PropertyDetails';
+import AdminProperty from '../pages/admin/Property';
+import AdminUser from '../pages/admin/User';
+import Subscription from '../pages/admin/Subscription';
+import SubscriptionPage from '../pages/user/SubscriptionPage';
+import ProtectedRoute from './Protected';
 
 const AppRoutes = () => {
   return (
     <Router>
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <Toaster position="top-right" reverseOrder={true} />
-        <Routes>
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/favourites" element={<Favourites />} />
-          <Route path="/profile/dashboard" element={<Dashboard />} />
-          <Route path="/properties" element={<PropertyListing />} />
 
-          <Route path="/" element={<Suspense fallback={<LoadingSpinner />}><Home /></Suspense>} />
-          <Route path="/property/:id" element={<Suspense fallback={<LoadingSpinner />}><PropertyDetails /></Suspense>} />
-          <Route path="/profile/details" element={<Profile />} />
-          <Route path="/profile/properties" element={<PropertiesPage />} />
-          <Route path="/profile/payment" element={<Suspense fallback={<LoadingSpinner />}><PaymentPage /></Suspense>} />
-          <Route path="/profile/booked" element={<PostedPage />} />
-          <Route path="/addproperty" element={<Suspense fallback={<LoadingSpinner />}><PropertyDetailsForm /></Suspense>} />
-          <Route path="/chat" element={<Suspense fallback={<LoadingSpinner />}><ChatPage /></Suspense>} />
-          <Route path="/admin/dashboard" element={<Suspense fallback={<LoadingSpinner />}><AdminDashboard /></Suspense>} />
+        <Routes>
+          <Route path="/" element={<Suspense fallback={<Loader />}><Home /></Suspense>} />
           <Route path="*" element={<NotFoundPage />} />
 
+          {/* User Routes */}
+          <Route path="/favourites" element={<Favourites />} />
+          <Route path="/properties" element={<PropertyListing />} />
+          <Route path="/property/:id" element={<PropertyDetails />} />
+          <Route path="/profile/dashboard" element={<Dashboard />} />
+          <Route path="/profile/details" element={<ProtectedRoute redirectTo='/' element={Profile} />} />
+          <Route path="/profile/properties" element={<ProtectedRoute redirectTo='/' element={PropertiesPage} />} />
+          <Route path="/profile/booked" element={<ProtectedRoute redirectTo='/' element={PostedPage} />} />
+          <Route path="/booked-property/:id" element={<BookingDetails />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/addproperty" element={<Suspense fallback={<Loader />}><PropertyDetailsForm /></Suspense>} />
+          <Route path="/chat" element={<Suspense fallback={<Loader />}><ChatPage /></Suspense>} />
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
+          <Route path="/admin/dashboard" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminDashboard} />} />
+          <Route path="/admin/property" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminProperty} />} />
+          <Route path="/admin/user" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminUser} />} />
+          <Route path="/admin/subscription" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={Subscription} />} />
+
+
+          {/* <Route path="/admin" element={<AdminLogin/>} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/property" element={<AdminProperty />} />
+          <Route path="/admin/user" element={<AdminUser />} />
+          <Route path="/admin/subscription" element={<Subscription />} /> */}
         </Routes>
       </GoogleOAuthProvider>
     </Router>

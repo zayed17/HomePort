@@ -76,84 +76,220 @@ const PropertyAddPage = () => {
     { title: 'Additional Details', icon: <FaInfoCircle title="Additional Details" /> },
   ];
 
-  const handleFormSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+//   const handleFormSubmit = async (event: FormEvent) => {
+//     event.preventDefault(); 
+
+//     const formDataToSend = new FormData();
+//     Object.keys(formData).forEach((key) => {
+//       const value = formData[key as keyof typeof formData];
+//       if (key === 'mediaFiles' && Array.isArray(value)) {
+//         value.forEach((file) => {
+//           formDataToSend.append('mediaFiles', file);
+//         });
+//       } else if (Array.isArray(value)) {
+//         value.forEach((item, index) => {
+//           formDataToSend.append(`${key}[${index}]`, item);
+//         });
+//       } else if (typeof value === 'object' && value !== null) {
+//         Object.keys(value).forEach((subKey) => {
+//           formDataToSend.append(`${key}[${subKey}]`, value[subKey as keyof typeof value]);
+//         });
+//       } else {
+//         formDataToSend.append(key, value as Blob);
+//       }
+//     });
+// console.log(formDataToSend,"condoel")
+//     try {
+//       if (isEditing) {
+//         await updateProperty(formDataToSend).unwrap();
+//         toast.success('Property updated successfully');
+//         navigate('/profile/properties');
+//       } else {
+//         await addProperty(formDataToSend).unwrap();
+//         toast.success('Property added successfully');
+//         navigate('/');
+//       }
+
+//       setFormData({
+//         propertyType: '',
+//         address: '',
+//         city: '',
+//         mediaFiles: [],
+//         depositAmount: 0,
+//         facing: '',
+//         propertyAge: '',
+//         totalFloors: 0,
+//         openings: 0,
+//         description: '',
+//         bedrooms: 0,
+//         bathrooms: 0,
+//         balconies: 0,
+//         totalArea: 0,
+//         hasWell: false,
+//         furnisherType: '',
+//         electronics: {},
+//         rentAmount: 0,
+//         isNegotiable: '',
+//         areBillsIncluded: '',
+//         eligibility: '',
+//         availableFrom: '',
+//         otherRooms: [],
+//         propertyFeatures: [],
+//         propertyAdvantages: [],
+//         noOfCars: 0,
+//         noOfScooters: 0,
+//         noOfBikes: 0,
+//         directionTips: '',
+//         sellPrice: 0,
+//         propertyCondition: '',
+//         lookingFor: '',
+//         longitude: 0,
+//         latitude: 0 
+//       });
+
+//       setLookingFor(null); 
+//       setCurrentSection(1);
+//     } catch (error:any) {
+//       console.error('Error submitting property:', error);
+//       toast.error(error.data.message);
+//     }
+//   };
+
+
+const handleFormSubmit = async (event: FormEvent) => {
+  event.preventDefault();
+
+  const filesToUpload = formData.mediaFiles;
+  console.log(filesToUpload, "first");
+
+  try {
+    const presignedResponse = await fetch('http://localhost:5003/api/property/presigned-urls', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        files: filesToUpload.map((file: any) => ({
+          filename: file.name,
+          fileType: file.type,
+        })),
+      }),
+    });
+
+    if (!presignedResponse.ok) {
+      throw new Error('Failed to get presigned URLs');
+    }
+
+    const presignedData = await presignedResponse.json();
+    console.log(presignedData,"presoids chejcs");
+
+    const uploadedUrls = await Promise.all(
+      filesToUpload.map(async (file: any, index) => {
+        const presignedUrl = presignedData.data.urls[index];
+
+        const uploadResponse = await fetch(presignedUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': file.type,
+          },
+          body: file,
+        });
+
+        if (!uploadResponse.ok) {
+          console.log(uploadResponse,"chekcin the resp;osn")
+          throw new Error(`Failed to upload ${file.name}`);
+        }
+
+        return presignedData.data.publicUrls[index];
+      })
+    );
 
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      const value = formData[key as keyof typeof formData];
-      if (key === 'mediaFiles' && Array.isArray(value)) {
-        value.forEach((file) => {
-          formDataToSend.append('mediaFiles', file);
-        });
-      } else if (Array.isArray(value)) {
+
+    uploadedUrls.forEach(url => {
+      console.log(url,"inside")
+      formDataToSend.append('mediaFiles', url);
+    });
+
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === 'mediaFiles') return; 
+
+      if (Array.isArray(value)) {
         value.forEach((item, index) => {
           formDataToSend.append(`${key}[${index}]`, item);
         });
       } else if (typeof value === 'object' && value !== null) {
-        Object.keys(value).forEach((subKey) => {
-          formDataToSend.append(`${key}[${subKey}]`, value[subKey as keyof typeof value]);
+        Object.entries(value).forEach(([subKey, subValue]) => {
+          formDataToSend.append(`${key}[${subKey}]`, String(subValue));
         });
       } else {
-        formDataToSend.append(key, value as Blob);
+        formDataToSend.append(key, String(value));
       }
     });
 
-    try {
-      if (isEditing) {
-        await updateProperty(formDataToSend).unwrap();
-        toast.success('Property updated successfully');
-        navigate('/profile/properties');
-      } else {
-        await addProperty(formDataToSend).unwrap();
-        toast.success('Property added successfully');
-        navigate('/');
-      }
+    formDataToSend.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
 
-      setFormData({
-        propertyType: '',
-        address: '',
-        city: '',
-        mediaFiles: [],
-        depositAmount: 0,
-        facing: '',
-        propertyAge: '',
-        totalFloors: 0,
-        openings: 0,
-        description: '',
-        bedrooms: 0,
-        bathrooms: 0,
-        balconies: 0,
-        totalArea: 0,
-        hasWell: false,
-        furnisherType: '',
-        electronics: {},
-        rentAmount: 0,
-        isNegotiable: '',
-        areBillsIncluded: '',
-        eligibility: '',
-        availableFrom: '',
-        otherRooms: [],
-        propertyFeatures: [],
-        propertyAdvantages: [],
-        noOfCars: 0,
-        noOfScooters: 0,
-        noOfBikes: 0,
-        directionTips: '',
-        sellPrice: 0,
-        propertyCondition: '',
-        lookingFor: '',
-        longitude: 0,
-        latitude: 0 
-      });
-
-      setLookingFor(null); 
-      setCurrentSection(1);
-    } catch (error:any) {
-      console.error('Error submitting property:', error);
-      toast.error(error.data.message);
+    if (isEditing) {
+      await updateProperty(formDataToSend).unwrap();
+      toast.success('Property updated successfully');
+      navigate('/profile/properties');
+    } else {
+      await addProperty(formDataToSend).unwrap();
+      toast.success('Property added successfully');
+      navigate('/');
     }
+
+    resetFormData();
+
+  } catch (error) {
+    console.error('Error submitting property:', error);
+    toast.error('Failed to submit property');
+  }
+};
+
+  
+  const resetFormData = () => {
+    setFormData({
+      propertyType: '',
+      address: '',
+      city: '',
+      mediaFiles: [],
+      depositAmount: 0,
+      facing: '',
+      propertyAge: '',
+      totalFloors: 0,
+      openings: 0,
+      description: '',
+      bedrooms: 0,
+      bathrooms: 0,
+      balconies: 0,
+      totalArea: 0,
+      hasWell: false,
+      furnisherType: '',
+      electronics: {},
+      rentAmount: 0,
+      isNegotiable: '',
+      areBillsIncluded: '',
+      eligibility: '',
+      availableFrom: '',
+      otherRooms: [],
+      propertyFeatures: [],
+      propertyAdvantages: [],
+      noOfCars: 0,
+      noOfScooters: 0,
+      noOfBikes: 0,
+      directionTips: '',
+      sellPrice: 0,
+      propertyCondition: '',
+      lookingFor: '',
+      longitude: 0,
+      latitude: 0,
+    });
+    setLookingFor(null);
+    setCurrentSection(1);
   };
+  
+
 
   const handleSectionClick = (sectionIndex: number) => {
     setCurrentSection(sectionIndex);

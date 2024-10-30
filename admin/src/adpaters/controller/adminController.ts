@@ -7,6 +7,7 @@ export class AdminController {
   async login(req: Request, res: Response,next:NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;
+      console.log(req.body,"chdk")
       const { admin, token } = await this.adminUseCase.authenticate(email, password);
 
         const ress = res.cookie('Admintoken', token, {

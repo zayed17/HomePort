@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { UserController } from '../express/controllers/UserController';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase ,UserAdminDashboardUseCase} from '../../../usecases';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UpdateUserSubscriptionUsecase ,UserAdminDashboardUseCase,GetSingleUserUsecase} from '../../../usecases';
 import { UserRepository, EmailRepository, RedisOTPRepository, S3Repository, GoogleAuthRepository,UserSubscriptionRepository,NotificationRepository } from '../../../repositories';
 import { authenticateToken } from 'homepackage'
 
@@ -41,12 +41,13 @@ const blockUnblockUseCase = new BlockUnblockUseCase(userRepository,notificationR
 const publishUserUpdateUseCase = new PublishUserUpdateUseCase(messageBrokerService)
 const updateUserSubscriptionUsecase = new UpdateUserSubscriptionUsecase(userRepository)
 const userAdminDashboardUseCase = new UserAdminDashboardUseCase(userRepository,userSubscriptionRepository)
+const getSingleUserUseCase = new GetSingleUserUsecase(userRepository)
 const rabbitMQClient= new RabbitMQClient()
 const rabbitMQConsumer = new RabbitMQConsumer(rabbitMQClient, updateUserSubscriptionUsecase);
 
 rabbitMQConsumer.start().catch(console.error);
 
-const userController = new UserController(signUpUseCase, loginUseCase, otpVerificationUseCase, getUserDetailUseCase, updateUseCase, uploadImageUseCase, resendOTPUseCase, googleAuthUseCase, verifyEmailUseCase, forgotPasswordUseCase, changePasswordUseCase, findAllUserUseCase, blockUnblockUseCase, publishUserUpdateUseCase,userAdminDashboardUseCase);
+const userController = new UserController(signUpUseCase, loginUseCase, otpVerificationUseCase, getUserDetailUseCase, updateUseCase, uploadImageUseCase, resendOTPUseCase, googleAuthUseCase, verifyEmailUseCase, forgotPasswordUseCase, changePasswordUseCase, findAllUserUseCase, blockUnblockUseCase, publishUserUpdateUseCase,userAdminDashboardUseCase,getSingleUserUseCase);
 
 
 const router = Router();
@@ -64,6 +65,7 @@ router.get('/getUser', authenticateToken(['user']), (req, res, next) => userCont
 router.get('/check-auth', authenticateToken(['user']), (req, res, next) => userController.checkAuth(req, res, next));
 router.get('/details/:id',(req, res, next) => userController.getDetails(req, res, next));
 router.post('/logout',(req, res, next) => userController.logout(req, res, next));
+router.get('/id/:id',(req, res, next) => userController.getSingleUser(req, res, next));
 
 // router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
 router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));

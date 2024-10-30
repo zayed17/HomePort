@@ -16,6 +16,7 @@ const VerifyRoute: React.FC<VerifyRouteProps> = ({
   const navigate = useNavigate();
   const token = getCookie(cookieName);
 
+  
   useEffect(() => {
     if (token) {
       navigate(redirectTo);

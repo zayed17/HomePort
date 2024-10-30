@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UserAdminDashboardUseCase } from '../../../../usecases';
+import { SignUpUseCase, LoginUseCase, OTPVerificationUseCase, GetUserDetailUsecase, UpdateUsecase, UploadImageUseCase, ResendOTPUseCase, GoogleAuthUseCase, VerifyEmailUseCase, ForgotPasswordUseCase, ChangePasswordUseCase, FindAllUserUseCase, BlockUnblockUseCase, PublishUserUpdateUseCase, UserAdminDashboardUseCase ,GetSingleUserUsecase} from '../../../../usecases';
 
 
 export class UserController {
@@ -18,8 +18,8 @@ export class UserController {
         private findAllUserUseCase: FindAllUserUseCase,
         private blockUnblockUseCase: BlockUnblockUseCase,
         private publishUserUpdateUseCase: PublishUserUpdateUseCase,
-        private userAdminDashboardUseCase: UserAdminDashboardUseCase
-
+        private userAdminDashboardUseCase: UserAdminDashboardUseCase,
+        private getSingleUserCase: GetSingleUserUsecase
     ) { }
 
     async signUpUser(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -124,6 +124,18 @@ export class UserController {
         }
     }
 
+
+    async getSingleUser(req: any, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const id = req.params.id
+            const userDetails = await this.getSingleUserCase.getDetail(id)
+            console.log(userDetails, "console")
+            res.status(200).json(userDetails);
+        } catch (error) {
+            res.status(400).json({ message: "Something happened" });
+            next(error)
+        }
+    }
 
     async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         console.log(req.body, "checking in updateuser")
