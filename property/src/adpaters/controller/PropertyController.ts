@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase,PresignedUseCase} from '../../usecase';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase} from '../../usecase';
 import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
 import Stripe from 'stripe'; 
 const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
@@ -28,7 +28,6 @@ export class PropertyController {
     private dashboardPropertiesUseCase:DashboardPropertiesUseCase,
     private repostPropertyUseCase:RepostPropertyUseCase,
     private adminDashboardUseCase:AdminDashboardUseCase,
-    private presignedUseCase:PresignedUseCase
 
 
 
@@ -38,57 +37,23 @@ export class PropertyController {
   
   async addProperty(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
+      const files = req.files as Express.Multer.File[];
       const id = req.user._id
       const user = await this.findUserUseCase.FindUser(id)
-
-      console.log(req.body,"chekcin osgfsdf",user,id)
-      return
       if (!user) {
         const userDetails = await fetchUserDetails(id);
         console.log(userDetails,"scs")
         await this.addUserUseCase.addUser(userDetails)
       }
       const formData = req.body;
-      // const result = await this.addPropertyUseCase.addProperty(files, formData, id);
-      // res.status(201).json({ message: 'Property added successfully', result });
+      const result = await this.addPropertyUseCase.addProperty(files, formData, id);
+      res.status(201).json({ message: 'Property added successfully', result });
     } catch (error) {
       next(error);
     }
   }
 
-  // async preSigned(req: Request, res: Response, next: NextFunction): Promise<any> {
-  //   try {
-  //     const { files } = req.body;
-  //     const urls = await this.presignedUseCase.preSignedUrl(files)
-  //     console.log(urls,"csdfsd")
-  //     res.json({urls})
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
 
-
-  async preSigned(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      const { files } = req.body as { files: any[] };
-      if (!files?.length) {
-        res.status(400).json({ success: false, error: 'No files provided' });
-        return;
-      }
-
-      const responses: any[] = await this.presignedUseCase.preSignedUrl(files);
-console.log(responses,"front end responsive ")
-      res.json({ success: true,
-        data: {
-          urls: responses.map(r => r.presignedUrl),
-          publicUrls: responses.map(r => r.publicUrl)
-        }
-      });
-    } catch (error) {
-      console.error('Controller error:', error);
-      next(error);
-    }
-  }
 
   async getPendingProperties(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
