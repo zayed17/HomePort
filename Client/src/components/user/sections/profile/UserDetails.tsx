@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import EditUserModal from '../../EditModal';
-import axios from 'axios';
 import ChangePasswordModal from '../../ChangePasswordModal';
-import { useGetUserQuery } from '../../../../store/user/userApi';
+import { useGetUserQuery, useUpdateProfileMutation } from '../../../../store/user/userApi';
 import { differenceInDays } from 'date-fns';
 import Loader from '../../../common/Loader';
 
@@ -14,6 +13,8 @@ const UserDetails: React.FC = () => {
   const { data: { userDetails } = {}, isLoading, isError, error } = useGetUserQuery({});
   console.log(userDetails)
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+
+  const [updateProfile, { isLoading: isUpdating,isSuccess }] = useUpdateProfileMutation(); // Add isLoading for the mutation
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -46,8 +47,7 @@ const UserDetails: React.FC = () => {
     try {
       const formData = new FormData();
       formData.append('photo', photo);
-      // const response = await axios.post('http:/localhost/api/user/uploadImage', formData, { withCredentials: true });
-      const response = await axios.post('https://homeport.online/api/user/uploadImage', formData, { withCredentials: true });
+      const response = await updateProfile(formData).unwrap()
       console.log('Image uploaded:', response);
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -113,7 +113,7 @@ const UserDetails: React.FC = () => {
         </label>
         <div className="relative w-32 h-32 mx-auto mb-2">
           <div className="w-full h-full bg-gray-200 rounded-full overflow-hidden relative">
-            {isLoading && (
+            {isUpdating && (
               <div className="absolute inset-0 w-full h-full rounded-full flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
                 <div className="loader"></div>
               </div>
@@ -137,7 +137,7 @@ const UserDetails: React.FC = () => {
             onChange={handleFileChange}
           />
         </div>
-        {isPreview && (
+        {isPreview && !isUpdating && !isSuccess && ( // Show buttons only if there's a preview and not updating
           <div className="mt-2 flex justify-center space-x-2">
             <button
               className="bg-red-500 text-white py-1 px-3 rounded-full text-sm"

@@ -95,6 +95,13 @@ const userApi = createApi({
         body: credentials,
       }),
     }),
+    updateProfile: builder.mutation({
+      query: (credentials) => ({
+        url: `${URL}/uploadImage`,
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
     findAllUsers: builder.query({
       query: () => `${URL}/findAll`,
       keepUnusedDataFor: 60,
@@ -113,6 +120,6 @@ const userApi = createApi({
   }),
 });
 
-export const { useLoginInMutation, useSignUpMutation, useOtpVerifyMutation, useGetUserQuery, useGoogleSignMutation, useUpdateUserMutation, useUploadPicMutation, useResendOTPMutation, useVerifyEmailMutation, useForgotPasswordMutation, useChangePasswordMutation, useFindAllUsersQuery, useBlockAndUnblockMutation, useGetUserAdminDashboardQuery,useCheckAuthQuery,useLogoutMutation } = userApi;
+export const { useLoginInMutation, useSignUpMutation, useOtpVerifyMutation, useGetUserQuery, useGoogleSignMutation, useUpdateUserMutation, useUploadPicMutation, useResendOTPMutation, useVerifyEmailMutation, useForgotPasswordMutation, useChangePasswordMutation, useFindAllUsersQuery, useBlockAndUnblockMutation, useGetUserAdminDashboardQuery,useCheckAuthQuery,useLogoutMutation,useUpdateProfileMutation } = userApi;
 
 export default userApi;
