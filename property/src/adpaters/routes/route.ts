@@ -1,34 +1,32 @@
 import { Router } from "express";
 import  { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase,PresignedUseCase} from '../../usecase';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase} from '../../usecase';
 import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository,NotificationRepository } from '../../repositories';
-// import { S3Service } from "../../infrastructure";
+import { S3Service } from "../../infrastructure";
 import { RabbitMQPublisher } from '../../infrastructure/rabbitMq/RabbitMQPulisher';
 import upload from '../../infrastructure/middleware/multerMiddleware'
 import PropertyModel from "../../infrastructure/mongodb/PropertyModel";
 import { StripeService } from '../../infrastructure/Stripe/StripeService';
 import { PaymentService } from '../../service/PaymentService';
-import PropertyService from "../../infrastructure/S3/S3Service";
 import { authenticateToken } from 'homepackage'
 
 import { checking } from "./Just";
 
 
-// const s3Service = new S3Service();
+const s3Service = new S3Service();
 const stripeService = new StripeService()
 const paymentService = new PaymentService()
 // Initialize repositories with required services
-// const s3Repository = new S3Repository(s3Service);
+const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
 // const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
 const rabbitMQPublisher = new RabbitMQPublisher('amqp://localhost:5672')
-const propertyService = new PropertyService()
 const notificationRepository = new NotificationRepository('https://homeport.online/api/chat')
 // Initialize use cases with required repositories
-const addPropertyUseCase = new AddPropertyUseCase( propertyRepository,rabbitMQPublisher);
+const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);
 const findPendingPropertyUseCase = new FindPendingPropertyUseCase(propertyRepository)
 const rejectPropertyUseCase = new RejectPropertyUseCase(propertyRepository,notificationRepository)
 const verifyPropertyUseCase = new VerifyPropertyUseCase(propertyRepository,notificationRepository)
@@ -48,10 +46,9 @@ const updatePropertyUseCase = new UpdatePropertyUseCase(propertyRepository)
 const dashboardPropertiesUseCase = new DashboardPropertiesUseCase(propertyRepository)
 const rabbitMqepostPropertyUseCase = new RepostPropertyUseCase( propertyRepository)
 const adminDashboardUseCase = new AdminDashboardUseCase(propertyRepository)
-const presignedUseCase = new PresignedUseCase(propertyService)
 
 
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase,adminDashboardUseCase,presignedUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase,adminDashboardUseCase);
 
 const router = Router();
 
@@ -112,7 +109,6 @@ router.get('/favourite-property',authenticateToken(['user']),(req, res, next) =>
 router.post('/report-property',authenticateToken(['user']),(req, res, next) => propertyController.addReport(req, res, next));
 router.get('/reports',(req, res, next) => propertyController.findReports(req, res, next));
 router.post('/update-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.RepostProperty(req, res, next));
-router.post('/presigned-urls',(req, res, next) => propertyController.preSigned(req, res, next));
 
 
 
