@@ -11,6 +11,8 @@ const app = express();
 const server = http.createServer(app);
 
 export const io = new SocketIOServer(server, {
+  path: '/api/property/socket.io',
+  transports: ['websocket', 'polling'], 
   cors: {
     origin: "https://homeport.online",
     // origin:"http://localhost:5173",
@@ -19,6 +21,10 @@ export const io = new SocketIOServer(server, {
     credentials: true
   }
 });
+
+
+
+
 
 io.on('connection', (socket) => {
   console.log('A user connected: ', socket.id);

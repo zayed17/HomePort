@@ -4,10 +4,11 @@ let socket: Socket | null = null;
 
 try {
     // socket = io('http://localhost:5003', {
-    socket = io('wss://api.homeport.online/api/property', {
-        withCredentials: true,
-        reconnectionAttempts: 5,  
-        reconnectionDelay: 3000,  
+    socket = io('wss://api.homeport.online', {
+        path: '/api/property/socket.io',  
+        transports: ['websocket','polling'],     
+        reconnectionAttempts: 3,       
+        reconnectionDelay: 3000,
     });
 
     
