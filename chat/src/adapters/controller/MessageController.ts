@@ -164,6 +164,7 @@ export class MessageController {
 
     socket.on('propertyRejected', async (rejectionData) => {
       try {
+        console.log("propertyRejected",rejectionData)
         const notification =  this.propertyNotificationUseCase.createRejectionNotification(rejectionData);
         io.emit('propertyNotification', notification);
       } catch (error) {

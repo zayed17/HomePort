@@ -17,6 +17,5 @@ export class VerifyPropertyUseCase {
     };
 
     await this.propertyRepository.updateProperty(id, updatedProperty);
-    await this.notificationRepository.sendNotification('propertyVerified', {status: 'verified'});
   }
 }

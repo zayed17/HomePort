@@ -39,7 +39,9 @@ export class PropertyController {
     try {
       const files = req.files as Express.Multer.File[];
       const id = req.user._id
+      console.log(id,"id chen")
       const user = await this.findUserUseCase.FindUser(id)
+      console.log(user,"cheicnm")
       if (!user) {
         const userDetails = await fetchUserDetails(id);
         console.log(userDetails,"scs")
@@ -89,7 +91,6 @@ export class PropertyController {
     try {
       const { id } = req.params
       const result = await this.findPropertyUseCase.findProperty(id);
-      console.log(result,"chdk in back")
       res.status(201).json(result);
     } catch (error) {
       next(error);

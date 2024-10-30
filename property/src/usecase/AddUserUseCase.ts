@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'; 
 import { UserPropertyInterface } from '../repositories';
 import { UserData } from '../entities/userPropertyEntity';
 
@@ -9,7 +10,7 @@ export class AddUserUseCase {
   async addUser(user: any): Promise<void> {
     try {
       const userData: UserData = {
-        _id:user.id,
+        _id: new mongoose.Types.ObjectId(user._id), 
         name: user.firstName,
         email: user.email,
         phone: user.phone,

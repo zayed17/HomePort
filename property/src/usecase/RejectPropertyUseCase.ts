@@ -6,6 +6,7 @@ export class RejectPropertyUseCase {
       private notificationRepository: NotificationInterface) { }
 
   async rejectProperty(id: string, reason: string): Promise<void> {
+    console.log("rejected use case worked")
     const property = await this.propertyRepository.findOne({ _id: id });
     if (!property) {
       throw new Error('Property not found');
@@ -16,6 +17,6 @@ export class RejectPropertyUseCase {
     };
 
     await this.propertyRepository.updateProperty(id, updatedProperty);
-    await this.notificationRepository.sendNotification('propertyRejected', { status: 'rejected' });
+
   }
 }
