@@ -238,10 +238,10 @@ const Navbar = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    toast.success('Logout successfully');
-  };
+  // const handleLogout = () => {
+  //   logout();
+  //   toast.success('Logout successfully');
+  // };
 
   useEffect(() => {
     if (!socket) return;
