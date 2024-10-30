@@ -1,5 +1,5 @@
 export interface UserData {
-    _id:string;
+    _id:any;
     name: string;
     email: string;
     phone: string;
@@ -7,7 +7,7 @@ export interface UserData {
 }
 
 export class User {
-    _id:string;
+    _id:any;
     name: string;
     email: string;
     phone: string;

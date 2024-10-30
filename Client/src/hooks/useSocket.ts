@@ -12,7 +12,7 @@ const useSocket = () => {
     
     const socketInstance = io(SOCKET_SERVER_URL, {
       path: '/api/chat/socket.io',  
-      transports: ['websocket'],     
+      transports: ['websocket','polling'],     
       reconnectionAttempts: 3,       
       reconnectionDelay: 3000,      
     });
@@ -34,7 +34,7 @@ const useSocket = () => {
     // Clean up socket on component unmount
     return () => {
       console.log('Disconnecting socket');
-      socketInstance.disconnect();
+      socketInstance.disconnect()
     };
   }, []);
 

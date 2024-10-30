@@ -379,9 +379,10 @@ const Navbar = () => {
       </div>
 
       <LoginModal isOpen={isModalOpen} onClose={closeModal} />
-      <NotificationDrawer isOpen={isNotificationOpen} onClose={closeNotificationDrawer} />
+      <NotificationDrawer open={isNotificationOpen} onClose={closeNotificationDrawer}   onNotificationsChange={loadNotificationCount} />
     </nav>
   );
 };
 
 export default Navbar;
+

@@ -3,6 +3,7 @@ import { Modal, Button, Typography, Space, Input, Row, Col, notification } from 
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { IoMdHome, IoMdBed, IoMdPin, IoMdCar, IoMdImages } from 'react-icons/io';
 import { useVerifyPropertyMutation, useRejectPropertyMutation } from '../../store/property/propertyApi';
+import useSocket from '../../hooks/useSocket';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -17,6 +18,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ property, o
   const [showRejectReason, setShowRejectReason] = useState(false);
   const [verifyProperty] = useVerifyPropertyMutation();
   const [rejectProperty] = useRejectPropertyMutation();
+  const socket = useSocket();
 
   if (!property) return null;
 
@@ -33,6 +35,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ property, o
     try {
       await verifyProperty(property._id).unwrap();
       openNotification('success', 'Property Verified', 'Property verified successfully');
+      socket?.emit('propertyVerified')
       onClose();
     } catch (error) {
       openNotification('error', 'Verification Failed', 'Failed to verify the property');
@@ -43,6 +46,7 @@ const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({ property, o
     try {
       await rejectProperty({ propertyId: property._id, reason: rejectReason }).unwrap();
       openNotification('success', 'Property Rejected', 'Property rejected successfully');
+      socket?.emit('propertyRejected',rejectReason)
       onClose();
     } catch (error) {
       openNotification('error', 'Rejection Failed', 'Failed to reject the property');
