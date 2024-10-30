@@ -35,6 +35,7 @@ interface BookedDetail {
 
 const Properties: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true); 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
   const { data, error, isLoading, refetch } = useGetAllPropertiesQuery({ page: currentPage, limit: pageSize});
@@ -81,24 +82,21 @@ const Properties: React.FC = () => {
     const isBooked = property.status === "booked";
 
     return (
-      <div
-        key={property._id}
-        className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
-      >
-        <div
-          onClick={() => handleNavigate(property._id)}
-          className="relative h-48 cursor-pointer"
-        >
-          <img
-            src={property.mediaFiles[0]}
-            alt={property.propertyType}
-            className="w-full h-full object-cover"
-          />
-          <span
-            className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-              property.status
-            )}`}
-          >
+      <div key={property._id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+        <div onClick={() => handleNavigate(property._id)} className="relative h-48 cursor-pointer" >
+        <div className="relative w-full h-full">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+          <span>Loading...</span> 
+        </div>
+      )}
+      <img src={property.mediaFiles[0]}  alt={property.propertyType}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"}`}onLoad={() => setLoading(false)} 
+        onError={() => {
+          setLoading(false);
+        }}
+      />
+    </div>          <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(property.status )}`}>
             {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
           </span>
           {!isBooked && property.sponsorship?.isSponsored && (
