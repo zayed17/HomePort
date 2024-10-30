@@ -5,8 +5,8 @@ const URL = '/api/chat';
 const chattingApi = createApi({
   reducerPath: 'chattingApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: `${import.meta.env.VITE_API_URL}`,
-    // baseUrl: `http://localhost:3000`,
+    // baseUrl: `${import.meta.env.VITE_API_URL}`,
+    baseUrl: `http://localhost:3000`,
     credentials: 'include',
   }),
   endpoints: (builder) => ({

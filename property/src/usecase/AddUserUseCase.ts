@@ -10,7 +10,7 @@ export class AddUserUseCase {
     try {
       const userData: UserData = {
         _id:user.id,
-        name: user.firstname,
+        name: user.firstName,
         email: user.email,
         phone: user.phone,
         favourites: [] 
