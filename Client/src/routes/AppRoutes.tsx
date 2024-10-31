@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Loader from '../components/common/Loader';
 import NotFoundPage from '../pages/NotFound';
-import VerifyRoute from './Verify';
+// import VerifyRoute from './Verify';
 
 const Home = lazy(() => import('../pages/user/Home'));
 const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'));
@@ -52,11 +52,11 @@ const AppRoutes = () => {
           <Route path="/addproperty" element={<Suspense fallback={<Loader />}><PropertyDetailsForm /></Suspense>} />
           <Route path="/chat" element={<Suspense fallback={<Loader />}><ChatPage /></Suspense>} />
           <Route path="/chat/:chatId" element={<ChatPage />} />
-          <Route path="/admin" element={<VerifyRoute cookieName='Admintoken' redirectTo='/admin/dashboard' element={AdminLogin} />} />
-          <Route path="/admin/dashboard" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminDashboard} />} />
-          <Route path="/admin/property" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminProperty} />} />
-          <Route path="/admin/user" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={AdminUser} />} />
-          <Route path="/admin/subscription" element={<ProtectedRoute cookieName='Admintoken' redirectTo='/admin' element={Subscription} />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard/>} />
+          <Route path="/admin/property" element={<AdminProperty/>} />
+          <Route path="/admin/user" element={<AdminUser/>} />
+          <Route path="/admin/subscription" element={<Subscription />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
