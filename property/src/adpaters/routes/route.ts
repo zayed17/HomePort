@@ -95,6 +95,18 @@ router.get('/list-properties-public',  async (req: any, res: Response, next: Nex
       next(error); 
   }
 });
+
+
+router.get('/list-properties-map',  async (req: any, res: Response, next: NextFunction) => {
+  try {
+     
+      const properties = await PropertyModel.find({ status: 'verified' })
+
+      res.json(properties);
+    } catch (error) {
+      next(error); 
+  }
+});
 router.get('/properties/pending',(req, res, next) => propertyController.getPendingProperties(req, res, next));
 router.post('/properties/verify/:id',(req, res, next) => propertyController.verifyProperty(req, res, next));
 router.post('/properties/reject/:id',(req, res, next) => propertyController.rejectProperty(req, res, next));
