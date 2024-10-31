@@ -51,7 +51,7 @@ const BookingMain: React.FC = () => {
     ? property.depositAmount
     : Math.min(property.sellPrice * 0.05, 50000);
 
-  const totalAmount = depositAmount + fixedBookingFee;
+  const totalAmount =Math.round(depositAmount + fixedBookingFee);
 
   const handleBooking = async () => {
     if (!selectedDay) {
@@ -59,7 +59,7 @@ const BookingMain: React.FC = () => {
       return;
     }
   
-    setLoading(true); // Set loading to true when the booking process starts
+    setLoading(true);
   
     try {
       const { id: sessionId } = await payment({ amount: totalAmount * 100, propertyId: property._id, bookingDate: selectedDay }).unwrap();
@@ -74,7 +74,7 @@ const BookingMain: React.FC = () => {
       toast.error(error.data.message);
       console.error('Payment failed', error);
     } finally {
-      setLoading(false); // Set loading to false after the process ends
+      setLoading(false); 
     }
   }
 
