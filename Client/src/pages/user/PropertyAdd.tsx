@@ -25,7 +25,7 @@ const PropertyAddPage = () => {
     skip: !isEditing, 
   });
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
     propertyType: '',
     address: '',
     city: '',
@@ -82,7 +82,6 @@ const PropertyAddPage = () => {
 
     let allFieldsValid = true;
 
-    // Validate each field
     Object.keys(validationRules).forEach((field) => {
         const { required, type, min, message } = validationRules[field];
         let isRequired = required;
