@@ -6,8 +6,9 @@ import Filters from '../../components/user/Filter';
 import { useGetPropertiesQuery, useGetPublicPropertiesQuery, useToggleFavoriteMutation } from '../../store/property/propertyApi';
 import { Pagination, Skeleton, Badge, Button, Input, Select, Modal, Tooltip } from 'antd';
 import { FaHeart, FaRegHeart, FaMap } from 'react-icons/fa';
-import { getCookie } from '../../helpers/getCookie';
 import MapWithProperties from '../../components/user/MapShow';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 
 const { Option } = Select;
@@ -47,11 +48,10 @@ interface FilterState {
 }
 
 const PropertyListing: React.FC = () => {
-  const token = getCookie('token');
   const [currentPage, setCurrentPage] = useState(1);
-  const isAuthenticated = (): boolean => !!token;
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [pageSize] = useState<number>(3);
-  const { data, isLoading, isError } = isAuthenticated() ? useGetPropertiesQuery({ page: currentPage, limit: pageSize}) : useGetPublicPropertiesQuery({ page: currentPage, limit: pageSize});
+  const { data, isLoading, isError } = isAuthenticated ? useGetPropertiesQuery({ page: currentPage, limit: pageSize}) : useGetPublicPropertiesQuery({ page: currentPage, limit: pageSize});
 
   console.log(data,"chdleof")
   const properties = data?.properties || [];
@@ -158,7 +158,7 @@ const PropertyListing: React.FC = () => {
 
 
   const handleFavoriteClick = async (propertyId: string, isFavorited: any): Promise<void> => {
-    if (!isAuthenticated()) {
+    if (!isAuthenticated) {
       toast.error('Please Login to favorite');
       return;
     }
@@ -221,7 +221,7 @@ const PropertyListing: React.FC = () => {
               <>
                 <div className="space-y-4">
                   {filteredProperties.map((property) => {
-                    const isFavorited = isAuthenticated() && property.createdBy?.favourites.includes(property._id);
+                    const isFavorited = isAuthenticated && property.createdBy?.favourites.includes(property._id);
                     const animationClass = animatedId === property._id ? (isFavorited ? 'broken' : 'animated') : '';
                     return (
                       <Badge.Ribbon key={property._id} text="Sponsored" color="darkBlue" className={property.sponsorship?.isSponsored ? 'visible' : 'invisible'} >
