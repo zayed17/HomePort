@@ -1,4 +1,4 @@
-const validationRules = {
+const validationRules :any= {
     address: { required: true, message: "Address is required." },
     areBillsIncluded: { required: false },
     availableFrom: { required: true, message: "Available from date is required." },
