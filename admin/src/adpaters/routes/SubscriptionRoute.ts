@@ -40,8 +40,8 @@ router.post('/payment-intent', authenticateToken(['user']),async (req:any, res) 
               quantity: 1,
           }],
           mode: 'payment',
-          success_url: 'https://api.homeport.online/subscription?session_id={CHECKOUT_SESSION_ID}', 
-          cancel_url: 'https://api.homeport.online/api/chat/cancel', 
+          success_url: 'https://homeport.online/subscription?session_id={CHECKOUT_SESSION_ID}', 
+          cancel_url: 'https://homeport.online/api/chat/cancel', 
           metadata: {
             userId, 
               planId,
