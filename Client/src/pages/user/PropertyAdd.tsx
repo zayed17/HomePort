@@ -197,7 +197,7 @@ console.log(formDataToSend,"condoel")
 
   const handleLookingForSelection = (selection: string) => {
     setLookingFor(selection);
-    setFormData(prevFormData => ({ ...prevFormData, lookingFor: selection }));
+    setFormData((prevFormData:any) => ({ ...prevFormData, lookingFor: selection }));
   };
 
   if (isLoading || isAddingProperty || isUpdatingProperty) {
