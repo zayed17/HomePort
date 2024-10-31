@@ -52,8 +52,8 @@ router.post('/make-payment', authenticateToken(['user']), async (req: any, res) 
         },
       ],
       mode: 'payment',
-      success_url: `https://api.homeport.online/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
-      cancel_url: 'https://api.homeport.online/payment-error',
+      success_url: `https://homeport.online/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
+      cancel_url: 'https://homeport.online/payment-error',
       metadata: {
         propertyId,
         userId,
