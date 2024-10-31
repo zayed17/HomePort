@@ -52,8 +52,8 @@ router.post('/make-payment', authenticateToken(['user']), async (req: any, res) 
         },
       ],
       mode: 'payment',
-      success_url: `https://homeport.online/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
-      cancel_url: 'https://homeport.online/payment-error',
+      success_url: `https://api.homeport.online/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
+      cancel_url: 'https://api.homeport.online/payment-error',
       metadata: {
         propertyId,
         userId,
@@ -97,7 +97,7 @@ router.post('/booking', async (req: any, res: Response) => {
 
     try {
       console.log(propertyId, "id consoling")
-      const propertyResponse = await axios.get(`https://homeport.online/api/property/property/${propertyId}`);
+      const propertyResponse = await axios.get(`https://api.homeport.online/api/property/property/${propertyId}`);
       const propertyData = propertyResponse.data;
       console.log(propertyData)
       if (!propertyData) {
@@ -122,7 +122,7 @@ router.post('/booking', async (req: any, res: Response) => {
         }
       };
 
-      const userResponse = await axios.get(`https://homeport.online/api/user/details/${userId}`);
+      const userResponse = await axios.get(`https://api.homeport.online/api/user/details/${userId}`);
       const userData = userResponse.data;
       console.log(userData)
       if (!userData) {
