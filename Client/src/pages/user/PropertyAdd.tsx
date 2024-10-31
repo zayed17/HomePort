@@ -10,6 +10,7 @@ import { useAddPropertyMutation, useUpdatePropertyMutation, useGetPropertyQuery 
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import loaderGif from '/assets/gifff.gif';
+import validationRules from '../../helpers/propertyValidation';
 
 const PropertyAddPage = () => {
   const { propertyId } = useParams<{ propertyId: string }>();
@@ -79,6 +80,41 @@ const PropertyAddPage = () => {
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault(); 
 
+    let allFieldsValid = true;
+
+    // Validate each field
+    Object.keys(validationRules).forEach((field) => {
+        const { required, type, min, message } = validationRules[field];
+        let isRequired = required;
+
+        if (field === 'depositAmount') {
+            isRequired = (formData.lookingFor === "rent");
+        }
+
+        if (field === 'rentAmount') {
+            isRequired = (formData.lookingFor === "rent");
+        }
+
+        if (field === 'sellPrice') {
+            isRequired = (formData.lookingFor === "sell");
+        }
+
+        const value = formData[field];
+
+        if (isRequired && (value === "" || (type === 'number' && value < min))) {
+            toast.error(message);
+            allFieldsValid = false;
+        }
+
+        if (field === 'mediaFiles' && value.length < 3) {
+            toast.error("You must upload at least 3 media files.");
+            allFieldsValid = false;
+        }
+    });
+
+    if (!allFieldsValid) {
+        return;
+    }
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       const value = formData[key as keyof typeof formData];
@@ -200,9 +236,7 @@ console.log(formDataToSend,"condoel")
               >
                 {section.icon}
               </div>
-              <span
-                className={`mt-2 text-xs ${currentSection === index + 1 ? 'text-BlueGray' : 'text-gray-600'}`}
-              >
+              <span className={`mt-2 text-xs ${currentSection === index + 1 ? 'text-BlueGray' : 'text-gray-600'}`}>
                 {section.title}
               </span>
             </div>
@@ -229,26 +263,17 @@ console.log(formDataToSend,"condoel")
 
         <div className="mt-8 flex justify-end space-x-4">
           {currentSection > 1 && (
-            <button
-              onClick={() => handleSectionClick(currentSection - 1)}
-              className="px-4 py-2 bg-BlueGray text-white rounded shadow"
-            >
+            <button onClick={() => handleSectionClick(currentSection - 1)} className="px-4 py-2 bg-BlueGray text-white rounded shadow">
               Back
             </button>
           )}
           {currentSection < sectionTitles.length && (
-            <button
-              onClick={() => handleSectionClick(currentSection + 1)}
-              className="px-4 py-2 bg-BlueGray text-white rounded shadow"
-            >
+            <button onClick={() => handleSectionClick(currentSection + 1)} className="px-4 py-2 bg-BlueGray text-white rounded shadow">
               Next
             </button>
           )}
           {currentSection === sectionTitles.length && (
-            <button
-              onClick={handleFormSubmit}
-              className="px-4 py-2 bg-GrayishBlue text-white rounded shadow"
-            >
+            <button onClick={handleFormSubmit} className="px-4 py-2 bg-GrayishBlue text-white rounded shadow" >
               {isEditing ? 'Update Property' : 'Add Property'}
             </button>
           )}
