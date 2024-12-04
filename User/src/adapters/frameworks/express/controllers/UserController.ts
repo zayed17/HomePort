@@ -50,7 +50,7 @@ export class UserController {
                 sameSite: 'none',
             });
 
-            res.status(200).json({ message: 'User successfully logged in', user:user._id, role });
+            res.status(200).json({ message: 'User successfully logged in', token});
         } catch (error) {
             next(error);
         }
