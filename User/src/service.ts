@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from './app';
 import cookieParser from 'cookie-parser'
-import { main } from './UserServer';
+
 dotenv.config();
 
 
@@ -15,7 +15,6 @@ mongoose.connect(MONGO_URL).then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });
-    main()
 
 }).catch((err) => {
     console.error('Failed to connect to MongoDB', err);

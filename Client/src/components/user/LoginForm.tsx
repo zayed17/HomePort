@@ -22,11 +22,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onForgotPassword }) => {
     const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
         try {
             const res = await login({ email: data.email, password: data.password, role: 'user' }).unwrap();
-            const user = {
-                _id: res.user, 
-                role: res.role 
-            };
-            dispatch(loginSuccess(user));
+            dispatch(loginSuccess(res.token));
             clearError()
             onClose()
             toast.success('Login successfully');

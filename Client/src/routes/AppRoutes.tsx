@@ -4,7 +4,6 @@ import { Toaster } from 'react-hot-toast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Loader from '../components/common/Loader';
 import NotFoundPage from '../pages/NotFound';
-// import VerifyRoute from './Verify';
 
 const Home = lazy(() => import('../pages/user/Home'));
 const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'));

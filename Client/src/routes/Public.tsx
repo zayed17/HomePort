@@ -3,19 +3,19 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-interface ProtectedRouteProps {
-  element: React.ComponentType;
-  redirectTo: string ;         
+interface PublicRouteProps {
+  element: React.ComponentType; 
+  redirectTo?: string;          
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element: Component, redirectTo  }) => {
+const PublicRoute: React.FC<PublicRouteProps> = ({ element: Component, redirectTo = "/dashboard" }) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  if (!isAuthenticated) {
+  if (isAuthenticated) {
     return <Navigate to={redirectTo} replace />;
   }
 
   return <Component />;
 };
 
-export default ProtectedRoute;
+export default PublicRoute;
