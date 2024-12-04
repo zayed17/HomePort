@@ -15,7 +15,7 @@ export const useAuth = () => {
             if (userData) {
                 dispatch(loginSuccess(userData)); 
             } else {
-                dispatch(loginFail('Not authenticated')); 
+                dispatch(loginFail()); 
             }
         }
     }, [userData, isLoading, dispatch]);
