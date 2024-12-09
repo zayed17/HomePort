@@ -9,8 +9,9 @@ export const checking = async (
   try {
     const id = req.user._id;
     console.log(id,"id checking from front end")
-    const response = await axios.get(`https://api.homeport.online/api/user/details/${id}`);
-console.log(response,"response checking form backend")
+    const response = await axios.get(`${process.env.BACKEND_API_URL}/api/user/details/${id}`);
+
+   console.log(response,"response checking form backend")
     if (!response.data) {
       return res.status(400).json({ message: 'Invalid user data received.' });
     }

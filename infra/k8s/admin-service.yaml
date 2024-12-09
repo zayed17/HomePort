@@ -5,7 +5,9 @@ metadata:
 data:
   MONGO_URL: "mongodb+srv://mzayed9745:mohammadzayed9745@projectcluster.dozic4b.mongodb.net/subscription?retryWrites=true&w=majority&appName=ProjectCluster"
   CORS_ORIGIN: "https://homeport.online"
-
+  EMAIL: "mzayed9745@gmail.com"
+  PASSWORD: "zayed123"
+  
 ---
 
 apiVersion: apps/v1

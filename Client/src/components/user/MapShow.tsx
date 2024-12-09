@@ -37,8 +37,7 @@ const MapWithProperties: React.FC = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch('https://api.homeport.online/api/property/list-properties-map');
-        // const response = await fetch('http://localhost:5003/api/property/list-properties-map');
+        const response = await fetch(`${import.meta.env.VITE_PROPERTY_API_URL}/api/property/list-properties-map`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
