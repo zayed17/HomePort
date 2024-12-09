@@ -9,8 +9,7 @@ import connectDB from './infrastructure/mongoDB/connection/connection';
 const app = express();
 
 const corsOptions = {
-  origin: 'https://homeport.online',
-  // origin:'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN,
   methods: ['GET', 'POST', 'OPTIONS'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
