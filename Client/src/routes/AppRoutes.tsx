@@ -49,6 +49,7 @@ const AppRoutes = () => {
           <Route path="/booked-property/:id" element={<BookingDetails />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/addproperty" element={<Suspense fallback={<Loader />}><PropertyDetailsForm /></Suspense>} />
+          <Route path="/addproperty/:propertyId" element={<Suspense fallback={<Loader />}><PropertyDetailsForm /></Suspense>} />
           <Route path="/chat" element={<Suspense fallback={<Loader />}><ChatPage /></Suspense>} />
           <Route path="/chat/:chatId" element={<ChatPage />} />
           <Route path="/admin" element={<AdminLogin />} />
