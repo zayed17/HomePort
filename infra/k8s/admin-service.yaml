@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-admin
+data:
+  MONGO_URL: "mongodb+srv://mzayed9745:mohammadzayed9745@projectcluster.dozic4b.mongodb.net/subscription?retryWrites=true&w=majority&appName=ProjectCluster"
+  CORS_ORIGIN: "https://homeport.online"
+  EMAIL: "mzayed9745@gmail.com"
+  PASSWORD: "zayed123"
+  
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-service
+  template:
+    metadata:
+      labels:
+        app: admin-service
+    spec:
+      containers:
+        - name: admin-service
+          image: zayed17/realestate-admin:latest
+          ports:
+            - containerPort: 5002
+          envFrom:
+            - configMapRef:
+                name: config-admin
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-service
+spec:
+  selector:
+    app: admin-service
+  ports:
+    - protocol: TCP
+      port: 5002
+      targetPort: 5002
+  type: ClusterIP
