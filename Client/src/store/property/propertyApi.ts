@@ -1,84 +1,11 @@
-// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-// const URL = '/property';
-
-// const createGetQuery = (url:string) => ({
-//   query: () => `${URL}${url}`,
-//   keepUnusedDataFor: 60,
-// });
-
-// const createMutation = (url:string, method = 'POST') => ({
-//   query: (body:any) => ({
-//     url: `${URL}${url}`,
-//     method,
-//     body,
-//   }),
-// });
-
-// const propertyApi = createApi({
-//   reducerPath: 'propertyApi',
-//   baseQuery: fetchBaseQuery({
-//     baseUrl: 'http://localhost',
-//     credentials: 'include',
-//   }),
-//   endpoints: (builder) => ({
-//     addProperty: builder.mutation(createMutation('/add-property')),
-
-//     getProperties: builder.query(createGetQuery('/list-properties')),
-
-//     getPublicProperties: builder.query(createGetQuery('/list-properties-public')),
-
-//     getPendingProperties: builder.query(createGetQuery('/properties/pending')),
-
-//     verifyProperty: builder.mutation(createMutation('/properties/verify')),
-
-//     rejectProperty: builder.mutation(createMutation('/properties/reject', 'POST')),
-
-//     getProperty: builder.query({
-//       query: (id) => `${URL}/property/${id}`,
-//     }),
-
-//     getAllProperties: builder.query(createGetQuery('/properties')),
-
-//     getAdminProperties: builder.query(createGetQuery('/adminProperties')),
-
-//     blockAndUnblock: builder.mutation(createMutation('/block-unblock', 'PATCH')),
-
-//     toggleFavorite: builder.mutation(createMutation('/favorite-update', 'PATCH')),
-
-//     getFavourites: builder.query(createGetQuery('/favourite-property')),
-
-//     reportProperty: builder.mutation(createMutation('/report-property')),
-
-//     getReports: builder.query(createGetQuery('/reports')),
-
-//     updateProperty: builder.mutation(createMutation('/update-property')),
-
-//     createPaymentIntent: builder.mutation(createMutation('/payment-intent')),
-
-//     getDashboard: builder.query(createGetQuery('/dashboard-properties')),
-
-//     getAdminDashboard: builder.query(createGetQuery('/admin-dashboard')),
-
-//   }),
-// });
-
-// export const {  useAddPropertyMutation, useGetPublicPropertiesQuery, useGetPropertiesQuery,  useGetPendingPropertiesQuery, useRejectPropertyMutation, useVerifyPropertyMutation,  useGetPropertyQuery, useGetAllPropertiesQuery, useGetAdminPropertiesQuery,  useBlockAndUnblockMutation, useToggleFavoriteMutation, useGetFavouritesQuery,  useReportPropertyMutation, useGetReportsQuery, useUpdatePropertyMutation,  useCreatePaymentIntentMutation, useGetDashboardQuery, useGetAdminDashboardQuery } = propertyApi;
-
-// export default propertyApi;
-
-
-
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const URL = '/api/property';
-// console.log(import.meta.env.VITE_API_URL)
 const propertyApi = createApi({
   reducerPath: 'propertyApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}`,
-    // baseUrl:"http://localhost:5003",
+    baseUrl: `${import.meta.env.VITE_PROPERTY_API_URL}`,
     credentials: 'include',
-  }),
+  }), 
   endpoints: (builder) => ({
     addProperty: builder.mutation({
       query: (credentials) => ({

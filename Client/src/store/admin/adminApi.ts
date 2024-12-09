@@ -6,8 +6,7 @@ const URL1 = '/api/subscriptions';
 const userApi = createApi({
   reducerPath: 'adminApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: `${import.meta.env.VITE_API_URL}`,
-    // baseUrl: `http://localhost:5002`,
+    baseUrl: `${import.meta.env.VITE_ADMIN_API_URL}`,
     credentials: 'include',
   }),
   endpoints: (builder) => ({
