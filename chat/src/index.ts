@@ -13,8 +13,7 @@ const io = new SocketIOServer(server, {
   path: '/api/chat/socket.io',
   transports: ['websocket', 'polling'], 
   cors: {
-    origin: 'https://homeport.online',
-    // origin:["http://localhost:5173" , "http://localhost:5003"],
+    origin: process.env.CORS_ORIGIN,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -25,8 +24,7 @@ const io = new SocketIOServer(server, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'https://homeport.online',
-  // origin:["http://localhost:5173"],
+  origin: process.env.CORS_ORIGIN,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
