@@ -14,8 +14,7 @@ export const io = new SocketIOServer(server, {
   path: '/api/property/socket.io',
   transports: ['websocket', 'polling'], 
   cors: {
-    origin: "https://homeport.online",
-    // origin:"http://localhost:5173",
+    origin: process.env.CORS_ORIGIN,
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -35,8 +34,7 @@ io.on('connection', (socket) => {
 });
 
 const corsOptions = {
-  origin: "https://homeport.online",
-  // origin:"http://localhost:5173",
+  origin: process.env.CORS_ORIGIN,
   methods: ["GET", "POST", "PUT" ,"OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,

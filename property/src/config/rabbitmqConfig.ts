@@ -1,7 +1,6 @@
 export const rabbitmqConfig = {
-    url: "amqp://rabbitmq:5672",
-    // url:"amqp://guest:guest@localhost:5672",
 
+    url: process.env.RABBITMQ_URL || "", 
     exchanges: {
         userUpdates: 'user_updates',
         bookingUpdates: 'booking_exchange' 

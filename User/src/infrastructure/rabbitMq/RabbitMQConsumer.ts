@@ -7,9 +7,8 @@ export class RabbitMQConsumer {
     private client: RabbitMQClient;
     private updateUserSubscriptionUsecase: UpdateUserSubscriptionUsecase;
 
-    // Configure retry parameters
     private readonly maxRetries: number = 5;
-    private readonly retryDelay: number = 3000; // in milliseconds
+    private readonly retryDelay: number = 3000; 
 
     constructor(client: RabbitMQClient, updateUserSubscriptionUsecase: UpdateUserSubscriptionUsecase) {
         this.client = client;
@@ -29,7 +28,7 @@ export class RabbitMQConsumer {
                 const messageContent = JSON.parse(msg.content.toString());
                 await this.handleUserUpdate(messageContent, msg);
             }
-        }, { noAck: false }); // Disable auto-acknowledgement
+        }, { noAck: false }); 
     }
 
     private async handleUserUpdate(message: any, originalMessage: amqp.Message): Promise<void> {
@@ -40,16 +39,13 @@ export class RabbitMQConsumer {
                 const { id, count, change } = message;
                 await this.updateUserSubscriptionUsecase.update(id, count, change);
                 console.log(`User ${id} updated with new count ${count}`);
-                // Acknowledge the message after successful processing
                 this.client.getChannel().then(channel => channel.ack(originalMessage));
-                return; // Exit the loop if successful
+                return; 
             } catch (error) {
                 attempt++;
                 console.error(`Attempt ${attempt} failed for user update:`, error);
                 if (attempt >= this.maxRetries) {
-                    // Optionally, you can move the message to a dead-letter queue or handle it differently
                     console.error('Max retry attempts reached. Failed to update user:', message);
-                    // Acknowledge the message to prevent reprocessing if necessary
                     this.client.getChannel().then(channel => channel.ack(originalMessage));
                 }
                 await this.delay(this.retryDelay);
@@ -57,7 +53,6 @@ export class RabbitMQConsumer {
         }
     }
 
-    // Utility function for delay
     private delay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
