@@ -16,11 +16,11 @@ const authSlice = createSlice({
             localStorage.setItem('token', action.payload);
             state.isAuthenticated = true;
         },
-        loginFail: (state) => {
+        loginFail: () => {
             // localStorage.removeItem('token');
             // state.isAuthenticated = false;
         },
-        logoutSuccess: (state) => {
+        logoutSuccess: () => {
             // localStorage.removeItem('token');
             // state.isAuthenticated = false;
         },
