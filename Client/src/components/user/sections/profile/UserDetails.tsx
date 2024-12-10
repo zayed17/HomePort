@@ -10,11 +10,11 @@ const UserDetails: React.FC = () => {
   const [photo, setPhoto] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const { data: { userDetails } = {}, isLoading, isError, error } = useGetUserQuery({});
+  const { data: { userDetails } = {}, isLoading, isError, error,refetch } = useGetUserQuery({});
   console.log(userDetails)
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
 
-  const [updateProfile, { isLoading: isUpdating,isSuccess }] = useUpdateProfileMutation(); // Add isLoading for the mutation
+  const [updateProfile, { isLoading: isUpdating,isSuccess }] = useUpdateProfileMutation(); 
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -137,7 +137,7 @@ const UserDetails: React.FC = () => {
             onChange={handleFileChange}
           />
         </div>
-        {isPreview && !isUpdating && !isSuccess && ( // Show buttons only if there's a preview and not updating
+        {isPreview && !isUpdating && !isSuccess && ( 
           <div className="mt-2 flex justify-center space-x-2">
             <button
               className="bg-red-500 text-white py-1 px-3 rounded-full text-sm"
@@ -212,7 +212,7 @@ const UserDetails: React.FC = () => {
         Change Password
       </h4>
       <ChangePasswordModal isOpen={isChangePasswordModalOpen} onClose={handleChangePassModal} email={userDetails.email} />
-      <EditUserModal isOpen={isModalOpen} onClose={handleCloseModal} user={userDetails} />
+      <EditUserModal refetch={refetch} isOpen={isModalOpen} onClose={handleCloseModal} user={userDetails} />
     </div>
   );
 };

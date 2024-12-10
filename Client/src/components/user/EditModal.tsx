@@ -13,9 +13,10 @@ interface EditUserModalProps {
     email: string;
     phone: string;
   };
+  refetch:any
 }
 
-const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) => {
+const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user ,refetch}) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -55,6 +56,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user }) 
         email: user.email,
         phone: formData.phone,
       }).unwrap();
+      refetch()
       clearError();
       onClose();
       toast.success('User details updated successfully');

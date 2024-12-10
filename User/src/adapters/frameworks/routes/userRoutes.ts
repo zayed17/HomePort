@@ -67,7 +67,7 @@ router.get('/details/:id',(req, res, next) => userController.getDetails(req, res
 router.post('/logout',(req, res, next) => userController.logout(req, res, next));
 router.get('/id/:id',(req, res, next) => userController.getSingleUser(req, res, next));
 
-// router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
+router.put('/updateProfile', authenticateToken(['user']), (req, res, next) => userController.updateUser(req, res, next));
 router.post('/uploadImage', authenticateToken(['user']), upload.single('photo'), (req, res, next) => userController.uploadImage(req, res, next));
 router.get('/findAll', (req, res, next) => userController.findAllUsers(req, res, next));
 router.get('/admin-dashboard', (req, res, next) => userController.userAdminDashboard(req, res, next));
