@@ -115,7 +115,7 @@ const Navbar = () => {
               <button onClick={handleNotificationClick} className="text-xl text-white  p-2 rounded-full hover:bg-GrayishBlue">
                 <Bell className="w-6 h-6" />
               </button>
-              {notificationCount > 0 && (
+              {notificationCount > 0 && isAuthenticated &&  (
                 <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">{notificationCount}</span>
               )}
             </div>
@@ -161,7 +161,7 @@ const Navbar = () => {
               className="text-GrayishBlue flex items-center gap-2 py-3 text-lg font-medium hover:bg-gray-100 rounded-md transition-colors duration-200 relative"
             >
               Notifications
-              {notificationCount > 0 && (
+              {notificationCount > 0  &&  isAuthenticated && (
                 <span className="absolute top-1 right-1 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                   {notificationCount}
                 </span>
