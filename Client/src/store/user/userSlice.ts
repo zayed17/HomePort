@@ -17,12 +17,12 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
         },
         loginFail: (state) => {
-            localStorage.removeItem('token');
-            state.isAuthenticated = false;
+            // localStorage.removeItem('token');
+            // state.isAuthenticated = false;
         },
         logoutSuccess: (state) => {
-            localStorage.removeItem('token');
-            state.isAuthenticated = false;
+            // localStorage.removeItem('token');
+            // state.isAuthenticated = false;
         },
     },
 });

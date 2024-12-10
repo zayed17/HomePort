@@ -73,6 +73,7 @@ router.get('/findAll', (req, res, next) => userController.findAllUsers(req, res,
 router.get('/admin-dashboard', (req, res, next) => userController.userAdminDashboard(req, res, next));
 
 router.patch('/block-unblock', (req, res, next) => userController.blockUblock(req, res, next));
+router.post('/refresh-token', refreshToken);
 
 router.post('/subscription', async (req: any, res: express.Response) => {
   const sig = req.headers['stripe-signature'] as string;

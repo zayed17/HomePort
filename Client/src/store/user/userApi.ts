@@ -1,12 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createBaseQueryWithReauth } from '../baseQueryWithReauth';
 const URL = '/api/user'
 
 const userApi = createApi({
   reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_USER_API_URL}`,
-    credentials: 'include',
-  }),
+  baseQuery:createBaseQueryWithReauth(`${import.meta.env.VITE_USER_API_URL}`),
   endpoints: (builder) => ({
     loginIn: builder.mutation({
       query: (credentials) => ({
