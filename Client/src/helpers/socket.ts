@@ -1,10 +1,11 @@
 import { io, Socket } from 'socket.io-client';
 
 let socket: Socket | null = null;
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_SERVER_URL || 'http://localhost:5003';
 
 try {
-    // socket = io('http://localhost:5003', {
-    socket = io('wss://api.homeport.online', {
+
+    socket = io(SOCKET_SERVER_URL, {
         path: '/api/property/socket.io',  
         transports: ['websocket','polling'],     
         reconnectionAttempts: 3,       

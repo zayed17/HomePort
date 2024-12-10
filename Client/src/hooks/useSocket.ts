@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_SERVER_URL = 'wss://api.homeport.online';
-// const SOCKET_SERVER_URL = 'http://localhost:3000';
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_SERVER_URL || 'http://localhost:3000';
+
 
 const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);

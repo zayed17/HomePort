@@ -17,14 +17,17 @@ import { checking } from "./Just";
 const s3Service = new S3Service();
 const stripeService = new StripeService()
 const paymentService = new PaymentService()
+
 // Initialize repositories with required services
 const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
+
 // const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
 const rabbitMQPublisher = new RabbitMQPublisher(process.env.RABBITMQ_URL || 'amqp://localhost:5672');
-const notificationRepository = new NotificationRepository(process.env.NOTIFICATION_API_URL || "")
+const notificationRepository = new NotificationRepository(process.env.NOTIFICATION_API_URL || "http://localhost:3000")
+
 
 // Initialize use cases with required repositories
 const addPropertyUseCase = new AddPropertyUseCase(s3Repository, propertyRepository,rabbitMQPublisher);
@@ -56,56 +59,6 @@ const router = Router();
 
 
 router.post('/add-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.addProperty(req, res, next));
-router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
-    try {
-      const userId = req.user._id
-      const page = parseInt(req.query.page) 
-      const limit = parseInt(req.query.limit) 
-
-      const properties = await PropertyModel.find({ status: 'verified', createdBy: { $ne: userId } })
-      .populate('createdBy')
-      .sort({ 'sponsorship.isSponsored': -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
-
-    const total = await PropertyModel.countDocuments({ status: 'verified', createdBy: { $ne: userId } });
-    const totalPages =  Math.ceil(total / limit) 
-    res.json({ properties, total, page, totalPages});
-    } catch (error) {
-      next(error); 
-    }
-  });
-
-router.get('/list-properties-public',  async (req: any, res: Response, next: NextFunction) => {
-  try {
-      const page = parseInt(req.query.page) 
-      const limit = parseInt(req.query.limit) 
-      const properties = await PropertyModel.find({ status: 'verified' })
-      .populate('createdBy')
-      .sort({ 'sponsorship.isSponsored': -1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
-
-      const total = await PropertyModel.countDocuments({ status: 'verified' });
-      const totalPages =  Math.ceil(total / limit)
-
-      res.json({ properties, total, page, totalPages});
-    } catch (error) {
-      next(error); 
-  }
-});
-
-
-router.get('/list-properties-map',  async (req: any, res: Response, next: NextFunction) => {
-  try {
-     
-      const properties = await PropertyModel.find({ status: 'verified' })
-
-      res.json(properties);
-    } catch (error) {
-      next(error); 
-  }
-});
 router.get('/properties/pending',(req, res, next) => propertyController.getPendingProperties(req, res, next));
 router.post('/properties/verify/:id',(req, res, next) => propertyController.verifyProperty(req, res, next));
 router.post('/properties/reject/:id',(req, res, next) => propertyController.rejectProperty(req, res, next));
@@ -123,7 +76,56 @@ router.post('/report-property',authenticateToken(['user']),(req, res, next) => p
 router.get('/reports',(req, res, next) => propertyController.findReports(req, res, next));
 router.post('/update-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.RepostProperty(req, res, next));
 
+router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user._id
+    const page = parseInt(req.query.page) 
+    const limit = parseInt(req.query.limit) 
 
+    const properties = await PropertyModel.find({ status: 'verified', createdBy: { $ne: userId } })
+    .populate('createdBy')
+    .sort({ 'sponsorship.isSponsored': -1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  const total = await PropertyModel.countDocuments({ status: 'verified', createdBy: { $ne: userId } });
+  const totalPages =  Math.ceil(total / limit) 
+  res.json({ properties, total, page, totalPages});
+  } catch (error) {
+    next(error); 
+  }
+});
+
+router.get('/list-properties-public',  async (req: any, res: Response, next: NextFunction) => {
+try {
+    const page = parseInt(req.query.page) 
+    const limit = parseInt(req.query.limit) 
+    const properties = await PropertyModel.find({ status: 'verified' })
+    .populate('createdBy')
+    .sort({ 'sponsorship.isSponsored': -1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+    const total = await PropertyModel.countDocuments({ status: 'verified' });
+    const totalPages =  Math.ceil(total / limit)
+
+    res.json({ properties, total, page, totalPages});
+  } catch (error) {
+    next(error); 
+}
+});
+
+
+router.get('/list-properties-map',  async (req: any, res: Response, next: NextFunction) => {
+try {
+   
+    const properties = await PropertyModel.find({ status: 'verified' })
+
+    res.json(properties);
+  } catch (error) {
+    next(error); 
+}
+});
 
 
 
