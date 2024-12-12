@@ -62,6 +62,7 @@ const Properties: React.FC = () => {
     try {
       await closeDeal({ bookingId }).unwrap();
       toast.success("Booked property successfully closed!");
+      refetch()
       closeBookingModal();
     } catch (error) {
       toast.error("Error closing the deal. Please try again.");
