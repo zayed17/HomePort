@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import toast from 'react-hot-toast';
+
 import PropertyCard from '../../components/user/PropertyCard';
 import Nav from '../../components/user/Nav';
 import Filters from '../../components/user/Filter';
-import { useGetPropertiesQuery, useGetPublicPropertiesQuery, useToggleFavoriteMutation } from '../../store/property/propertyApi';
+import { useGetPropertiesQuery, useGetPublicPropertiesQuery } from '../../store/property/propertyApi';
 import { Pagination, Skeleton, Badge, Button, Input, Select, Modal, Tooltip } from 'antd';
-import { FaHeart, FaRegHeart, FaMap } from 'react-icons/fa';
+import { FaMap } from 'react-icons/fa';
 import MapWithProperties from '../../components/user/MapShow';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
@@ -56,9 +56,8 @@ const PropertyListing: React.FC = () => {
   console.log(data,"chdleof")
   const properties = data?.properties || [];
   const totalProperties = data?.total || 0;
-  const [updateFavorites] = useToggleFavoriteMutation();
-  const [animatedId, setAnimatedId] = useState<string | null>(null);
-  // const [filteredProperties, setFilteredProperties] = useState<Property[]>(properties);
+ 
+
   const [sortOption, setSortOption] = useState<string>('default');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filters, setFilters] = useState<FilterState>({});
@@ -71,48 +70,6 @@ const PropertyListing: React.FC = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
-
-  // useEffect(() => {
-  //   let result = [...properties];
-
-  //   if (filters.lookingFor && filters.lookingFor !== 'any') {
-  //     result = result.filter((property: Property) => property.lookingFor === filters.lookingFor);
-  //   }
-  //   if (filters.priceRange) {
-  //     result = result.filter((property: Property) =>
-  //       (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) >= filters.priceRange![0] &&
-  //       (property.lookingFor === 'rent' ? property.rentAmount : property.sellPrice) <= filters.priceRange![1]
-  //     );
-  //   }
-  //   if (filters.propertyType && filters.propertyType !== 'Any') {
-  //     result = result.filter((property: Property) => property.propertyType === filters.propertyType);
-  //   }
-  //   if (filters.bedrooms && filters.bedrooms !== 'Any') {
-  //     result = result.filter((property: Property) => property.bedrooms === filters.bedrooms);
-  //   }
-  //   if (filters.furnisherType && filters.furnisherType !== 'Any') {
-  //     result = result.filter((property: Property) => property.furnisherType === filters.furnisherType);
-  //   }
-  //   if (searchTerm) {
-  //     result = result.filter((property: Property) =>
-  //       property.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       property.city.toLowerCase().includes(searchTerm.toLowerCase())
-  //     );
-  //   }
-
-  //   if (sortOption === 'priceAsc') {
-  //     result = result.sort((a: Property, b: Property) =>
-  //       (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice) - (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice)
-  //     );
-  //   } else if (sortOption === 'priceDesc') {
-  //     result = result.sort((a: Property, b: Property) =>
-  //       (b.lookingFor === 'rent' ? b.rentAmount : b.sellPrice) - (a.lookingFor === 'rent' ? a.rentAmount : a.sellPrice)
-  //     );
-  //   }
-
-  //   setFilteredProperties(result);
-  // }, [properties, filters, searchTerm, sortOption]);
 
 
   const filteredProperties = useMemo(() => {
@@ -157,26 +114,8 @@ const PropertyListing: React.FC = () => {
   }, [properties, filters, searchTerm, sortOption]);
 
 
-  const handleFavoriteClick = async (propertyId: string, isFavorited: any): Promise<void> => {
-    if (!isAuthenticated) {
-      toast.error('Please Login to favorite');
-      return;
-    }
+  
 
-    try {
-      setAnimatedId(propertyId);
-
-      if (isFavorited) {
-        await updateFavorites({ propertyId, action: 'remove' });
-      } else {
-        await updateFavorites({ propertyId, action: 'add' });
-      }
-
-      setTimeout(() => setAnimatedId(null), 500);
-    } catch (error) {
-      console.error('Failed to update favorites', error);
-    }
-  };
 
   const handlePageChange = (pageNumber: number): void => {
     setCurrentPage(pageNumber);
@@ -221,8 +160,7 @@ const PropertyListing: React.FC = () => {
               <>
                 <div className="space-y-4">
                   {filteredProperties.map((property) => {
-                    const isFavorited = isAuthenticated && property.createdBy?.favourites.includes(property._id);
-                    const animationClass = animatedId === property._id ? (isFavorited ? 'broken' : 'animated') : '';
+                    
                     return (
                       <Badge.Ribbon key={property._id} text="Sponsored" color="darkBlue" className={property.sponsorship?.isSponsored ? 'visible' : 'invisible'} >
                         <div className="relative">
@@ -240,13 +178,6 @@ const PropertyListing: React.FC = () => {
                             sellPrice={property.sellPrice}
                             depositAmount={property.depositAmount}
                             lookingFor={property.lookingFor}
-                          />
-                          <Button
-                            onClick={() => handleFavoriteClick(property._id, isFavorited)}
-                            shape="circle"
-                            icon={isFavorited ? <FaHeart className="text-red-600" /> : <FaRegHeart className="text-gray-600" />}
-                            className={`absolute top-10 right-2 heart-icon ${animationClass}`}
-                            aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
                           />
                         </div>
                       </Badge.Ribbon>
