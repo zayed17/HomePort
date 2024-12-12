@@ -1,8 +1,8 @@
 import { Router } from "express";
 import  { Request, Response, NextFunction } from 'express';
 import { PropertyController } from "../controller/PropertyController";
-import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,ToggleFavouriteUseCaseUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase} from '../../usecase';
-import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository,NotificationRepository } from '../../repositories';
+import { AddPropertyUseCase ,FindPendingPropertyUseCase,RejectPropertyUseCase,VerifyPropertyUseCase,FindPropertyUseCase,FindAllPropertiesUseCase,FindAdminPropertiesUseCase,BlockUnblockUseCase,AddUserUseCase,FindUserUseCase,SuccessPaymentUseCase,FindFavouritesUseCase,AddReportUseCase,FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase,AddReviewUseCase} from '../../usecase';
+import { S3Repository, PropertyRepository,UserPropertyRepository,ReportPropertyRepository,NotificationRepository,ReviewRepository } from '../../repositories';
 import { S3Service } from "../../infrastructure";
 import { RabbitMQPublisher } from '../../infrastructure/rabbitMq/RabbitMQPulisher';
 import upload from '../../infrastructure/middleware/multerMiddleware'
@@ -23,6 +23,7 @@ const s3Repository = new S3Repository(s3Service);
 const propertyRepository = new PropertyRepository();
 const userPropertyRepository = new UserPropertyRepository()
 const reportPropertyRepository = new ReportPropertyRepository()
+const reviewRepository = new ReviewRepository()
 
 // const rabbitMQPublisher = new RabbitMQPublisher('amqp://rabbitmq:5672')
 const rabbitMQPublisher = new RabbitMQPublisher(process.env.RABBITMQ_URL || 'amqp://localhost:5672');
@@ -40,7 +41,7 @@ const findAdminPropertiesUseCase = new FindAdminPropertiesUseCase(propertyReposi
 const blockUnblockUseCase = new BlockUnblockUseCase(propertyRepository)
 const addUserUseCase = new AddUserUseCase(userPropertyRepository)
 const findUserUseCase = new FindUserUseCase(userPropertyRepository)
-const toggleFavouriteUseCaseUseCase = new ToggleFavouriteUseCaseUseCase(userPropertyRepository)
+
 const successPaymentUseCase = new SuccessPaymentUseCase(propertyRepository,stripeService)
 const findFavouritesUseCase = new FindFavouritesUseCase(userPropertyRepository)
 const addReportUseCase = new AddReportUseCase(reportPropertyRepository)
@@ -50,9 +51,9 @@ const updatePropertyUseCase = new UpdatePropertyUseCase(propertyRepository)
 const dashboardPropertiesUseCase = new DashboardPropertiesUseCase(propertyRepository)
 const rabbitMqepostPropertyUseCase = new RepostPropertyUseCase( propertyRepository)
 const adminDashboardUseCase = new AdminDashboardUseCase(propertyRepository)
+const addReviewUseCase = new AddReviewUseCase(userPropertyRepository,reviewRepository)
 
-
-const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,toggleFavouriteUseCaseUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase,adminDashboardUseCase);
+const propertyController = new PropertyController(addPropertyUseCase,findPendingPropertyUseCase,verifyPropertyUseCase,rejectPropertyUseCase,findPropertyUseCase,findAllPropertiesUseCase,findAdminPropertiesUseCase,blockUnblockUseCase,findUserUseCase,addUserUseCase,successPaymentUseCase,findFavouritesUseCase,addReportUseCase,findAllReportsUseCase,paymentUseCase,updatePropertyUseCase,dashboardPropertiesUseCase,rabbitMqepostPropertyUseCase,adminDashboardUseCase,addReviewUseCase);
 
 const router = Router();
 
@@ -68,13 +69,14 @@ router.get('/adminProperties',(req, res, next) => propertyController.findAdminPr
 router.get('/admin-dashboard',(req, res, next) => propertyController.getAdminDashboard(req, res, next));
 router.patch('/block-unblock',(req, res, next) => propertyController.blockUblock(req, res, next));
 router.get('/dashboard-properties',authenticateToken(['user']),(req, res, next) => propertyController.dashboardProperties(req, res, next));
-router.patch('/favorite-update',authenticateToken(['user']),(req, res, next) => propertyController.toggleFavourite(req, res, next));
 router.post('/payment-intent',authenticateToken(['user']),checking,(req, res, next) => propertyController.createPaymentIntent(req, res, next));
 router.post('/sponsored-success',(req, res, next) => propertyController.handleWebhook(req, res, next));
 router.get('/favourite-property',authenticateToken(['user']),(req, res, next) => propertyController.findFavourites(req, res, next));
 router.post('/report-property',authenticateToken(['user']),(req, res, next) => propertyController.addReport(req, res, next));
 router.get('/reports',(req, res, next) => propertyController.findReports(req, res, next));
 router.post('/update-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.RepostProperty(req, res, next));
+router.post('/add-review',authenticateToken(['user']),(req, res, next) => propertyController.addReview(req, res, next))
+
 
 router.get('/list-properties',authenticateToken(['user']), async (req: any, res: Response, next: NextFunction) => {
   try {

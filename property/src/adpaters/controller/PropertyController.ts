@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, ToggleFavouriteUseCaseUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase} from '../../usecase';
-import { fetchUserDetails } from '../../infrastructure/userGrpcClient';
+import { AddPropertyUseCase, FindPendingPropertyUseCase, VerifyPropertyUseCase, RejectPropertyUseCase, FindPropertyUseCase, FindAllPropertiesUseCase, FindAdminPropertiesUseCase, BlockUnblockUseCase, FindUserUseCase, AddUserUseCase, SuccessPaymentUseCase, FindFavouritesUseCase, AddReportUseCase, FindAllReportsUseCase,PaymentUseCase,UpdatePropertyUseCase,DashboardPropertiesUseCase,RepostPropertyUseCase,AdminDashboardUseCase,AddReviewUseCase} from '../../usecase';
+import { fetchUserDetails } from '../../infrastructure/fetchUser';
 import Stripe from 'stripe'; 
 const stripe = new Stripe('sk_test_51Pkesm094jYnWAeuaCqHqijaQyfRv8avZ38f6bEUyTy7i7rVbOc8oyxFCn6Ih1h2ggzloqcECKBcach0PiWH8Jde00yYqaCtTB');
 
@@ -18,7 +18,6 @@ export class PropertyController {
     private blockUnblockUseCase: BlockUnblockUseCase,
     private findUserUseCase: FindUserUseCase,
     private addUserUseCase: AddUserUseCase,
-    private toggleFavouriteUseCaseUseCase: ToggleFavouriteUseCaseUseCase,
     private successPaymentUseCase: SuccessPaymentUseCase,
     private findFavouritesUseCase: FindFavouritesUseCase,
     private addReportUseCase: AddReportUseCase,
@@ -28,9 +27,7 @@ export class PropertyController {
     private dashboardPropertiesUseCase:DashboardPropertiesUseCase,
     private repostPropertyUseCase:RepostPropertyUseCase,
     private adminDashboardUseCase:AdminDashboardUseCase,
-
-
-
+    private addReviewUseCase:AddReviewUseCase
   ) { }
 
 
@@ -147,17 +144,6 @@ export class PropertyController {
     }
   }
 
-  async toggleFavourite(req: any, res: Response, next: NextFunction): Promise<void> {
-    console.log(req.body, "from the current body")
-    const { propertyId, action } = req.body;
-    const userId = req.user._id
-    try {
-      await this.toggleFavouriteUseCaseUseCase.toggleFavourite({ propertyId, userId, action })
-      res.status(200).json({ success: true });
-    } catch (error) {
-      next(error)
-    }
-  }
 
   async createPaymentIntent(req: any, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -262,4 +248,25 @@ export class PropertyController {
       next(error);
     }
   }
+
+  async addReview(req: any, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user._id;
+      const { rating, description, propertyId } = req.body;
+      console.log(rating,description,typeof rating,typeof description,"chekcing of the ")
+      const user = await this.findUserUseCase.FindUser(userId);
+    console.log(user,"user existing checking in controller")
+      if(!user){
+        const userDetails = await fetchUserDetails(userId);
+        console.log(userDetails,"user checking in fetching")
+       await this.addUserUseCase.addUser(userDetails)
+      }
+      await this.addReviewUseCase.addReview(userId, rating, description, propertyId);
+      
+      res.status(201).json({ message: 'Review added successfully' });
+    } catch (error) {
+      next(error);
+    }
+  }
+  
 }

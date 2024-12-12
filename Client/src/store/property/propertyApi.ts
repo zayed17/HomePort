@@ -110,9 +110,16 @@ const propertyApi = createApi({
       query: () => `${URL}/admin-dashboard`,  
       keepUnusedDataFor: 60, 
     }),
+    addReview: builder.mutation({
+      query: (credentials) => ({
+        url: `${URL}/add-review`,
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery,useGetAdminDashboardQuery} = propertyApi;
+export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery,useGetAdminDashboardQuery,useAddReviewMutation} = propertyApi;
 
 export default propertyApi;

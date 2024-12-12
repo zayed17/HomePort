@@ -9,12 +9,13 @@ export class AddUserUseCase {
 
   async addUser(user: any): Promise<void> {
     try {
+      console.log(user,"user data consoling")
       const userData: UserData = {
         _id: new mongoose.Types.ObjectId(user._id), 
-        name: user.firstName,
+        name: user.firstName + " " + user.lastName,
         email: user.email,
         phone: user.phone,
-        favourites: [] 
+        imageUrl: user.image ? user.image:''
       };
       await this.userPropertyInterface.addUser(userData);
     } catch (error) {

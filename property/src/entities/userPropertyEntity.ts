@@ -3,7 +3,7 @@ export interface UserData {
     name: string;
     email: string;
     phone: string;
-    favourites: string[]; 
+    imageUrl: string; 
 }
 
 export class User {
@@ -11,13 +11,13 @@ export class User {
     name: string;
     email: string;
     phone: string;
-    favourites: string[];
+    imageUrl: string;
 
-    constructor({_id,name, email,phone, favourites}: UserData) {
+    constructor({_id,name, email,phone, imageUrl}: UserData) {
         this._id = _id;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.favourites = favourites;
+        this.imageUrl = imageUrl;
     }
 }
