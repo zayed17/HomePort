@@ -26,8 +26,9 @@ const ConnectWithOwnerButton: React.FC<ConnectWithOwnerButtonProps> = ({
 
     if (userDetails) {
       try {
-        // const response = await fetch('http://localhost:3000/api/chat/chats', {
-        const response = await fetch('https://api.homeport.online/api/chat/chats', {
+        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/chat/chats`;
+
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
