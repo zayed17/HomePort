@@ -10,8 +10,8 @@ import PropertyModel from "../../infrastructure/mongodb/PropertyModel";
 import { StripeService } from '../../infrastructure/Stripe/StripeService';
 import { PaymentService } from '../../service/PaymentService';
 import { authenticateToken } from 'homepackage'
+import { checking } from "./CheckSubscription";
 
-import { checking } from "./Just";
 
 
 const s3Service = new S3Service();
@@ -59,7 +59,7 @@ const router = Router();
 
 
 
-router.post('/add-property',authenticateToken(['user']), upload ,(req, res, next) => propertyController.addProperty(req, res, next));
+router.post('/add-property',authenticateToken(['user']),checking, upload ,(req, res, next) => propertyController.addProperty(req, res, next));
 router.get('/properties/pending',(req, res, next) => propertyController.getPendingProperties(req, res, next));
 router.post('/properties/verify/:id',(req, res, next) => propertyController.verifyProperty(req, res, next));
 router.post('/properties/reject/:id',(req, res, next) => propertyController.rejectProperty(req, res, next));

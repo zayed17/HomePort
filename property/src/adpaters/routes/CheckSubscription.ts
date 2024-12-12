@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
 
-export const checking = async (
-  req: any,
-  res: Response,
-  next: NextFunction
-) => {
+export const checking = async (req: any,res: Response,next: NextFunction) => {
   try {
     const id = req.user._id;
     console.log(id,"id checking from front end")
