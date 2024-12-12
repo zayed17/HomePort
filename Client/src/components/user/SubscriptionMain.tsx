@@ -7,6 +7,10 @@ import axios from 'axios';
 import loaderGif from '/assets/gifff.gif';
 import { useGetUserQuery } from '../../store/user/userApi';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { message } from 'antd';
+
 
 interface SubscriptionPlan {
   _id: string;
@@ -28,6 +32,7 @@ const SubscriptionHero: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [priceDifference, setPriceDifference] = useState<number | null>(null);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     if (error) {
@@ -67,6 +72,10 @@ const SubscriptionHero: React.FC = () => {
   };
 
   const handleSubscribe = (plan: SubscriptionPlan) => {
+    if (!isAuthenticated) { 
+      message.warning('Please log in to add a subscription.');
+      return;
+    }
     const difference = calculatePriceDifference(plan.price);
     setPriceDifference(difference);
     setSelectedPlan(plan);

@@ -1,5 +1,9 @@
 import  { useState } from "react";
 import { List, Avatar, Rate, Pagination } from "antd";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { message } from 'antd';
+
 
 const dummyReviews = [
   {
@@ -51,9 +55,18 @@ const formatTime = (isoString: any) => {
 const ReviewList = ({ setIsLocationModalOpen }: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleAddReview = () => {
+    if (!isAuthenticated) { 
+      message.warning('Please log in to add a review.');
+      return;
+    }
+    setIsLocationModalOpen(true);
   };
 
   const startIndex = (currentPage - 1) * pageSize;
@@ -64,8 +77,7 @@ const ReviewList = ({ setIsLocationModalOpen }: any) => {
     <div className="w-full mt-4 p-5 bg-gray-100 rounded-lg">
       <div className="border-b-2 flex justify-between border-gray-300 pb-3 mb-4">
         <h2 className="text-2xl font-bold text-black tracking-wide">User Reviews</h2>
-        <button onClick={() => setIsLocationModalOpen(true)}
-          className="rounded-full p-2 bg-BlueGray text-white font-semibold">
+        <button onClick={handleAddReview} className="rounded-full p-2 bg-BlueGray text-white font-semibold">
           + Add Review
         </button>
       </div>

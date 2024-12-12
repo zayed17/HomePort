@@ -15,6 +15,9 @@ import 'react-photo-view/dist/react-photo-view.css';
 import ConnectWithOwnerButton from '../user/connectButton';
 import ChatInterface from '../user/chat';
 import AddReview from './AddReview';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { message } from 'antd';
 
 
 const electronicsIcons = {
@@ -41,6 +44,7 @@ const PropertyDetailsPage: React.FC = () => {
 
 
   const [chatId, setChatId] = useState<string | null>(null);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const handleChatStart = (id: string) => {
     setChatId(id);
@@ -95,6 +99,10 @@ const PropertyDetailsPage: React.FC = () => {
   }, []);
 
   const openModal = () => {
+    if (!isAuthenticated) { 
+      message.warning('Please log in to report this property.');
+      return;
+    }
     setModalOpen(true);
   };
 
@@ -109,6 +117,10 @@ const PropertyDetailsPage: React.FC = () => {
   const otherImages = property?.mediaFiles.slice(1, 4);
   const hasMoreImages = property?.mediaFiles.length > 4;
   const handleBooking = () => {
+    if(!isAuthenticated){
+      message.warning('Please log in to book a property.');
+      return;
+    }
     navigate(`/booking/${property._id}`);
   };
 
@@ -349,10 +361,7 @@ const PropertyDetailsPage: React.FC = () => {
                 <span className="text-sm text-gray-500">Sell Price</span>
               </div>
             )}
-            <button
-              onClick={handleBooking}
-              className="rounded-full p-3 bg-BlueGray text-white w-full font-semibold hover:bg-darkBlue transition-all"
-            >
+            <button onClick={handleBooking} className="rounded-full p-3 bg-BlueGray text-white w-full font-semibold hover:bg-darkBlue transition-all">
               Book now
             </button>
           </div>
