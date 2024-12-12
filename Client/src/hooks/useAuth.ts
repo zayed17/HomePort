@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginSuccess, loginFail, logoutSuccess } from '../store/user/userSlice';
+import { loginSuccess, logoutSuccess } from '../store/user/userSlice';
 import { useCheckAuthQuery, useLogoutMutation } from '../store/user/userApi';
 import { AppDispatch } from '../store/store';
 
@@ -14,8 +14,6 @@ export const useAuth = () => {
         if (!isLoading) {
             if (userData) {
                 dispatch(loginSuccess(userData)); 
-            } else {
-                dispatch(loginFail()); 
             }
         }
     }, [userData, isLoading, dispatch]);

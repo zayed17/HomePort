@@ -15,7 +15,7 @@ import 'react-photo-view/dist/react-photo-view.css';
 import ConnectWithOwnerButton from '../user/connectButton';
 import ChatInterface from '../user/chat';
 import AddReview from './AddReview';
-import ReviewList from './ReviewList';
+
 
 const electronicsIcons = {
   "AC": <TbAirConditioningDisabled />,

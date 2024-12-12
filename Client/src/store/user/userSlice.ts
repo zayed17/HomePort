@@ -16,17 +16,13 @@ const authSlice = createSlice({
             localStorage.setItem('token', action.payload);
             state.isAuthenticated = true;
         },
-        loginFail: () => {
-            // localStorage.removeItem('token');
-            // state.isAuthenticated = false;
-        },
-        logoutSuccess: () => {
-            // localStorage.removeItem('token');
-            // state.isAuthenticated = false;
+        logoutSuccess: (state) => {
+            localStorage.removeItem('token');
+            state.isAuthenticated = false;
         },
     },
 });
 
-export const { loginSuccess, loginFail, logoutSuccess } = authSlice.actions;
+export const { loginSuccess, logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;
