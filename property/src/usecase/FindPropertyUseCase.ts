@@ -1,11 +1,18 @@
-import { PropertyInterface } from '../repositories';
-import { Property } from '../entities/propertyEntity';
+import { PropertyInterface,ReviewInterace } from '../repositories';
+
 
 export class FindPropertyUseCase {
-    constructor(private propertyRepository: PropertyInterface) { }
+    constructor(private propertyRepository: PropertyInterface,
+                private reviewRepository:ReviewInterace
+    ) { }
 
-    async findProperty(id: string): Promise<Property | null> {
+    async findProperty(id: string): Promise<any | null> {
         const property = await this.propertyRepository.findOneWithPopulation({ _id: id },'createdBy')
-        return property;
+
+        const reviews = await this.reviewRepository.findByPropertyId(id);
+        return {
+            ...property,
+            reviews,
+          };
     }
 }

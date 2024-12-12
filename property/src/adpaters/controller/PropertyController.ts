@@ -88,8 +88,9 @@ export class PropertyController {
     try {
       const { id } = req.params
       const result = await this.findPropertyUseCase.findProperty(id);
-      res.status(201).json(result);
-    } catch (error) {
+      console.log(result,"chekcing")
+      res.status(200).json({property: result._doc,reviews: result.reviews,});
+          } catch (error) {
       next(error);
     }
   }

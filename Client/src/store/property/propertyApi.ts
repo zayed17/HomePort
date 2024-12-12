@@ -80,13 +80,6 @@ const propertyApi = createApi({
       query: () => `${URL}/reports`,  
       keepUnusedDataFor: 60, 
     }),
-    // updateProperty: builder.mutation({
-    //   query: (credentials) => ({
-    //     url: `${URL}/favorite-update`,
-    //     method: 'PATCH',
-    //     body: credentials,
-    //   }),
-    // }),
 
     updateProperty: builder.mutation({
       query: (credentials) => ({
@@ -117,9 +110,13 @@ const propertyApi = createApi({
         body: credentials,
       }),
     }),
+    getReviews: builder.query({
+      query: () => `${URL}/reviews`,  
+      keepUnusedDataFor: 60, 
+    }),
   }),
 });
 
-export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery,useGetAdminDashboardQuery,useAddReviewMutation} = propertyApi;
+export const { useAddPropertyMutation, useGetPublicPropertiesQuery,useGetPropertiesQuery ,useGetPendingPropertiesQuery,useRejectPropertyMutation,useVerifyPropertyMutation,useGetPropertyQuery,useGetAllPropertiesQuery,useGetAdminPropertiesQuery,useBlockAndUnblockMutation,useToggleFavoriteMutation,useGetFavouritesQuery,useReportPropertyMutation,useGetReportsQuery,useUpdatePropertyMutation,useCreatePaymentIntentMutation,useGetDashboardQuery,useGetAdminDashboardQuery,useAddReviewMutation,useGetReviewsQuery} = propertyApi;
 
 export default propertyApi;

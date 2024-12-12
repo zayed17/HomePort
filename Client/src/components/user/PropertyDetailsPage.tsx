@@ -112,18 +112,7 @@ const PropertyDetailsPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
-  const mainImage = property?.mediaFiles[0];
-  const otherImages = property?.mediaFiles.slice(1, 4);
-  const hasMoreImages = property?.mediaFiles.length > 4;
-  const handleBooking = () => {
-    if(!isAuthenticated){
-      message.warning('Please log in to book a property.');
-      return;
-    }
-    navigate(`/booking/${property._id}`);
-  };
-
+  const { data, error, isLoading,refetch } = useGetPropertyQuery(id || '');
 
   if (isLoading) {
     return (
@@ -140,6 +129,21 @@ const PropertyDetailsPage: React.FC = () => {
       </div>
     );
   }
+  const { property, reviews } = data; // Now only destructures if `data` exists
+
+  console.log(property,"chekcing the proepru")
+  const mainImage = property?.mediaFiles[0];
+  const otherImages = property?.mediaFiles.slice(1, 4);
+  const hasMoreImages = property?.mediaFiles.length > 4;
+  const handleBooking = () => {
+    if(!isAuthenticated){
+      message.warning('Please log in to book a property.');
+      return;
+    }
+    navigate(`/booking/${property._id}`);
+  };
+
+
 
   if (!property) {
     return (
@@ -373,7 +377,7 @@ const PropertyDetailsPage: React.FC = () => {
         </div>
 
       </div>
-      <AddReview propertyId={property._id} />
+      <AddReview propertyId={property._id}  reviews={reviews} refetch={refetch}/>
     </div>
   );
 };

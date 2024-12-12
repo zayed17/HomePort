@@ -1,46 +1,11 @@
-import  { useState } from "react";
-import { List, Avatar, Rate, Pagination } from "antd";
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { message } from 'antd';
+import { useState } from "react";
+import { List, Avatar, Rate, Pagination, Dropdown, Menu, Button } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { message } from "antd";
+import { EllipsisOutlined } from "@ant-design/icons";
 
-
-const dummyReviews = [
-  {
-    id: 1,
-    userName: "John Doe",
-    userPhoto: "https://via.placeholder.com/40",
-    time: "2024-12-11T08:00:00Z",
-    rating: 4,
-    content: "Great place to stay. The host was very welcoming and the property was clean and comfortable.",
-  },
-  {
-    id: 2,
-    userName: "Jane Smith",
-    userPhoto: "https://via.placeholder.com/40",
-    time: "2024-12-10T14:30:00Z",
-    rating: 5,
-    content: "Absolutely loved it! The location is perfect and the amenities exceeded expectations.",
-  },
-  {
-    id: 3,
-    userName: "Alex Johnson",
-    userPhoto: "https://via.placeholder.com/40",
-    time: "2024-12-09T18:45:00Z",
-    rating: 3,
-    content: "It was okay. The property could use some improvements, but the stay was decent overall.",
-  },
-  ...Array.from({ length: 20 }, (_, i) => ({
-    id: i + 4,
-    userName: `User ${i + 4}`,
-    userPhoto: "https://via.placeholder.com/40",
-    time: `2024-12-${Math.max(1, i % 30)}T${8 + i % 12}:00:00Z`,
-    rating: Math.floor(Math.random() * 5) + 1,
-    content: "This is a sample review content for testing pagination and layout.",
-  })),
-];
-
-const formatTime = (isoString: any) => {
+const formatTime = (isoString: string) => {
   const date = new Date(isoString);
   return date.toLocaleString("en-US", {
     weekday: "short",
@@ -52,7 +17,7 @@ const formatTime = (isoString: any) => {
   });
 };
 
-const ReviewList = ({ setIsLocationModalOpen }: any) => {
+const ReviewList = ({ setIsLocationModalOpen, reviews, handleEdit, handleDelete }: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -62,8 +27,8 @@ const ReviewList = ({ setIsLocationModalOpen }: any) => {
   };
 
   const handleAddReview = () => {
-    if (!isAuthenticated) { 
-      message.warning('Please log in to add a review.');
+    if (!isAuthenticated) {
+      message.warning("Please log in to add a review.");
       return;
     }
     setIsLocationModalOpen(true);
@@ -71,55 +36,91 @@ const ReviewList = ({ setIsLocationModalOpen }: any) => {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentReviews = dummyReviews.slice(startIndex, endIndex);
+  const currentReviews = reviews?.slice(startIndex, endIndex) || [];
+
+
+  const menu = (reviewId: string) => (
+    <Menu>
+      <Menu.Item key="edit" onClick={() => handleEdit(reviewId)}>
+        Edit
+      </Menu.Item>
+      <Menu.Item key="delete" onClick={() => handleDelete(reviewId)}>
+        Delete
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <div className="w-full mt-4 p-5 bg-gray-100 rounded-lg">
       <div className="border-b-2 flex justify-between border-gray-300 pb-3 mb-4">
         <h2 className="text-2xl font-bold text-black tracking-wide">User Reviews</h2>
-        <button onClick={handleAddReview} className="rounded-full p-2 bg-BlueGray text-white font-semibold">
+        <button
+          onClick={handleAddReview}
+          className="rounded-full p-2 bg-BlueGray text-white font-semibold"
+        >
           + Add Review
         </button>
       </div>
-      <List itemLayout="horizontal"
-        dataSource={currentReviews}
-        renderItem={(item) => (
-          <List.Item className="border-gray-200 py-4">
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  src={item.userPhoto}
-                  alt={item.userName}
-                  size={50}
-                  className="border border-gray-300 shadow-sm"
+
+      {reviews && reviews.length > 0 ? (
+        <>
+          <List
+            itemLayout="horizontal"
+            dataSource={currentReviews}
+            renderItem={(item: any) => (
+              <List.Item className="border-gray-200 py-4">
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={item.userId.imageUrl || "https://via.placeholder.com/40"}
+                      alt={item.name}
+                      size={50}
+                      className="border border-gray-300 shadow-sm"
+                    />
+                  }
+                  title={
+                    <div className="flex justify-between w-full">
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-gray-900">{item.userId.name}</span>
+                        <span className="text-sm text-gray-500 italic">{formatTime(item.createdAt)}</span>
+                      </div>
+                      <Dropdown overlay={menu(item._id)} trigger={['click']}>
+                        <Button
+                          shape="circle"
+                          icon={<EllipsisOutlined />}
+                          className="ml-2"
+                        />
+                      </Dropdown>
+                    </div>
+                  }
+                  description={
+                    <div>
+                      <Rate
+                        value={item.rating || 0}
+                        disabled
+                        className="text-yellow-500 text-sm"
+                      />
+                      <p className="mt-2 text-gray-700">{item.description || "No content provided"}</p>
+                    </div>
+                  }
                 />
-              }
-              title={
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-900">{item.userName}</span>
-                  <span className="text-sm text-gray-500 italic">{formatTime(item.time)}</span>
-                </div>
-              }
-              description={
-                <div className="mt-2">
-                  <Rate value={item.rating} disabled className="text-yellow-500 text-sm" />
-                  <p className="mt-2 text-gray-700">{item.content}</p>
-                </div>
-              }
+              </List.Item>
+            )}
+          />
+          <div className="flex justify-center">
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={reviews.length}
+              onChange={handlePageChange}
+              showSizeChanger={false}
+              className="ant-pagination-custom"
             />
-          </List.Item>
-        )}
-      />
-      <div className="flex justify-center">
-        <Pagination
-          current={currentPage}
-          pageSize={pageSize}
-          total={dummyReviews.length}
-          onChange={handlePageChange}
-          showSizeChanger={false}
-          className="ant-pagination-custom"
-        />
-      </div>
+          </div>
+        </>
+      ) : (
+        <div className="text-center text-gray-500 italic">No reviews available.</div>
+      )}
     </div>
   );
 };

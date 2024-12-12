@@ -4,7 +4,7 @@ import * as turf from '@turf/turf';
 import ReviewList from './ReviewList';
 import { useAddReviewMutation } from '../../store/property/propertyApi';
 
-const AddReview = ({propertyId}:any) => {
+const AddReview = ({propertyId,reviews,refetch}:any) => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [_, setUserLocation] = useState<[number, number] | null>(null);
@@ -69,6 +69,7 @@ console.log(distance,"checking")
       await addReview({rating: values.rating,description: values.description, propertyId}).unwrap();
       message.success('Review added successfully!');
       setIsReviewModalOpen(false);
+      refetch()
       form.resetFields();
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -122,7 +123,7 @@ console.log(distance,"checking")
         </Form>
       </Modal>
 
-      <ReviewList setIsLocationModalOpen={setIsLocationModalOpen} />
+      <ReviewList setIsLocationModalOpen={setIsLocationModalOpen} reviews={reviews}/>
     </div>
   );
 };

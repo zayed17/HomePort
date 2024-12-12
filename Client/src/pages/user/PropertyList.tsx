@@ -52,8 +52,6 @@ const PropertyListing: React.FC = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [pageSize] = useState<number>(3);
   const { data, isLoading, isError } = isAuthenticated ? useGetPropertiesQuery({ page: currentPage, limit: pageSize}) : useGetPublicPropertiesQuery({ page: currentPage, limit: pageSize});
-
-  console.log(data,"chdleof")
   const properties = data?.properties || [];
   const totalProperties = data?.total || 0;
  
