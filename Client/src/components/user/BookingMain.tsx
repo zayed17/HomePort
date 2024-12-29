@@ -11,7 +11,10 @@ const stripePromise =  loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 const BookingMain: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false)
-  const { data: property, error, isLoading } = useGetPropertyQuery(id || '');
+  const { data, error, isLoading } = useGetPropertyQuery(id || '');
+  const property = data?.property;
+
+  console.log(property,"checking property")
   const availableFrom = new Date(property?.availableFrom);
   const minDate = {
     year: availableFrom.getFullYear(),
@@ -86,9 +89,7 @@ const BookingMain: React.FC = () => {
           <div className="md:flex">
             <div className="md:w-2/3 p-8">
               <div className="relative mb-8">
-                <img
-                  src={property.mediaFiles[0] || '/path/to/default/image.jpg'}
-                  alt={property.title}
+                <img src={property?.mediaFiles?.[0] || '/path/to/default/image.jpg'} alt={property.title}
                   className="w-full h-96 object-cover rounded-xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-xl"></div>
@@ -126,17 +127,17 @@ const BookingMain: React.FC = () => {
                   <div className="flex items-center mb-4">
                     <FaUserCircle className="text-4xl text-BlueGray mr-4" />
                     <div>
-                      <p className="font-semibold text-lg">{property.createdBy.name}</p>
+                      <p className="font-semibold text-lg">{property?.createdBy?.name}</p>
                       <p className="text-gray-600">Property Owner</p>
                     </div>
                   </div>
                   <div className="flex items-center mb-2">
                     <FaEnvelope className="text-BlueGray mr-2" />
-                    <span>{property.createdBy.email}</span>
+                    <span>{property?.createdBy?.email}</span>
                   </div>
                   <div className="flex items-center">
                     <FaPhone className="text-BlueGray mr-2" />
-                    <span>{property.createdBy.phone}</span>
+                    <span>{property?.createdBy?.phone}</span>
                   </div>
                 </div>
               </div>
