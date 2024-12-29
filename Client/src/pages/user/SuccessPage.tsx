@@ -1,16 +1,12 @@
-import  { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Result, Button, Card, Spin, Typography, Space } from 'antd';
-import { SmileOutlined, HomeOutlined } from '@ant-design/icons';
-
-const { Title, Text } = Typography;
 
 const PaymentSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [_hasProcessed, setHasProcessed] = useState(false);
   const hasFetchedRef = useRef(false);
 
   // Helper function to parse URL parameters
@@ -24,14 +20,13 @@ const PaymentSuccess = () => {
   };
 
   useEffect(() => {
-    const { sessionId, propertyId, bookingDate }:any = getQueryParams();
+    const { sessionId, propertyId, bookingDate } :any= getQueryParams();
 
     if (sessionId && !hasFetchedRef.current) {
-
+      // To prevent duplicate API calls
       hasFetchedRef.current = true;
-      setLoading(true);
 
-
+      // Fetch the payment details using the session ID
       axios
         .get(`/api/payment-details?session_id=${sessionId}`)
         .then((response) => {
@@ -40,66 +35,45 @@ const PaymentSuccess = () => {
             propertyId,
             bookingDate: decodeURIComponent(bookingDate),
           });
-          setLoading(false);
+          setHasProcessed(true);
         })
         .catch((error) => {
           console.error('Error fetching payment details:', error);
-          setLoading(false);
         });
     }
   }, [location.search]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
-      {loading ? (
-        <Spin size="large" tip="Fetching Payment Details..." />
-      ) : (
-        <Card
-          style={{ maxWidth: 600, borderRadius: 10 }}
-          cover={
-            <Result
-              icon={<SmileOutlined style={{ color: '#52c41a' }} />}
-              status="success"
-              title="Payment Successful!"
-              subTitle="Thank you for sponsoring your property."
-            />
-          }
+      <div className="max-w-lg mx-auto p-8 bg-white shadow-2xl rounded-lg text-center">
+        {/* Cartoon House Image */}
+        <img
+          src="https://png.pngtree.com/png-clipart/20221219/original/pngtree-cartoon-house-illustration-png-image_8780795.png"
+          alt="Cartoon House"
+          className="w-24 h-24 mx-auto mb-6 animate-bounce"
+        />
+        <h1 className="text-4xl font-extrabold mb-4 text-green-600">Payment Successful!</h1>
+        <p className="text-lg mb-6 text-gray-700">Thank you for sponsoring your property.</p>
+        {paymentDetails && (
+          <div className="space-y-4 text-gray-800 text-left bg-gray-50 p-4 rounded-md shadow-inner">
+            <p><strong>Property ID:</strong> {paymentDetails.propertyId}</p>
+            <p><strong>Booking Date:</strong> {paymentDetails.bookingDate}</p>
+            <p><strong>Amount Paid:</strong> ₹{paymentDetails.amount}</p>
+            <p><strong>Transaction ID:</strong> {paymentDetails.transactionId}</p>
+          </div>
+        )}
+        <button
+          onClick={() => navigate('/')}
+          className="mt-8 px-8 py-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 ease-in-out transform hover:scale-105"
         >
-          {paymentDetails && (
-            <Space direction="vertical" size="large" style={{ width: '100%' }}>
-              <Card style={{ borderRadius: 8, background: '#fafafa' }}>
-                <Title level={4}>Payment Details</Title>
-                <div style={{ paddingLeft: 16 }}>
-                  <Text strong>Property ID: </Text>
-                  <Text>{paymentDetails.propertyId}</Text>
-                  <br />
-                  <Text strong>Booking Date: </Text>
-                  <Text>{paymentDetails.bookingDate}</Text>
-                  <br />
-                  <Text strong>Amount Paid: </Text>
-                  <Text>₹{paymentDetails.amount}</Text>
-                  <br />
-                  <Text strong>Transaction ID: </Text>
-                  <Text>{paymentDetails.transactionId}</Text>
-                </div>
-              </Card>
-
-              <Button
-                type="primary"
-                size="large"
-                icon={<HomeOutlined />}
-                block
-                onClick={() => navigate('/')}
-                style={{ borderRadius: 8 }}
-              >
-                Go to Dashboard
-              </Button>
-            </Space>
-          )}
-        </Card>
-      )}
+          Go to Dashboard
+        </button>
+      </div>
     </div>
   );
 };
 
 export default PaymentSuccess;
+
+
+ 
