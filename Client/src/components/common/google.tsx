@@ -1,6 +1,9 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import toast from 'react-hot-toast';
 import { useGoogleSignMutation } from '../../store/user/userApi';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../store/user/userSlice';
+
 
 interface signinwithgoogle {
   isLogin:Boolean,
@@ -10,13 +13,15 @@ interface signinwithgoogle {
 
 const SignInWithGoogle: React.FC<signinwithgoogle> = ({isLogin,onClose}) => {
   const [google] = useGoogleSignMutation();
+  const dispatch = useDispatch();
 
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
       console.log('Code response checking:', codeResponse);
       try {
-        await google({code:codeResponse.code}).unwrap()
+        const res = await google({code:codeResponse.code}).unwrap()
+        dispatch(loginSuccess(res.token));
         onClose()      
         toast.success('Login successfully'); 
         } catch (error) {

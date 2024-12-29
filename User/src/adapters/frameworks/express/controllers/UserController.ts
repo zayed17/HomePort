@@ -193,7 +193,7 @@ export class UserController {
                 secure: true,
                 sameSite: 'none',
             });
-            res.json({ token, userDetails, role: 'user' })
+            res.status(200).json({ message: 'User successfully logged in', token});
         } catch (error) {
             next(error)
         }

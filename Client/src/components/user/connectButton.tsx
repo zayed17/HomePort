@@ -26,7 +26,7 @@ const ConnectWithOwnerButton: React.FC<ConnectWithOwnerButtonProps> = ({
 
     if (userDetails) {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/chat/chats`;
+        const apiUrl = `${import.meta.env.VITE_CHAT_API_URL}/api/chat/chats`;
 
         const response = await fetch(apiUrl, {
           method: 'POST',
