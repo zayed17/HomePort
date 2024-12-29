@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import  { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Result, Button, Card, Spin, Typography, Space } from 'antd';
@@ -9,7 +9,7 @@ const { Title, Text } = Typography;
 const PaymentSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [paymentDetails, setPaymentDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const hasFetchedRef = useRef(false);
 
@@ -24,7 +24,7 @@ const PaymentSuccess = () => {
   };
 
   useEffect(() => {
-    const { sessionId, propertyId, bookingDate } = getQueryParams();
+    const { sessionId, propertyId, bookingDate }:any = getQueryParams();
 
     if (sessionId && !hasFetchedRef.current) {
 
