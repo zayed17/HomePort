@@ -10,10 +10,12 @@ const PaymentSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
+
+  console.log(paymentDetails,"checking first")
   const [loading, setLoading] = useState(true);
   const hasFetchedRef = useRef(false);
 
-  // Helper function to parse URL parameters
+
   const getQueryParams = () => {
     const searchParams = new URLSearchParams(location.search);
     return {
@@ -35,6 +37,7 @@ const PaymentSuccess = () => {
       axios
         .get(`/api/payment-details?session_id=${sessionId}`)
         .then((response) => {
+          console.log(response,"res ponse checking")
           setPaymentDetails({
             ...response.data,
             propertyId,

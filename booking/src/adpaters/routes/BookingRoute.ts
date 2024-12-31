@@ -17,6 +17,7 @@ import { Types } from "mongoose";
 const router = Router();
 
 const endpointSecret = 'whsec_QHcpQyNgYpG7ofY17pOwjRPuRGO03wOU';
+// const endpointSecret = "whsec_63146c32f64ea75f5dc3be41011e6e4c7c44fe7ffd26432bd2458cc892c403b0"
 const convertToISODate = (bookingDate: { day: number; month: number; year: number }): string => {
   const { day, month, year } = bookingDate;
   const date = new Date(year, month - 1, day);
@@ -54,6 +55,7 @@ router.post('/make-payment', authenticateToken(['user']), async (req: any, res) 
       mode: 'payment',
       success_url: `https://homeport.online/payment-success?session_id={CHECKOUT_SESSION_ID}&property_id=${propertyId}&booking_date=${encodeURIComponent(bookingDate)}`,
       cancel_url: 'https://homeport.online/payment-error',
+
       metadata: {
         propertyId,
         userId,
@@ -98,7 +100,7 @@ router.post('/booking', async (req: any, res: Response) => {
     try {
       console.log(propertyId, "id consoling")
       const propertyResponse = await axios.get(`https://api.homeport.online/api/property/property/${propertyId}`);
-      const propertyData = propertyResponse.data;
+      const propertyData = propertyResponse.data.property;
       console.log(propertyData)
       if (!propertyData) {
         console.error('Property not found');
